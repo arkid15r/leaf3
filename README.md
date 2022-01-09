@@ -4,4 +4,4 @@
 4. `pip install -r requirements/dev.txt -r requirements/prod.txt`
 5. `python manage.py migrate`
 6. Run `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'` and place the output into .config SECRET_KEY variable
-7. python manage.ppy runserver
+7. `python manage.py runserver`
