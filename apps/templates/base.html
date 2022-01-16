@@ -1,0 +1,67 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html class="layout-static" lang="{{ LANGUAGE_CODE }}">
+
+<head>
+	{# Meta #}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>{% block title %}{% endblock title %}</title>
+
+	{# CSS #}
+	{% block css %}
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+
+	{% compress css %}
+	<link href="{% static 'css/all.min.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/icons/icomoon/styles.min.css' %}" rel="stylesheet" type="text/css">
+	{% endcompress %}
+
+	{% block css-extra %}{% endblock css-extra %}
+
+	{% endblock css %}
+
+	{# JS #}
+	{% block head-js %}
+
+	{% compress js %}
+	<script src="{% static 'js/main/jquery.min.js' %}"></script>
+	<script src="{% static 'js/main/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+	{% endcompress js %}
+
+	{% block js %}{% endblock js %}
+
+	{% endblock head-js %}
+</head>
+
+<body>
+	{% include 'includes/header.html' %}
+
+	{% block page-content %}
+
+	<div class="page-content">
+		<div class="content-wrapper">
+			<div class="content-inner">
+				{% block page-header%}{% endblock page-header %}
+
+				<div class="content container pt-0">
+					{% block content %}{% endblock content %}
+				</div>
+
+				{% include 'includes/footer.html' %}
+			</div>
+		</div>
+	</div>
+
+	{% endblock page-content %}
+
+	{% block tail-js %}{% endblock tail-js %}
+</body>
+
+</html>

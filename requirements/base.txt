@@ -1,3 +1,14 @@
+# https://docs.djangoproject.com/en/stable/
 Django==4.0.1
+
+# https://django-allauth.readthedocs.io/en/stable/
 django-allauth==0.47.0
+
+# https://django-compressor.readthedocs.io/en/stable/
+django-compressor==3.1
+
+# https://django-crispy-forms.readthedocs.io/en/stable
+django-crispy-forms==1.13.0
+
+# https://django-environ.readthedocs.io/en/stable/
 django-environ==0.8.1

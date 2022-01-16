@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Home" %}{% endblock %}
+
+{% block page-header %}
+
+{% if user.is_authenticated %}
+{% trans "Home" as page_header_primary_text %}
+{% endif %}
+
+{% include 'includes/page_header.html' %}
+
+{% endblock page-header %}

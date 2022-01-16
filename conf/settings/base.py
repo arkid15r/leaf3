@@ -1,7 +1,11 @@
+"""Project settings base."""
+
 import os
 from pathlib import Path
 
 import environ
+
+ugettext = lambda s: s
 
 # Paths.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -25,9 +29,13 @@ DJANGO_APPS = [
 EXTERNAL_APPS = [
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'compressor',
+    'crispy_forms',
 ]
 
 PROJECT_APPS = [
+    'apps.core',
     'apps.user',
 ]
 
@@ -87,6 +95,7 @@ DEBUG = env.bool('DJANGO_DEBUG', False)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -105,6 +114,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -118,6 +128,8 @@ SECRET_KEY = env.str('SECRET_KEY')
 # Language, i18, l10n, timezones.
 # https://docs.djangoproject.com/en/stable/ref/settings/#language-code
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (('en', ugettext('English')),)
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#locale-paths
 LOCALE_PATHS = [os.path.join(APPS_DIR, 'locale')]
@@ -143,7 +155,7 @@ MEDIA_URL = 'media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#static-url
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#staticfiles-dirs
 STATICFILES_DIRS = [os.path.join(APPS_DIR, 'static')]
@@ -152,6 +164,7 @@ STATICFILES_DIRS = [os.path.join(APPS_DIR, 'static')]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
 ]
 
 # Site settings.
@@ -170,3 +183,47 @@ ADMIN_URL = 'admin/'
 
 # django-allauth
 ALL_AUTH_URL = 'auth/'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_FORMS = {
+    'login': 'apps.core.forms.LoginForm',
+    'signup': 'apps.core.forms.SignupForm',
+}
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
+# TODO(ark): go back to the default POST approach after fixing the page layout.
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+ACCOUNT_USERNAME_REQUIRED = False
+
+#django-compressor
+# https://django-compressor.readthedocs.io/en/stable/settings.html#django.conf.settings.COMPRESS_ENABLED
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=False)
+
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
+COMPRESS_OFFLINE = False
+
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
+
+# https://django-compressor.readthedocs.io/en/stable/settings.html?#django.conf.settings.COMPRESS_OUTPUT_DIR
+COMPRESS_OUTPUT_DIR = 'compress'
+
+# https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=scss#django.conf.settings.COMPRESS_PRECOMPILERS
+COMPRESS_PRECOMPILERS = (('text/scss', 'sass {infile} {outfile}'),)
+
+# https://django-compressor.readthedocs.io/en/stable/settings.html#django.conf.settings.COMPRESS_STORAGE
+COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
+
+# https://django-compressor.readthedocs.io/en/stable/settings.html?#django.conf.settings.COMPRESS_URL
+COMPRESS_URL = STATIC_URL
+
+# django-crispy-forms
+# https://django-crispy-forms.readthedocs.io/en/stable/install.html#template-packs
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

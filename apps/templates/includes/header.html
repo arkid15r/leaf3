@@ -1,0 +1,54 @@
+{% load i18n %}
+{% load static %}
+
+{% block navigation-bar %}
+<div class="navbar navbar-expand-xl navbar-light navbar-static px-0">
+  <div
+    class="d-flex w-100 w-xl-auto overflow-auto overflow-xl-visible scrollbar-hidden border-top border-top-light-100 border-top-xl-0 order-1 order-xl-0">
+    <ul class="navbar-nav navbar-nav-underline flex-row text-nowrap mx-auto">
+      <li class="nav-item">
+        <a href="{% url 'main' %}" class="navbar-nav-link active">
+          <i class="icon-home4 mr-2"></i>
+          {% trans "Home" %}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="d-flex flex-xl-1 justify-content-xl-end order-0 order-xl-1 pr-3">
+    <ul class="navbar-nav navbar-nav-underline flex-row">
+      {% if user.is_authenticated %}
+      <li class="nav-item nav-item-dropdown-xl dropdown dropdown-user h-100">
+        <a href="#" class="navbar-nav-link navbar-nav-link-toggler d-flex align-items-center h-100 dropdown-toggle"
+          data-toggle="dropdown">
+          <img src="{% static 'images/placeholders/placeholder.jpg' %}" class="rounded-circle mr-xl-2" height="38"
+            alt="">
+          <span class="d-none d-xl-block">{{ user.username }}</span>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right">
+          <a href="#" class="dropdown-item"><i class="icon-user-plus"></i> {% trans "My profile" %}</a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item"><i class="icon-cog5"></i>{% trans "Settings" %}</a>
+          <a href="{% url 'account_logout' %}" class="dropdown-item"><i
+              class="icon-switch2"></i>{% trans "Log out" %}</a>
+        </div>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a href="{% url 'account_signup' %}" class="navbar-nav-link">
+          {%trans "Sign Up" %}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'account_login' %}" class="navbar-nav-link">
+          {%trans "Log In" %}
+        </a>
+      </li>
+
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+{% endblock navigation-bar %}
