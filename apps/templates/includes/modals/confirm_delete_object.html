@@ -1,0 +1,44 @@
+{% load i18n %}
+
+{% trans 'Close' as button_close_text_default %}
+{% trans 'Delete' as button_delete_text_default %}
+{% trans 'Delete confirmation' as modal_title_default %}
+
+<div id="modal_delete" class="modal" tabindex="-1" aria-modal="true" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h6 class="modal-title">{{ modal_title | default:modal_title_default }}</h6>
+        <button type="button" class="back close" data-dismiss="modal">×</button>
+      </div>
+
+      <div class="modal-body">
+        <h6 class="font-weight-semibold">{{ object }}</h6>
+        <p>
+          {% blocktrans %}
+          Are you sure you want to delete "{{ object }}"?
+          You will not be able to undo this action.
+          {% endblocktrans %}
+        </p>
+
+        <div class="modal-footer">
+          <button type="button" class="back btn btn-link"
+            data-dismiss="modal">{{ button_close_text | default:button_close_text_default }}</button>
+          <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+              {{ button_delete_text | default:button_delete_text_default }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/javascript">
+      $('#modal_delete').modal('show');
+      $('button.back').on('click', function () {
+        window.history.back();
+      });
+    </script>
+  </div>
+</div>

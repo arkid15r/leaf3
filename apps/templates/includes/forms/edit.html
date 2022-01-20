@@ -1,0 +1,17 @@
+{% extends 'includes/forms/base.html' %}
+
+{% load i18n %}
+
+{% block buttons %}
+
+<button type="submit" class="btn btn-primary">
+  {{ button_submit_text }} &raquo;
+</button>
+
+<a href="{{ button_delete_url }}" title={{ button_delete_title }}>
+  <button type="button" class="btn btn-danger float-right">
+    <i class="icon-trash"></i>
+  </button>
+</a>
+
+{% endblock buttons %}

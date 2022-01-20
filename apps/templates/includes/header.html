@@ -7,7 +7,7 @@
     class="d-flex w-100 w-xl-auto overflow-auto overflow-xl-visible scrollbar-hidden border-top border-top-light-100 border-top-xl-0 order-1 order-xl-0">
     <ul class="navbar-nav navbar-nav-underline flex-row text-nowrap mx-auto">
       <li class="nav-item">
-        <a href="{% url 'main' %}" class="navbar-nav-link active">
+        <a href="{% url 'main' %}" class="navbar-nav-link">
           <i class="icon-home4 mr-2"></i>
           {% trans "Home" %}
         </a>
@@ -37,15 +37,14 @@
       {% else %}
       <li class="nav-item">
         <a href="{% url 'account_signup' %}" class="navbar-nav-link">
-          {%trans "Sign Up" %}
+          {%trans "Sign up" %}
         </a>
       </li>
       <li class="nav-item">
         <a href="{% url 'account_login' %}" class="navbar-nav-link">
-          {%trans "Log In" %}
+          {%trans "Log in" %}
         </a>
       </li>
-
       {% endif %}
     </ul>
   </div>
