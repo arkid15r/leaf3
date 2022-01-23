@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block page-header %}
+{% trans 'Create a tree' as page_header_primary_text %}
+
+{% include 'includes/page_header.html' %}
+{% endblock page-header %}
+
+{% block content %}
+{% include 'includes/forms/add.html' %}
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans 'Dashboard' %}{% endblock %}
+
+{% block page-header %}
+{% trans 'Create a tree' as page_header_primary_button_text %}
+{% trans 'Dashboard' as page_header_primary_text %}
+{% url 'tree-create' as page_header_primary_button_url %}
+
+{% include 'includes/page_header.html' with page_header_primary_button_icon='icon-tree6' %}
+{% endblock page-header %}
+
+{% block content %}
+{% for object in object_list %}
+<a href="{{ object.get_absolute_url }}">{{ object }}</a>
+{% endfor %}
+{% endblock content %}

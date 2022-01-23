@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% trans 'Next' as next %}
+{% trans 'Prev' as prev %}
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="row">
+  <ul class="pagination pagination-flat align-self-center m-auto">
+    {% if page_obj.has_previous %}
+    <li class="active page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo; {{ prev }}</a>
+    </li>
+    {% else %}
+    <li class="disabled page-item"><a class="page-link" href="#">&laquo; {{ prev }}</a></li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <a href="#" class="page-link">
+        {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}
+      </a>
+    </li>
+
+    {% if page_obj.has_next %}
+    <li class="active page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ next }} &raquo;</a>
+    </li>
+    {% else %}
+    <li class="disabled page-item"><a class="page-link" href="#">{{ next }} &raquo;</a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}

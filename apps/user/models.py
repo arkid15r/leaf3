@@ -2,8 +2,8 @@
 
 from django.contrib.auth.models import AbstractUser
 
-from apps.core.models import TimestampedModel
+from apps.core.models import TimestampModel
 
 
-class User(AbstractUser, TimestampedModel):
+class User(AbstractUser, TimestampModel):
   """User model."""

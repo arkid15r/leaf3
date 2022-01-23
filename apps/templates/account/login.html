@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
@@ -7,15 +7,14 @@
 
 {% get_providers as socialaccount_providers %}
 
-{% trans "Log In" as log_in %}
-{% block title %}{{ log_in }}{% endblock %}
+{% block title %}{% trans 'Log in' %}{% endblock %}
 
 {% block page-header %}
+{% trans 'Log in' as log_in %}
 {% include 'includes/page_header.html' with page_header_primary_text=log_in %}
 {% endblock page-header %}
 
 {% block content %}
-
 {% if socialaccount_providers %}
 <p>{% blocktrans with site.name as site_name %}Please sign in with one
   of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
@@ -23,33 +22,31 @@
 
 <div class="socialaccount_ballot">
   <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+    {% include 'socialaccount/snippets/provider_list.html' with process='login' %}
   </ul>
   <div class="login-or">{% trans 'or' %}</div>
 </div>
 
-{% include "socialaccount/snippets/login_extra.html" %}
-
+{% include 'socialaccount/snippets/login_extra.html' %}
 {% endif %}
 
 <div class="col-lg-4 m-auto">
   <form class="border border-primary p-4 rounded" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
-    {{ form|crispy }}
+    {{ form | crispy }}
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
 
     <div class="row">
-      <button type="submit" class="btn btn-primary mx-auto">{{ log_in }} &raquo;</button>
+      <button type="submit" class="btn btn-primary mx-auto">{% trans 'Log in' %} &raquo;</button>
     </div>
     <div class="mt-2 row">
       <p class="mx-auto"><a href="{{ signup_url }}">{% trans "Don't have an account?" %}
         </a> | <a class="button secondaryAction"
-          href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+          href="{% url 'account_reset_password' %}">{% trans 'Forgot Password?' %}</a>
       </p>
     </div>
   </form>
 </div>
-
 {% endblock content %}

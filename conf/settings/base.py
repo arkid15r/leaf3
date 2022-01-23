@@ -30,12 +30,16 @@ EXTERNAL_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'bootstrap_datepicker_plus',
     'compressor',
     'crispy_forms',
+    'django_neomodel',
 ]
 
 PROJECT_APPS = [
     'apps.core',
+    'apps.schema',
+    'apps.tree',
     'apps.user',
 ]
 
@@ -73,7 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#login-url
-LOGIN_URL = "allauth.account:account_login"
+LOGIN_URL = 'account_login'
 
 # Databases.
 # https://docs.djangoproject.com/en/stable/ref/databases/
@@ -162,9 +166,9 @@ STATICFILES_DIRS = [os.path.join(APPS_DIR, 'static')]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-finders
 STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 ]
 
 # Site settings.
@@ -195,21 +199,25 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 #django-compressor
 # https://django-compressor.readthedocs.io/en/stable/settings.html#django.conf.settings.COMPRESS_ENABLED
-COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=False)
+COMPRESS_ENABLED = env.bool('COMPRESS_ENABLED', default=False)
 
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
 COMPRESS_OFFLINE = False
 
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
-    "css": [
-        "compressor.filters.css_default.CssAbsoluteFilter",
-        "compressor.filters.cssmin.rCSSMinFilter",
+    'css': [
+        'compressor.filters.css_default.CssAbsoluteFilter',
+        'compressor.filters.cssmin.rCSSMinFilter',
     ],
-    "js": ["compressor.filters.jsmin.JSMinFilter"],
+    'js': ['compressor.filters.jsmin.JSMinFilter'],
 }
 
 # https://django-compressor.readthedocs.io/en/stable/settings.html?#django.conf.settings.COMPRESS_OUTPUT_DIR
@@ -227,3 +235,10 @@ COMPRESS_URL = STATIC_URL
 # django-crispy-forms
 # https://django-crispy-forms.readthedocs.io/en/stable/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+NEOMODEL_NEO4J_BOLT_URL = env.str('NEO4J_DATABASE_URL')
+
+# shortuuid
+# https://github.com/skorokithakis/shortuuid
+SHORT_UUID_ALPHABET = '23456789abcdefghijkmnopqrstuvwxyz'
+SHORT_UUID_LENGTH = 10

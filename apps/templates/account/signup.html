@@ -1,29 +1,28 @@
 {% extends "base.html" %}
+
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-
-{% block title %}{% trans "Sign Up" %}{% endblock %}
+{% block title %}{% trans 'Sign up' %}{% endblock %}
 
 {% block page-header %}
-{% trans "Sign Up" as page_header_primary_text %}
+{% trans 'Sign up' as page_header_primary_text %}
 {% include 'includes/page_header.html' %}
 {% endblock page-header %}
-
 
 {% block content %}
 <div class="col-lg-4 m-auto">
   <form class="border border-primary p-4 rounded" id="signup_form" method="post" action="{% url 'account_signup' %}">
     {% csrf_token %}
-    {{ form|crispy }}
+    {{ form | crispy }}
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
     <div class="row">
-      <button type="submit" class="btn btn-primary mx-auto">{% trans "Sign Up" %} &raquo;</button>
+      <button type="submit" class="btn btn-primary mx-auto">{% trans 'Sign up' %} &raquo;</button>
     </div>
     <div class="mt-2 row">
-      <a class="mx-auto" href="{{ login_url }}">{% trans "Already have an account?" %}</a>
+      <a class="mx-auto" href="{{ login_url }}">{% trans 'Already have an account?' %}</a>
     </div>
   </form>
 </div>

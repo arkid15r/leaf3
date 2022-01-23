@@ -9,4 +9,5 @@ from apps.user.models import User
 class UserAdmin(admin.ModelAdmin):
   """User model admin."""
 
-  list_display = ('username', 'email')
+  list_display = ('email', 'username')
+  search_fields = ('email', 'username')

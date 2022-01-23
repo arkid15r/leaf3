@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ tree }}{% endblock %}
+
+{% block page-header %}
+{% include 'includes/tree/page_header.html' with page_header_primary_text=tree %}
+{% endblock page-header %}

@@ -7,7 +7,21 @@
         <div class="text-muted">{{ page_header_secondary_text }}</div>
         {% endif %}
       </div>
-      <a href="#" class="header-elements-toggle text-body d-md-none"><i class="icon-more"></i></a>
+      <a href="" class="header-elements-toggle text-body d-md-none">
+        <i class="icon-more"></i>
+      </a>
     </div>
+    {% block buttons %}
+    {% if page_header_primary_button_text %}
+    <div class="header-elements d-none py-0 mb-3 mb-md-0">
+      <a href="{{ page_header_primary_button_url }}">
+        <button type="button" class="btn btn-dark ml-3">
+          <i class="{{ page_header_primary_button_icon }} mr-2"></i>
+          {{ page_header_primary_button_text }}
+        </button>
+      </a>
+    </div>
+    {% endif %}
+    {% endblock buttons %}
   </div>
 </div>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block page-header %}
+{% trans 'Family members' as page_header_primary_text %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name %}
+{% endblock page-header %}
+
+{% block content %}
+<div class="card">
+
+  <div class="table-responsive">
+    <table class="table text-nowrap">
+      <thead>
+        <tr>
+          <th>{% trans 'Full name' %}</th>
+          <th>{% trans 'Birth date' %}</th>
+          <th>{% trans 'Location' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for person in page_obj %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <div>
+                <a href="#" class="text-body font-weight-semibold">{{ person.full_name }}</a>
+                <div class="text-muted font-size-sm">{{ person.status }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ person.birth_date | default_if_none:'' }}</td>
+          <td><span class="badge badge-success-100 text-success">{{ person.location }}</span></td>
+          <td class="text-center">
+            <a href="{% url 'person-edit' tree.uid person.uid %}" title={{ button_delete_title }}>
+              <button type="button" class="btn btn-sm float-right">
+                <i class="icon-pencil"></i>
+              </button>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock content %}

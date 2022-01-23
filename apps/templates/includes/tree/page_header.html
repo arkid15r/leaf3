@@ -1,0 +1,21 @@
+{% extends 'includes/page_header.html' %}
+
+{% load i18n %}
+
+{% block buttons %}
+<div class="btn-group position-static">
+
+  <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    <i class="icon-menu7 mr-2"></i>
+    {% trans 'Manage tree' %}
+  </button>
+  <div class="dropdown-menu dropdown-menu-right" style="">
+    <a href="{% url 'person-create' tree.uid %}" class="dropdown-item">
+      <i class="icon-menu7"></i>{% trans 'Add person' %}</a>
+    <a href="#" class="dropdown-item"><i class="icon-screen-full"></i> Another action</a>
+    <a href="#" class="dropdown-item"><i class="icon-mail5"></i> One more action</a>
+    <div class="dropdown-divider"></div>
+    <a href="#" class="dropdown-item"><i class="icon-gear"></i> Separated line</a>
+  </div>
+</div>
+{% endblock buttons %}

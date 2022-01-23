@@ -1,3 +1,6 @@
+"""Project local environment settings."""
+# pylint: disable=unused-wildcard-import,wildcard-import
+
 from conf.settings.base import *
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#caches

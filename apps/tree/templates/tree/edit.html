@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ form.instance }}{% endblock %}
+
+{% block page-header %}
+{% trans 'Edit tree' as page_header_primary_text %}
+
+{% include 'includes/page_header.html' %}
+{% endblock page-header %}
+
+{% block content %}
+{% trans 'Save' as button_submit_text %}
+{% trans 'Delete' as button_delete_title %}
+{% url 'tree-delete' form.instance.id as button_delete_url %}
+
+{% include 'includes/forms/edit.html' %}
+{% endblock content %}
