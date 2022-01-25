@@ -1,13 +1,18 @@
 """Tree forms."""
 
-from django.forms import ModelForm
+from django import forms
 
 from apps.tree.models import Tree
 
 
-class TreeForm(ModelForm):
+class TreeForm(forms.ModelForm):
   """Tree form."""
 
   class Meta:
+    """Tree form meta."""
+
+    fields = (
+        'name',
+        'description',
+    )
     model = Tree
-    fields = ('name', 'description')

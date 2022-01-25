@@ -29,8 +29,8 @@ class Create(LoginRequiredMixin, GetTreeObjectMixin, CreateView):
     """Generate context."""
 
     try:
-      tree = Tree.objects.get(creator=self.request.user,
-                              uid=self.kwargs['tree_uid'])
+      tree = Tree.nodes.get(creator_uid=self.request.user.uid,
+                            uid=self.kwargs['tree_uid'])
     except Tree.DoesNotExist:
       raise Http404
 
@@ -77,14 +77,14 @@ class Edit(LoginRequiredMixin, GetTreeObjectMixin, UpdateView):
     """Generate context."""
 
     try:
-      tree = Tree.objects.get(creator=self.request.user,
-                              uid=self.kwargs['tree_uid'])
+      tree = Tree.nodes.get(creator_uid=self.request.user.uid,
+                            uid=self.kwargs['tree_uid'])
     except Tree.DoesNotExist:
       raise Http404
 
     context = super().get_context_data(**kwargs)
     context.update({'tree': tree})
-
+    print(context['form'].errors)
     return context
 
   def get_form_kwargs(self):

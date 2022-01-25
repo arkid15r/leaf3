@@ -131,12 +131,13 @@ SECRET_KEY = env.str('SECRET_KEY')
 
 # Language, i18, l10n, timezones.
 # https://docs.djangoproject.com/en/stable/ref/settings/#language-code
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = env.str('DJANGO_LANGUAGE_CODE', 'en')
 
-LANGUAGES = (('en', ugettext('English')),)
+# https://docs.djangoproject.com/en/4.0/ref/settings/#languages
+LANGUAGES = (env.list('DJANGO_LANGUAGE') or ('en', ugettext('English')),)
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#locale-paths
-LOCALE_PATHS = [os.path.join(APPS_DIR, 'locale')]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#time-zone
 TIME_ZONE = 'UTC'
@@ -145,7 +146,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#use-l10n
+USE_L10N = False
+
+# https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-USE_TZ
 USE_TZ = True
+
+# https://docs.djangoproject.com/en/4.0/ref/settings/#date-format
+DATE_FORMAT = env.str('DJANGO_DATE_FORMAT')
+
+DATE_INPUT_FORMATS = env.list('DJANGO_DATE_INPUT_FORMATS')
 
 # Media files.
 # https://docs.djangoproject.com/en/stable/ref/settings/#media-root
@@ -236,6 +245,8 @@ COMPRESS_URL = STATIC_URL
 # https://django-crispy-forms.readthedocs.io/en/stable/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# django-neomodel
+# https://github.com/neo4j-contrib/django-neomodel
 NEOMODEL_NEO4J_BOLT_URL = env.str('NEO4J_DATABASE_URL')
 
 # shortuuid

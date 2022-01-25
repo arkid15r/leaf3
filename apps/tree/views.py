@@ -20,7 +20,7 @@ class Create(LoginRequiredMixin, CreateView):
   template_name = 'tree/add.html'
 
   def form_valid(self, form):
-    form.instance.creator = self.request.user
+    form.instance.creator_uid = self.request.user.uid
     return super().form_valid(form)
 
 
@@ -30,7 +30,8 @@ class Dashboard(LoginRequiredMixin, ListView):
   template_name = "tree/dashboard.html"
 
   def get_queryset(self):
-    return Tree.objects.filter(creator=self.request.user).order_by('-created')
+    return Tree.nodes.filter(
+        creator_uid=self.request.user.uid).order_by('-created')
 
 
 class Delete(LoginRequiredMixin, DeleteView):
@@ -49,7 +50,8 @@ class Manage(LoginRequiredMixin, TemplateView):
   def get_context_data(self, **kwargs):
     """Generate context."""
     try:
-      tree = Tree.objects.get(uid=self.kwargs['pk'], creator=self.request.user)
+      tree = Tree.nodes.get(uid=self.kwargs['pk'],
+                            creator_uid=self.request.user.uid)
     except Tree.DoesNotExist:
       raise Http404
 
@@ -66,3 +68,11 @@ class Edit(LoginRequiredMixin, UpdateView):
   model = Tree
   success_url = reverse_lazy('tree-dashboard')
   template_name = 'tree/edit.html'
+
+  def get_object(self, queryset=None):
+    """Get object."""
+
+    try:
+      return self.model.nodes.get(uid=self.kwargs['pk'])
+    except Tree.DoesNotExist:
+      raise Http404

@@ -4,12 +4,13 @@
 
 {% block page-header %}
 {% trans 'Family members' as page_header_primary_text %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name %}
+{% trans 'Add a person' as page_header_primary_button_text %}
+{% url 'person-create' tree.uid as page_header_primary_button_url %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_icon='icon-user'%}
 {% endblock page-header %}
 
 {% block content %}
 <div class="card">
-
   <div class="table-responsive">
     <table class="table text-nowrap">
       <thead>
@@ -30,7 +31,7 @@
               </div>
             </div>
           </td>
-          <td>{{ person.birth_date | default_if_none:'' }}</td>
+          <td>{{ person.dob | default_if_none:'' }}</td>
           <td><span class="badge badge-success-100 text-success">{{ person.location }}</span></td>
           <td class="text-center">
             <a href="{% url 'person-edit' tree.uid person.uid %}" title={{ button_delete_title }}>

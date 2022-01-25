@@ -10,12 +10,12 @@
     {% trans 'Manage tree' %}
   </button>
   <div class="dropdown-menu dropdown-menu-right" style="">
-    <a href="{% url 'person-create' tree.uid %}" class="dropdown-item">
-      <i class="icon-menu7"></i>{% trans 'Add person' %}</a>
-    <a href="#" class="dropdown-item"><i class="icon-screen-full"></i> Another action</a>
-    <a href="#" class="dropdown-item"><i class="icon-mail5"></i> One more action</a>
+    <a href="{% url 'person-list' tree.uid %}" class="dropdown-item">
+      <i class="icon-user"></i>{% trans 'Persons' %}</a>
+    <a href="{% url 'person-list' tree.uid %}" class="dropdown-item"><i class="icon-list"></i>{% trans 'Entities' %}</a>
+    <a href="{% url 'person-list' tree.uid %}" class="dropdown-item"><i class="icon-pin"></i>{% trans 'Locations' %}</a>
     <div class="dropdown-divider"></div>
-    <a href="#" class="dropdown-item"><i class="icon-gear"></i> Separated line</a>
+    <a href="{% url 'tree-edit' tree.uid %}" class="dropdown-item"><i class="icon-gear"></i>{% trans 'Settings' %}</a>
   </div>
 </div>
 {% endblock buttons %}

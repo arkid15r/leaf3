@@ -1,8 +1,9 @@
 """Person forms."""
 
 from django import forms
+from django.conf import settings
 from django.db.models import BLANK_CHOICE_DASH
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
@@ -12,7 +13,7 @@ from apps.schema.models.person import Person
 class PersonForm(forms.ModelForm):
   """Person form."""
 
-  gender = forms.ChoiceField(choices=Person.GENDERS, widget=forms.RadioSelect())
+  gender = forms.ChoiceField(label=_('Gender'), choices=Person.GENDERS, widget=forms.RadioSelect)
   father_uid = forms.ChoiceField(label=_('Father'), required=False)
   mother_uid = forms.ChoiceField(label=_('Mother'), required=False)
   spouse_uid = forms.ChoiceField(label=_('Spouse'), required=False)
@@ -36,21 +37,25 @@ class PersonForm(forms.ModelForm):
         (p.uid, str(p)) for p in persons
     ]
 
-    self.fields['birth_date'].widget = DatePickerInput()
-    self.fields['death_date'].widget = DatePickerInput()
-
   class Meta:
     """Person form meta."""
 
     fields = (
+        'last_name',
         'first_name',
         'patronymic_name',
-        'last_name',
         'gender',
-        'birth_date',
-        'death_date',
+        'dob',
+        'dod',
+        'cod',
+        'about',
         'father_uid',
         'mother_uid',
         'spouse_uid',
     )
     model = Person
+    widgets = {
+        'about': forms.Textarea,
+        'dob': DatePickerInput(format='%d/%m/%Y'),
+        'dod': DatePickerInput(format='%d/%m/%Y'),
+    }

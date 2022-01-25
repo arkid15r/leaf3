@@ -24,7 +24,7 @@ class UIDModel(models.Model):
   uid = ShortUUIDField(alphabet=settings.SHORT_UUID_ALPHABET,
                        length=settings.SHORT_UUID_LENGTH,
                        max_length=40,
-                       primary_key=True)
+                       unique=True)
 
   class Meta:
     """UID model meta."""

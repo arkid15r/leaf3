@@ -12,7 +12,8 @@ class GetTreeObjectMixin:
     """Get object."""
 
     try:
-      Tree.objects.get(creator=self.request.user, uid=self.kwargs['tree_uid'])
+      Tree.nodes.get(creator_uid=self.request.user.uid,
+                     uid=self.kwargs['tree_uid'])
     except Tree.DoesNotExist:
       raise Http404
 
@@ -27,10 +28,10 @@ class GetTreeQuerySetMixin:
     """Get queryset."""
 
     try:
-      self.tree = Tree.objects.get(creator=self.request.user,
-                                   uid=self.kwargs['tree_uid'])
+      self.tree = Tree.nodes.get(creator_uid=self.request.user.uid,
+                                 uid=self.kwargs['tree_uid'])
     except Tree.DoesNotExist:
       raise Http404
 
-    return self.model.nodes.filter(
-        tree_uid=self.tree.uid).order_by('birth_date')
+    return self.model.nodes.filter(tree_uid=self.tree.uid).order_by(
+        'dob', 'last_name', 'first_name')

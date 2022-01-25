@@ -1,5 +1,6 @@
 """Person models."""
 
+from django.conf import settings
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -7,10 +8,10 @@ from dateutil.relativedelta import relativedelta
 from neomodel import (DateProperty, Relationship, RelationshipFrom,
                       StringProperty)
 
-from apps.schema.models.base import ModelBase
+from apps.schema.models.base import TreeNodeModel
 
 
-class Person(ModelBase):
+class Person(TreeNodeModel):
   """Person model."""
 
   FEMALE = 'F'
@@ -18,19 +19,22 @@ class Person(ModelBase):
 
   GENDERS = ((FEMALE, _('Female')), (MALE, _('Male')))
 
-  first_name = StringProperty(label=_('First name'), required=True)
-  patronymic_name = StringProperty(label=_('Patronymic name'))
-  last_name = StringProperty(label=_('Last name'), required=True)
+  first_name = StringProperty(label=_('First name'), max_length=25, required=True,)
+  patronymic_name = StringProperty(label=_('Patronymic name'), max_length=25)
+  last_name = StringProperty(label=_('Last name'), required=True, max_length=50)
+  maiden_name = StringProperty(label=_('Maiden name'), max_length=25)
 
   gender = StringProperty(label=_('Gender'), required=True, choices=GENDERS)
-  birth_date = DateProperty(label=_('Date of birth'), index=True)
-  death_date = DateProperty(label=_('Date of death'))
+  dob = DateProperty(label=_('Date of birth'), index=True)
+  dod = DateProperty(label=_('Date of death'))
 
-  death_cause = StringProperty()
+  cod = StringProperty(label=_('Cause of death'), max_length=25)
 
-  father_uid = StringProperty()
-  mother_uid = StringProperty()
-  spouse_uid = StringProperty()
+  father_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+  mother_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+  spouse_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+
+  about = StringProperty(label=_('About'), max_length=1000)
 
   # Relationships.
   parents_rel = RelationshipFrom('Person', 'PARENT')
@@ -64,11 +68,11 @@ class Person(ModelBase):
     """Return age information."""
 
     result = ''
-    if self.death_date:
-      age = relativedelta(self.death_date, self.birth_date).years
+    if self.dod:
+      age = relativedelta(self.dod, self.dob).years
       result = _('Died in age of %(age)s years') % {'age': age}
-    elif self.birth_date:
-      age = relativedelta(now().date(), self.birth_date).years
+    elif self.dob:
+      age = relativedelta(now().date(), self.dob).years
       result = _('%(age)s years') % {'age': age}
 
     return result
@@ -77,3 +81,5 @@ class Person(ModelBase):
     """Person model meta."""
 
     app_label = 'schema'
+    verbose_name = _('Person')
+    verbose_name_plural = _('Persons')
