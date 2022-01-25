@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block page-header %}
+{% trans 'Locations' as page_header_primary_text %}
+{% trans 'Add a location' as page_header_primary_button_text %}
+{% url 'location-create' tree.uid as page_header_primary_button_url %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_icon='icon-pin'%}
+{% endblock page-header %}
+
+{% block content %}
+<div class="row">
+  {% for location in page_obj %}
+  {% include 'schema/location/card.html' %}
+  {% endfor %}
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock content %}

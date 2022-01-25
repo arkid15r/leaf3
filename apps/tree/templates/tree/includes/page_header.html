@@ -6,14 +6,15 @@
 <div class="btn-group position-static">
 
   <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    <i class="icon-menu7 mr-2"></i>
+    <i class="icon-pencil mr-2"></i>
     {% trans 'Manage tree' %}
   </button>
   <div class="dropdown-menu dropdown-menu-right" style="">
     <a href="{% url 'person-list' tree.uid %}" class="dropdown-item">
       <i class="icon-user"></i>{% trans 'Persons' %}</a>
     <a href="{% url 'person-list' tree.uid %}" class="dropdown-item"><i class="icon-list"></i>{% trans 'Entities' %}</a>
-    <a href="{% url 'person-list' tree.uid %}" class="dropdown-item"><i class="icon-pin"></i>{% trans 'Locations' %}</a>
+    <a href="{% url 'location-list' tree.uid %}" class="dropdown-item"><i
+        class="icon-pin"></i>{% trans 'Locations' %}</a>
     <div class="dropdown-divider"></div>
     <a href="{% url 'tree-edit' tree.uid %}" class="dropdown-item"><i class="icon-gear"></i>{% trans 'Settings' %}</a>
   </div>

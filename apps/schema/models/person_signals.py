@@ -1,5 +1,6 @@
 """Person signals/handlers."""
 
+from apps.schema.models.location import Location
 from apps.schema.models.person import Person
 
 
@@ -26,3 +27,15 @@ def post_save(sender, instance, created, **kwargs):
 
       instance.spouse_rel.disconnect_all()
       instance.spouse_rel.connect(spouse)
+
+  # Birthplace.
+  if instance.birthplace_uid:
+    instance.birthplace_rel.disconnect_all()
+    instance.birthplace_rel.connect(
+        Location.nodes.get(uid=instance.birthplace_uid))
+
+  # Residence.
+  if instance.residence_uid:
+    instance.birthplace_rel.disconnect_all()
+    instance.birthplace_rel.connect(
+        Location.nodes.get(uid=instance.residence_uid))

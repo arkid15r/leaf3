@@ -9,7 +9,7 @@ import pytz
 from django_neomodel import DjangoNode
 from neomodel import DateTimeProperty, StringProperty
 
-from apps.schema.models.properties import UIDProperty
+from apps.schema.models.db.properties import UIDProperty
 
 
 class TimestampModel(DjangoNode):
