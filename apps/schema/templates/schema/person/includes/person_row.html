@@ -1,0 +1,20 @@
+<tr>
+  <td>
+    <div class="d-flex align-items-center">
+      <div>
+        <a href="#" class="text-body font-weight-semibold">{{ person.full_name }}</a>
+        <div class="text-muted font-size-sm">{{ person.status }}</div>
+      </div>
+    </div>
+  </td>
+  <td>{{ person.dob | default_if_none:'' }}</td>
+  <td>{{ person.birthplace.short_address }}</td>
+  <td>{{ person.residence.short_address }}</td>
+  <td class="text-center">
+    <a href="{% url 'person-edit' tree.uid person.uid %}" title={{ button_delete_title }}>
+      <button type="button" class="btn btn-sm float-right">
+        <i class="icon-pencil"></i>
+      </button>
+    </a>
+  </td>
+</tr>

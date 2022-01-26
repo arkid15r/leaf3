@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    <div class="d-flex align-items-center">
+      <div>
+        <a href="#" class="text-body font-weight-semibold">{{ entity.name }}</a>
+        <div class="text-muted font-size-sm">{{ entity.status }}</div>
+      </div>
+    </div>
+  </td>
+  <td>{{ entity.category | default_if_none:'' }}</td>
+  <td>{{ entity.location.short_address }}</td>
+  <td class="text-center">
+    <a href="{% url 'entity-edit' tree.uid entity.uid %}" title={{ button_delete_title }}>
+      <button type="button" class="btn btn-sm float-right">
+        <i class="icon-pencil"></i>
+      </button>
+    </a>
+  </td>
+</tr>

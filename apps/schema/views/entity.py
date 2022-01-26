@@ -1,20 +1,20 @@
-"""Location views."""
+"""Entity views."""
 
 from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from apps.schema.forms.location import LocationForm
-from apps.schema.models.location import Location
+from apps.schema.forms.entity import EntityForm
+from apps.schema.models.entity import Entity
 from apps.schema.views.base import TreeMixin, TreeNodeMixin, TreeNodesMixin
 
 
 class Create(TreeMixin, CreateView):
-  """Location create view."""
+  """Entity create view."""
 
-  form_class = LocationForm
-  model = Location
-  template_name = 'schema/location/create.html'
+  form_class = EntityForm
+  model = Entity
+  template_name = 'schema/entity/create.html'
 
   def form_valid(self, form):
     """Validate form."""
@@ -30,19 +30,27 @@ class Create(TreeMixin, CreateView):
 
     return context
 
+  def get_form_kwargs(self):
+    """Get form kwargs."""
+
+    kwargs = super().get_form_kwargs()
+    kwargs['tree_uid'] = self.kwargs['tree_uid']
+
+    return kwargs
+
   def get_success_url(self, **unused_kwargs):
     """Generate redirect URL."""
 
-    return reverse('location-list', args=(self.kwargs['tree_uid'],))
+    return reverse('entity-list', args=(self.kwargs['tree_uid'],))
 
 
 class List(TreeNodesMixin, ListView):
-  """Location list view."""
+  """Entity list view."""
 
-  model = Location
-  ordering = ('street', 'city', 'state', 'country')
+  model = Entity
+  ordering = 'created'
   paginate_by = 5
-  template_name = 'schema/location/list.html'
+  template_name = 'schema/entity/list.html'
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -52,11 +60,11 @@ class List(TreeNodesMixin, ListView):
 
 
 class Edit(TreeNodeMixin, UpdateView):
-  """Location edit view."""
+  """Entity edit view."""
 
-  form_class = LocationForm
-  model = Location
-  template_name = 'schema/location/edit.html'
+  form_class = EntityForm
+  model = Entity
+  template_name = 'schema/entity/edit.html'
 
   def get_context_data(self, **kwargs):
     """Generate context."""
@@ -66,19 +74,27 @@ class Edit(TreeNodeMixin, UpdateView):
 
     return context
 
+  def get_form_kwargs(self):
+    """Get form kwargs."""
+
+    kwargs = super().get_form_kwargs()
+    kwargs['tree_uid'] = self.kwargs['tree_uid']
+
+    return kwargs
+
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return reverse('location-list', args=(self.kwargs['tree_uid'],))
+    return reverse('entity-list', args=(self.kwargs['tree_uid'],))
 
 
 class Delete(TreeNodeMixin, DeleteView):
-  """Location delete view."""
+  """Entity delete view."""
 
-  model = Location
-  template_name = 'schema/location/delete.html'
+  model = Entity
+  template_name = 'schema/entity/delete.html'
 
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return reverse('location-list', args=(self.kwargs['tree_uid'],))
+    return reverse('entity-list', args=(self.kwargs['tree_uid'],))

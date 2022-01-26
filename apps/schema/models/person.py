@@ -37,14 +37,14 @@ class Person(TreeNodeModel):
   mother_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   spouse_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
-  about = StringProperty(label=_('About'), max_length=1000)
+  details = StringProperty(label=_('About'), max_length=10000)
 
   # Locations.
   birthplace_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   residence_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
   # Relationships.
-  birthplace_rel = RelationshipTo('.location.Location', 'LIVES')
+  birthplace_rel = RelationshipTo('.location.Location', 'BORN')
   residence_rel = RelationshipTo('.location.Location', 'LIVES')
 
   parents_rel = RelationshipFrom('.person.Person', 'PARENT')

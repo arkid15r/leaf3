@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block page-header %}
-{% trans 'Family members' as page_header_primary_text %}
+{% trans 'Persons' as page_header_primary_text %}
 {% trans 'Add a person' as page_header_primary_button_text %}
 {% url 'person-create' tree.uid as page_header_primary_button_url %}
 {% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_icon='icon-user'%}
@@ -23,31 +23,11 @@
       </thead>
       <tbody>
         {% for person in page_obj %}
-        <tr>
-          <td>
-            <div class="d-flex align-items-center">
-              <div>
-                <a href="#" class="text-body font-weight-semibold">{{ person.full_name }}</a>
-                <div class="text-muted font-size-sm">{{ person.status }}</div>
-              </div>
-            </div>
-          </td>
-          <td>{{ person.dob | default_if_none:'' }}</td>
-          <td>{{ person.birthplace.short_address }}</td>
-          <td>{{ person.residence.short_address }}</td>
-          <td class="text-center">
-            <a href="{% url 'person-edit' tree.uid person.uid %}" title={{ button_delete_title }}>
-              <button type="button" class="btn btn-sm float-right">
-                <i class="icon-pencil"></i>
-              </button>
-            </a>
-          </td>
-        </tr>
+        {% include 'schema/person/includes/person_row.html' %}
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
-
 {% include 'includes/pagination.html' %}
 {% endblock content %}

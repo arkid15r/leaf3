@@ -2,7 +2,7 @@
 
 from django.urls import include, path
 
-from apps.schema.views import location, person
+from apps.schema.views import entity, location, person
 
 urlpatterns = [
     path(
@@ -17,6 +17,16 @@ urlpatterns = [
             path('person/<str:pk>/delete/',
                  person.Delete.as_view(),
                  name='person-delete'),
+
+            # Entity.
+            path('entity/', entity.List.as_view(), name='entity-list'),
+            path('entity/new/', entity.Create.as_view(), name='entity-create'),
+            path('entity/<str:pk>/edit',
+                 entity.Edit.as_view(),
+                 name='entity-edit'),
+            path('entity/<str:pk>/delete/',
+                 entity.Delete.as_view(),
+                 name='entity-delete'),
 
             # Location.
             path('location/', location.List.as_view(), name='location-list'),

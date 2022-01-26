@@ -1,18 +1,15 @@
 """Person views."""
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
 from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from apps.schema.forms.person import PersonForm
 from apps.schema.models.person import Person
-from apps.schema.views.base import GetTreeObjectMixin, GetTreeQuerySetMixin
-from apps.tree.models import Tree
+from apps.schema.views.base import TreeMixin, TreeNodeMixin, TreeNodesMixin
 
 
-class Create(LoginRequiredMixin, GetTreeObjectMixin, CreateView):
+class Create(TreeMixin, CreateView):
   """Person create view."""
 
   form_class = PersonForm
@@ -28,14 +25,8 @@ class Create(LoginRequiredMixin, GetTreeObjectMixin, CreateView):
   def get_context_data(self, **kwargs):
     """Generate context."""
 
-    try:
-      tree = Tree.nodes.get(creator_uid=self.request.user.uid,
-                            uid=self.kwargs['tree_uid'])
-    except Tree.DoesNotExist:
-      raise Http404
-
     context = super().get_context_data(**kwargs)
-    context.update({'tree': tree})
+    context.update({'tree': self.tree})
 
     return context
 
@@ -53,7 +44,7 @@ class Create(LoginRequiredMixin, GetTreeObjectMixin, CreateView):
     return reverse('person-list', args=(self.kwargs['tree_uid'],))
 
 
-class List(LoginRequiredMixin, GetTreeQuerySetMixin, ListView):
+class List(TreeNodesMixin, ListView):
   """Person list view."""
 
   model = Person
@@ -68,7 +59,7 @@ class List(LoginRequiredMixin, GetTreeQuerySetMixin, ListView):
     return context
 
 
-class Edit(LoginRequiredMixin, GetTreeObjectMixin, UpdateView):
+class Edit(TreeNodeMixin, UpdateView):
   """Person edit view."""
 
   form_class = PersonForm
@@ -78,15 +69,9 @@ class Edit(LoginRequiredMixin, GetTreeObjectMixin, UpdateView):
   def get_context_data(self, **kwargs):
     """Generate context."""
 
-    try:
-      tree = Tree.nodes.get(creator_uid=self.request.user.uid,
-                            uid=self.kwargs['tree_uid'])
-    except Tree.DoesNotExist:
-      raise Http404
-
     context = super().get_context_data(**kwargs)
-    context.update({'tree': tree})
-    print(context['form'].errors)
+    context.update({'tree': self.tree})
+
     return context
 
   def get_form_kwargs(self):
@@ -103,7 +88,7 @@ class Edit(LoginRequiredMixin, GetTreeObjectMixin, UpdateView):
     return reverse('person-list', args=(self.kwargs['tree_uid'],))
 
 
-class Delete(LoginRequiredMixin, GetTreeObjectMixin, DeleteView):
+class Delete(TreeNodeMixin, DeleteView):
   """Person delete view."""
 
   model = Person

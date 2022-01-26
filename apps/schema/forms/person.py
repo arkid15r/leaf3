@@ -22,24 +22,22 @@ class PersonForm(forms.ModelForm):
 
   def __init__(self, *args, **kwargs):
     tree_uid = kwargs.pop('tree_uid')
-    persons = Person.nodes.filter(tree_uid=tree_uid)
-
     super().__init__(*args, **kwargs)
 
+    persons = Person.nodes.filter(tree_uid=tree_uid)
     if self.instance:
       persons.exclude(uid=self.instance.uid)
 
     persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
-
-    self.fields['father_uid'].choices = persons
-    self.fields['mother_uid'].choices = persons
-    self.fields['spouse_uid'].choices = persons
-
-    locations = Location.nodes.filter(tree_uid=tree_uid)
-    locations = BLANK_CHOICE_DASH + [(l.uid, str(l)) for l in locations]
+    locations = BLANK_CHOICE_DASH + [
+        (l.uid, str(l)) for l in Location.nodes.filter(tree_uid=tree_uid)
+    ]
 
     self.fields['birthplace_uid'].choices = locations
+    self.fields['father_uid'].choices = persons
+    self.fields['mother_uid'].choices = persons
     self.fields['residence_uid'].choices = locations
+    self.fields['spouse_uid'].choices = persons
 
   class Meta:
     """Person form meta."""
@@ -52,7 +50,7 @@ class PersonForm(forms.ModelForm):
         'dob',
         'dod',
         'cod',
-        'about',
+        'details',
         'birthplace_uid',
         'residence_uid',
         'father_uid',
