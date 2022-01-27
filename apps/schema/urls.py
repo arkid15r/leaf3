@@ -2,12 +2,21 @@
 
 from django.urls import include, path
 
-from apps.schema.views import entity, location, person
+from apps.schema.views import entity, entry, location, person
 
 urlpatterns = [
     path(
         'tree/<str:tree_uid>/',
         include([
+            # Entry.
+            path('entry/', entry.List.as_view(), name='entry-list'),
+            path('entry/new/', entry.Create.as_view(), name='entry-create'),
+            path('entry/<str:pk>/edit', entry.Edit.as_view(),
+                 name='entry-edit'),
+            path('entry/<str:pk>/delete/',
+                 entry.Delete.as_view(),
+                 name='entry-delete'),
+
             # Person.
             path('person/', person.List.as_view(), name='person-list'),
             path('person/new/', person.Create.as_view(), name='person-create'),

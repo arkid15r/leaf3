@@ -13,7 +13,7 @@
 {% endblock page-header %}
 
 {% block content %}
-{% for object in object_list %}
-<a href="{{ object.get_absolute_url }}">{{ object }}</a>
+{% for tree in object_list %}
+{% include 'tree/includes/card.html' %}
 {% endfor %}
 {% endblock content %}

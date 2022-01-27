@@ -1,0 +1,19 @@
+<tr>
+  <td>
+    <div class="d-flex align-items-center">
+      <div>
+        <a href="#" class="text-body font-weight-semibold">{{ entry.actor }}</a>
+        <div class="text-muted font-size-sm">{{ entry.status }}</div>
+      </div>
+    </div>
+  </td>
+  <td>{{ entry.occurred }}</td>
+  <td>{{ entry.summary }}</td>
+  <td class="text-center">
+    <a href="{% url 'entry-edit' tree.uid entry.uid %}" title={{ button_delete_title }}>
+      <button type="button" class="btn btn-sm float-right">
+        <i class="icon-pencil"></i>
+      </button>
+    </a>
+  </td>
+</tr>

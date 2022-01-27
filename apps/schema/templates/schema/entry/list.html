@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block page-header %}
+{% trans 'Entries' as page_header_primary_text %}
+{% trans 'Add an entry' as page_header_primary_button_text %}
+{% url 'entry-create' tree.uid as page_header_primary_button_url %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_icon='icon-history'%}
+{% endblock page-header %}
+
+{% block content %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table text-nowrap">
+      <thead>
+        <tr>
+          <th>{% trans 'Person' %}</th>
+          <th>{% trans 'Date' %}</th>
+          <th>{% trans 'Summary' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in page_obj %}
+        {% include 'schema/entry/includes/entry_row.html' %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock content %}

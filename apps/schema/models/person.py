@@ -48,7 +48,7 @@ class Person(TreeNodeModel):
   residence_rel = RelationshipTo('.location.Location', 'LIVES')
 
   parents_rel = RelationshipFrom('.person.Person', 'PARENT')
-  spouse_rel = Relationship('.person.Person', 'MARRIED')
+  spouse_rel = Relationship('.person.Person', 'SPOUSE')
 
   def __str__(self):
     """Person str()."""

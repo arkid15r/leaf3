@@ -46,6 +46,7 @@ class PersonForm(forms.ModelForm):
         'last_name',
         'first_name',
         'patronymic_name',
+        'maiden_name',
         'gender',
         'dob',
         'dod',
@@ -59,7 +60,7 @@ class PersonForm(forms.ModelForm):
     )
     model = Person
     widgets = {
-        'about': forms.Textarea,
+        'details': forms.Textarea(),
         'dob': DatePickerInput(format='%d/%m/%Y'),
         'dod': DatePickerInput(format='%d/%m/%Y'),
     }
