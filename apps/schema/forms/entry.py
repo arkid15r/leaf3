@@ -27,14 +27,14 @@ class EntryForm(TreeFormBase):
 
     actions = BLANK_CHOICE_DASH + list(Entry.ACTIONS)
 
-    entities = Entity.nodes.filter(tree_uid=self.tree_uid)
+    entities = Entity.nodes.filter(tree_uid=self.tree.uid)
     entities = BLANK_CHOICE_DASH + [(e.uid, str(e)) for e in entities]
 
-    locations = Location.nodes.filter(tree_uid=self.tree_uid)
+    locations = Location.nodes.filter(tree_uid=self.tree.uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],
                                            key=lambda l: l[1])
 
-    persons = Person.nodes.filter(tree_uid=self.tree_uid)
+    persons = Person.nodes.filter(tree_uid=self.tree.uid)
     persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
 
     self.fields['action_uid'].choices = actions

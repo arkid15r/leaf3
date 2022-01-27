@@ -20,7 +20,7 @@ class EntityForm(TreeFormBase):
 
     categories = BLANK_CHOICE_DASH + list(Entity.CATEGORIES)
 
-    locations = Location.nodes.filter(tree_uid=self.tree_uid)
+    locations = Location.nodes.filter(tree_uid=self.tree.uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],
                                            key=lambda l: l[1])
 

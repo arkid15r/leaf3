@@ -53,7 +53,7 @@ class CreateViewBase(TreeMixin, CreateView):
   def form_valid(self, form):
     """Validate form."""
 
-    form.instance.tree_uid = self.kwargs['tree_uid']
+    form.instance.tree_uid = self.tree.uid
     return super().form_valid(form)
 
   def get_context_data(self, **kwargs):
@@ -68,7 +68,7 @@ class CreateViewBase(TreeMixin, CreateView):
     """Get form kwargs."""
 
     kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
+    kwargs['tree'] = self.tree
 
     return kwargs
 
@@ -106,6 +106,6 @@ class UpdateViewBase(TreeNodeMixin, UpdateView):
     """Get form kwargs."""
 
     kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
+    kwargs['tree'] = self.tree
 
     return kwargs

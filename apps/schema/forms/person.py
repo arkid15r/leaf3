@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
 from apps.schema.forms.base import TreeFormBase
-from apps.schema.models.location import Location
 from apps.schema.models.person import Person
 
 
@@ -24,13 +23,13 @@ class PersonForm(TreeFormBase):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
 
-    persons = Person.nodes.filter(tree_uid=self.tree_uid)
+    persons = self.tree.persons
     if self.instance:
       persons.exclude(uid=self.instance.uid)
 
     persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
     locations = BLANK_CHOICE_DASH + [
-        (l.uid, str(l)) for l in Location.nodes.filter(tree_uid=self.tree_uid)
+        (l.uid, str(l)) for l in self.tree.locations
     ]
 
     self.fields['birthplace_uid'].choices = locations

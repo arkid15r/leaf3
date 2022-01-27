@@ -78,14 +78,6 @@ class Update(UpdateViewBase):
 
     return context
 
-  def get_form_kwargs(self):
-    """Get form kwargs."""
-
-    kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
-
-    return kwargs
-
   def get_success_url(self):
     """Generate redirect URL."""
 
