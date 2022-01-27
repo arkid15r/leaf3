@@ -1,94 +1,42 @@
 """Entry views."""
 
-from django.urls import reverse
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.utils.translation import gettext_lazy as _
 
 from apps.schema.forms.entry import EntryForm
 from apps.schema.models.entry import Entry
-from apps.schema.views.base import TreeMixin, TreeNodeMixin, TreeNodesMixin
+from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
+                                    ListViewBase, UpdateViewBase)
 
 
-class Create(TreeMixin, CreateView):
+class Create(CreateViewBase):
   """Entry create view."""
 
   form_class = EntryForm
   model = Entry
   template_name = 'schema/entry/create.html'
-
-  def form_valid(self, form):
-    """Validate form."""
-
-    form.instance.tree_uid = self.kwargs['tree_uid']
-    return super().form_valid(form)
+  translations = {
+      'add_entry': _('Add an entry'),
+  }
 
   def get_context_data(self, **kwargs):
     """Generate context."""
 
     context = super().get_context_data(**kwargs)
-    context.update({'tree': self.tree})
+    context.update({
+        'page_header_primary_text': self.translations['add_entry'],
+        'page_header_secondary_text': self.tree,
+        'page_title': self.translations['add_entry'],
+    })
 
     return context
-
-  def get_form_kwargs(self):
-    """Get form kwargs."""
-
-    kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
-
-    return kwargs
 
   def get_success_url(self, **unused_kwargs):
     """Generate redirect URL."""
 
-    return reverse('entry-list', args=(self.kwargs['tree_uid'],))
+    return self.tree.entry_list_url
 
 
-class List(TreeNodesMixin, ListView):
-  """Entry list view."""
-
-  model = Entry
-  ordering = 'created'
-  paginate_by = 5
-  template_name = 'schema/entry/list.html'
-
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['tree'] = self.tree
-
-    return context
-
-
-class Edit(TreeNodeMixin, UpdateView):
-  """Entry edit view."""
-
-  form_class = EntryForm
-  model = Entry
-  template_name = 'schema/entry/edit.html'
-
-  def get_context_data(self, **kwargs):
-    """Generate context."""
-
-    context = super().get_context_data(**kwargs)
-    context.update({'tree': self.tree})
-
-    return context
-
-  def get_form_kwargs(self):
-    """Get form kwargs."""
-
-    kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
-
-    return kwargs
-
-  def get_success_url(self):
-    """Generate redirect URL."""
-
-    return reverse('entry-list', args=(self.kwargs['tree_uid'],))
-
-
-class Delete(TreeNodeMixin, DeleteView):
+class Delete(DeleteViewBase):
   """Entry delete view."""
 
   model = Entry
@@ -97,4 +45,41 @@ class Delete(TreeNodeMixin, DeleteView):
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return reverse('entry-list', args=(self.kwargs['tree_uid'],))
+    return self.tree.entry_list_url
+
+
+class List(ListViewBase):
+  """Entry list view."""
+
+  model = Entry
+  ordering = 'created'
+  template_name = 'schema/entry/list.html'
+
+
+class Update(UpdateViewBase):
+  """Entry update view."""
+
+  form_class = EntryForm
+  model = Entry
+  template_name = 'schema/entry/update.html'
+
+  translations = {
+      'edit_entry': _('Edit entry'),
+  }
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({
+        'page_header_primary_text': self.translations['edit_entry'],
+        'page_header_secondary_text': self.tree,
+        'page_title': self.translations['edit_entry'],
+    })
+
+    return context
+
+  def get_success_url(self):
+    """Generate redirect URL."""
+
+    return self.tree.entry_list_url

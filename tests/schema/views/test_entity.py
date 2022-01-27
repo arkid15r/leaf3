@@ -11,7 +11,7 @@ class TestEntityViews(TestCaseBase):
 
   def test_login_required(self):
     entity_uid = 'entity-uid'
-    entity_uid_url_names = ('entity-edit', 'entity-delete')
+    entity_uid_url_names = ('entity-update', 'entity-delete')
     tree_uid_url_names = ('entity-list', 'entity-create')
     tree_uid = 'tree-uid'
 

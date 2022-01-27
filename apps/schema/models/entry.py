@@ -14,11 +14,13 @@ class Entry(TreeNodeModel):
   """Entry model."""
 
   ACTION_GAVE_BIRTH = 'GAVE_BIRTH'
+  ACTION_GAVE_BIRTH_TEXT = _('Gave birth')
   ACTION_MARRIED = 'MARRIED'
+  ACTION_MARRIED_TEXT = _('Married')
 
   ACTIONS = (
-      (ACTION_GAVE_BIRTH, _('Gave birth')),
-      (ACTION_MARRIED, _('Married')),
+      (ACTION_GAVE_BIRTH, ACTION_GAVE_BIRTH_TEXT),
+      (ACTION_MARRIED, ACTION_MARRIED_TEXT),
   )
 
   action_uid = StringProperty(choices=ACTIONS, required=True)
@@ -51,10 +53,23 @@ class Entry(TreeNodeModel):
     except Person.DoesNotExist:
       pass
 
-  def get_absolute_url(self):
-    """Return entry absolute URL."""
+  @property
+  def object_delete_url(self):
+    """Return entry delete URL."""
+
+    return reverse_lazy('entry-delete', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_read_url(self):
+    """Return entry read URL."""
 
     return reverse_lazy('entry', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_update_url(self):
+    """Return entry update URL."""
+
+    return reverse_lazy('entry-update', args=(self.tree_uid, self.uid))
 
   class Meta:
     """Entry model meta."""

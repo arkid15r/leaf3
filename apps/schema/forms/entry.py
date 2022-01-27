@@ -6,13 +6,14 @@ from django.utils.translation import gettext_lazy as _
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
+from apps.schema.forms.base import TreeFormBase
 from apps.schema.models.entity import Entity
 from apps.schema.models.entry import Entry
 from apps.schema.models.location import Location
 from apps.schema.models.person import Person
 
 
-class EntryForm(forms.ModelForm):
+class EntryForm(TreeFormBase):
   """Entry form."""
 
   actor_uid = forms.ChoiceField(label=_('Actor'))
@@ -22,19 +23,18 @@ class EntryForm(forms.ModelForm):
   person_uid = forms.ChoiceField(label=_('Person'), required=False)
 
   def __init__(self, *args, **kwargs):
-    tree_uid = kwargs.pop('tree_uid')
     super().__init__(*args, **kwargs)
 
     actions = BLANK_CHOICE_DASH + list(Entry.ACTIONS)
 
-    entities = Entity.nodes.filter(tree_uid=tree_uid)
+    entities = Entity.nodes.filter(tree_uid=self.tree_uid)
     entities = BLANK_CHOICE_DASH + [(e.uid, str(e)) for e in entities]
 
-    locations = Location.nodes.filter(tree_uid=tree_uid)
+    locations = Location.nodes.filter(tree_uid=self.tree_uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],
                                            key=lambda l: l[1])
 
-    persons = Person.nodes.filter(tree_uid=tree_uid)
+    persons = Person.nodes.filter(tree_uid=self.tree_uid)
     persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
 
     self.fields['action_uid'].choices = actions
@@ -57,6 +57,10 @@ class EntryForm(forms.ModelForm):
     if action == Entry.ACTION_MARRIED:
       if not person_uid:
         self.add_error('person_uid', _('Required field'))
+        raise forms.ValidationError(_(
+            "The 'Person' field is required for %(action)s event") % {
+                'action': Entry.ACTION_MARRIED_TEXT
+            })
 
     return self.cleaned_data
 

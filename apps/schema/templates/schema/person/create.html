@@ -1,12 +1,1 @@
-{% extends 'base.html' %}
-
-{% load i18n %}
-
-{% block page-header %}
-{% trans 'Add a person' as page_header_primary_text %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name %}
-{% endblock page-header %}
-
-{% block content %}
-{% include 'includes/forms/add.html' %}
-{% endblock content %}
+{% extends 'schema/base/create.html' %}

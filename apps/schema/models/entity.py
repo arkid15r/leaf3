@@ -59,10 +59,23 @@ class Entity(TreeNodeModel):
     except Location.DoesNotExist:
       pass
 
-  def get_absolute_url(self):
-    """Return entity absolute URL."""
+  @property
+  def object_delete_url(self):
+    """Return entity delete URL."""
+
+    return reverse_lazy('entity-delete', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_read_url(self):
+    """Return entity read URL."""
 
     return reverse_lazy('entity', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_update_url(self):
+    """Return entity update URL."""
+
+    return reverse_lazy('entity-update', args=(self.tree_uid, self.uid))
 
   class Meta:
     """Entity model meta."""

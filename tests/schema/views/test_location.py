@@ -11,7 +11,7 @@ class TestLocationViews(TestCaseBase):
 
   def test_login_required(self):
     location_uid = 'location-uid'
-    location_uid_url_names = ('location-edit', 'location-delete')
+    location_uid_url_names = ('location-update', 'location-delete')
     tree_uid_url_names = ('location-list', 'location-create')
     tree_uid = 'tree-uid'
 

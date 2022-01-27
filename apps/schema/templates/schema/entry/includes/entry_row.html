@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <tr>
   <td>
     <div class="d-flex align-items-center">
@@ -10,7 +12,7 @@
   <td>{{ entry.occurred }}</td>
   <td>{{ entry.summary }}</td>
   <td class="text-center">
-    <a href="{% url 'entry-edit' tree.uid entry.uid %}" title={{ button_delete_title }}>
+    <a href="{{ entry.object_update_url }}" title={% trans 'Edit' %}>
       <button type="button" class="btn btn-sm float-right">
         <i class="icon-pencil"></i>
       </button>

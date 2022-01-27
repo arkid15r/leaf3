@@ -3,15 +3,13 @@
 {% load i18n %}
 
 {% block buttons %}
-
 <button type="submit" class="btn btn-dark">
-  {{ button_submit_text }} &raquo;
+  {% trans 'Save' %} &raquo;
 </button>
 
-<a href="{{ button_delete_url }}" title={{ button_delete_title }}>
+<a href="{{ object.object_delete_url }}" title={% trans 'Delete' %}>
   <button type="button" class="btn btn-danger float-right">
     <i class="icon-trash"></i>
   </button>
 </a>
-
 {% endblock buttons %}

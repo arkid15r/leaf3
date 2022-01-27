@@ -2,6 +2,8 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from apps.tree.models import Tree
 
@@ -43,3 +45,67 @@ class TreeNodesMixin(TreeMixin):
     """Get queryset."""
 
     return self.model.nodes.filter(tree_uid=self.tree.uid)
+
+
+class CreateViewBase(TreeMixin, CreateView):
+  """Create view base."""
+
+  def form_valid(self, form):
+    """Validate form."""
+
+    form.instance.tree_uid = self.kwargs['tree_uid']
+    return super().form_valid(form)
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({'tree': self.tree})
+
+    return context
+
+  def get_form_kwargs(self):
+    """Get form kwargs."""
+
+    kwargs = super().get_form_kwargs()
+    kwargs['tree_uid'] = self.kwargs['tree_uid']
+
+    return kwargs
+
+
+class DeleteViewBase(TreeNodeMixin, DeleteView):
+  """Delete view base."""
+
+
+class ListViewBase(TreeNodesMixin, ListView):
+  """List view base."""
+
+  paginate_by = 10
+
+  def get_context_data(self, **kwargs):
+    """Get context."""
+
+    context = super().get_context_data(**kwargs)
+    context['tree'] = self.tree
+
+    return context
+
+
+class UpdateViewBase(TreeNodeMixin, UpdateView):
+  """Update view base."""
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({'tree': self.tree})
+
+    return context
+
+  def get_form_kwargs(self):
+    """Get form kwargs."""
+
+    kwargs = super().get_form_kwargs()
+    kwargs['tree_uid'] = self.kwargs['tree_uid']
+
+    return kwargs
