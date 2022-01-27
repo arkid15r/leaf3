@@ -11,7 +11,7 @@ class TestPersonViews(TestCaseBase):
 
   def test_login_required(self):
     person_uid = 'person-uid'
-    person_uid_url_names = ('person-edit', 'person-delete')
+    person_uid_url_names = ('person-update', 'person-delete')
     tree_uid_url_names = ('person-list', 'person-create')
     tree_uid = 'tree-uid'
 

@@ -1,94 +1,42 @@
 """Person views."""
 
-from django.urls import reverse
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.utils.translation import gettext_lazy as _
 
 from apps.schema.forms.person import PersonForm
 from apps.schema.models.person import Person
-from apps.schema.views.base import TreeMixin, TreeNodeMixin, TreeNodesMixin
+from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
+                                    ListViewBase, UpdateViewBase)
 
 
-class Create(TreeMixin, CreateView):
+class Create(CreateViewBase):
   """Person create view."""
 
   form_class = PersonForm
   model = Person
   template_name = 'schema/person/create.html'
-
-  def form_valid(self, form):
-    """Validate form."""
-
-    form.instance.tree_uid = self.kwargs['tree_uid']
-    return super().form_valid(form)
+  translations = {
+      'add_person': _('Add a person'),
+  }
 
   def get_context_data(self, **kwargs):
     """Generate context."""
 
     context = super().get_context_data(**kwargs)
-    context.update({'tree': self.tree})
+    context.update({
+        'page_header_primary_text': self.translations['add_person'],
+        'page_header_secondary_text': self.tree,
+        'page_title': self.translations['add_person'],
+    })
 
     return context
-
-  def get_form_kwargs(self):
-    """Get form kwargs."""
-
-    kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
-
-    return kwargs
 
   def get_success_url(self, **unused_kwargs):
     """Generate redirect URL."""
 
-    return reverse('person-list', args=(self.kwargs['tree_uid'],))
+    return self.tree.person_list_url
 
 
-class List(TreeNodesMixin, ListView):
-  """Person list view."""
-
-  model = Person
-  ordering = ('dob', 'last_name', 'first_name')
-  paginate_by = 5
-  template_name = 'schema/person/list.html'
-
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['tree'] = self.tree
-
-    return context
-
-
-class Edit(TreeNodeMixin, UpdateView):
-  """Person edit view."""
-
-  form_class = PersonForm
-  model = Person
-  template_name = 'schema/person/edit.html'
-
-  def get_context_data(self, **kwargs):
-    """Generate context."""
-
-    context = super().get_context_data(**kwargs)
-    context.update({'tree': self.tree})
-
-    return context
-
-  def get_form_kwargs(self):
-    """Get form kwargs."""
-
-    kwargs = super().get_form_kwargs()
-    kwargs['tree_uid'] = self.kwargs['tree_uid']
-
-    return kwargs
-
-  def get_success_url(self):
-    """Generate redirect URL."""
-
-    return reverse('person-list', args=(self.kwargs['tree_uid'],))
-
-
-class Delete(TreeNodeMixin, DeleteView):
+class Delete(DeleteViewBase):
   """Person delete view."""
 
   model = Person
@@ -97,4 +45,48 @@ class Delete(TreeNodeMixin, DeleteView):
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return reverse('person-list', args=(self.kwargs['tree_uid'],))
+    return self.tree.person_list_url
+
+
+class List(ListViewBase):
+  """Person list view."""
+
+  model = Person
+  ordering = ('dob', 'last_name', 'first_name')
+  template_name = 'schema/person/list.html'
+
+
+class Update(UpdateViewBase):
+  """Person update view."""
+
+  form_class = PersonForm
+  model = Person
+  template_name = 'schema/person/update.html'
+  translations = {
+      'edit_person': _('Edit person'),
+  }
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({
+        'page_header_primary_text': self.translations['edit_person'],
+        'page_title': self.translations['edit_person'],
+        'tree': self.tree
+    })
+
+    return context
+
+  def get_form_kwargs(self):
+    """Get form kwargs."""
+
+    kwargs = super().get_form_kwargs()
+    kwargs['tree_uid'] = self.kwargs['tree_uid']
+
+    return kwargs
+
+  def get_success_url(self):
+    """Generate redirect URL."""
+
+    return self.tree.person_list_url

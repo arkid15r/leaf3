@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block page-header %}
+{% include 'includes/page_header.html' %}
+{% endblock page-header %}
+
+{% block content %}
+{% include 'includes/forms/create.html' %}
+{% endblock content %}

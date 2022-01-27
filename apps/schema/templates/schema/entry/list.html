@@ -6,7 +6,7 @@
 {% trans 'Entries' as page_header_primary_text %}
 {% trans 'Add an entry' as page_header_primary_button_text %}
 {% url 'entry-create' tree.uid as page_header_primary_button_url %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_icon='icon-history'%}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=tree.entry_create_url page_header_primary_button_icon='icon-history' %}
 {% endblock page-header %}
 
 {% block content %}

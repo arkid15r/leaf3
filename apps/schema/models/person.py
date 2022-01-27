@@ -1,6 +1,7 @@
 """Person models."""
 
 from django.conf import settings
+from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -67,6 +68,7 @@ class Person(TreeNodeModel):
     except Location.DoesNotExist:
       pass
 
+  @property
   def children(self):
     """Return person's children."""
 
@@ -85,6 +87,24 @@ class Person(TreeNodeModel):
     return ' '.join(fields)
 
   @property
+  def object_delete_url(self):
+    """Return person delete URL."""
+
+    return reverse_lazy('person-delete', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_read_url(self):
+    """Return person delete URL."""
+
+    return reverse_lazy('person', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_update_url(self):
+    """Return person update URL."""
+
+    return reverse_lazy('person-update', args=(self.tree_uid, self.uid))
+
+  @property
   def residence(self):
     """Return residence location."""
 
@@ -97,20 +117,6 @@ class Person(TreeNodeModel):
       pass
 
   @property
-  def status(self):
-    """Return age information."""
-
-    result = ''
-    if self.dod:
-      age = relativedelta(self.dod, self.dob).years
-      result = _('Died in age of %(age)s years') % {'age': age}
-    elif self.dob:
-      age = relativedelta(now().date(), self.dob).years
-      result = _('%(age)s years') % {'age': age}
-
-    return result
-
-  @property
   def spouse(self):
     """Return spouse person."""
 
@@ -121,6 +127,20 @@ class Person(TreeNodeModel):
       return Person.nodes.get(uid=self.spouse_uid)
     except Person.DoesNotExist:
       pass
+
+  @property
+  def summary(self):
+    """Return person summary information."""
+
+    result = ''
+    if self.dod:
+      age = relativedelta(self.dod, self.dob).years
+      result = _('Died in age of %(age)s years') % {'age': age}
+    elif self.dob:
+      age = relativedelta(now().date(), self.dob).years
+      result = _('%(age)s years') % {'age': age}
+
+    return result
 
   class Meta:
     """Person model meta."""

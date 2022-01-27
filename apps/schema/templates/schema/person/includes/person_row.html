@@ -11,7 +11,7 @@
   <td>{{ person.birthplace.short_address }}</td>
   <td>{{ person.residence.short_address }}</td>
   <td class="text-center">
-    <a href="{% url 'person-edit' tree.uid person.uid %}" title={{ button_delete_title }}>
+    <a href="{{ person.object_update_url }}" title={% trans 'Edit' %}>
       <button type="button" class="btn btn-sm float-right">
         <i class="icon-pencil"></i>
       </button>

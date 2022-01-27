@@ -35,16 +35,16 @@ class Location(TreeNodeModel):
     return ', '.join(fields)
 
   @property
-  def short_address(self):
-    """Location short address."""
-
-    return self.join_fields(('town', 'state'))
-
-  @property
   def detailed_address(self):
     """Location detailed address."""
 
     return self.join_fields(('street', 'town', 'state', 'country'))
+
+  @property
+  def full_address(self):
+    """Location full address."""
+
+    return self.join_fields(('street', 'town', 'area', 'state', 'country'))
 
   @property
   def long_address(self):
@@ -53,15 +53,28 @@ class Location(TreeNodeModel):
     return self.join_fields(('town', 'state', 'country'))
 
   @property
-  def full_address(self):
-    """Location full address."""
+  def object_delete_url(self):
+    """Return location delete URL."""
 
-    return self.join_fields(('street', 'town', 'area', 'state', 'country'))
+    return reverse_lazy('location-delete', args=(self.tree_uid, self.uid))
 
-  def get_absolute_url(self):
+  @property
+  def object_read_url(self):
     """Return location absolute URL."""
 
     return reverse_lazy('location', args=(self.tree_uid, self.uid))
+
+  @property
+  def object_update_url(self):
+    """Return location update URL."""
+
+    return reverse_lazy('location-update', args=(self.tree_uid, self.uid))
+
+  @property
+  def short_address(self):
+    """Location short address."""
+
+    return self.join_fields(('town', 'state'))
 
   class Meta:
     """Location model meta."""

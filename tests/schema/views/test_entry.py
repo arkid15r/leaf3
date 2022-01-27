@@ -11,7 +11,7 @@ class TestEntryViews(TestCaseBase):
 
   def test_login_required(self):
     entry_uid = 'entry-uid'
-    entry_uid_url_names = ('entry-edit', 'entry-delete')
+    entry_uid_url_names = ('entry-update', 'entry-delete')
     tree_uid_url_names = ('entry-list', 'entry-create')
     tree_uid = 'tree-uid'
 
