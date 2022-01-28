@@ -4,12 +4,14 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext_lazy
 
 from dateutil.relativedelta import relativedelta
 from neomodel import (DateProperty, Relationship, RelationshipFrom,
                       RelationshipTo, StringProperty)
 
 from apps.schema.models.base import TreeNodeModel
+from apps.schema.models.db.relationships import TimeRangeRelationship
 from apps.schema.models.location import Location
 
 
@@ -38,7 +40,7 @@ class Person(TreeNodeModel):
   mother_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   spouse_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
-  details = StringProperty(label=_('About'), max_length=10000)
+  details = StringProperty(label=_('Details'), max_length=10000)
 
   # Locations.
   birthplace_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
@@ -50,6 +52,13 @@ class Person(TreeNodeModel):
 
   parents_rel = RelationshipFrom('.person.Person', 'PARENT')
   spouse_rel = Relationship('.person.Person', 'SPOUSE')
+
+  marriage_rel = Relationship('.person.Person',
+                              'MARRIED',
+                              model=TimeRangeRelationship)
+  employment_rel = RelationshipTo('.entity.Entity',
+                                  'WORKED',
+                                  model=TimeRangeRelationship)
 
   def __str__(self):
     """Person str()."""
@@ -77,6 +86,18 @@ class Person(TreeNodeModel):
     )
 
   @property
+  def entry_create_url(self):
+    """Return entry create URL."""
+
+    return reverse_lazy('entry-create', args=(self.tree_uid, self.uid))
+
+  @property
+  def entry_list_url(self):
+    """Return entry list URL."""
+
+    return reverse_lazy('entry-list', args=(self.tree_uid, self.uid))
+
+  @property
   def full_name(self):
     """Return full name."""
 
@@ -85,6 +106,18 @@ class Person(TreeNodeModel):
       fields.append(self.patronymic_name)
 
     return ' '.join(fields)
+
+  @property
+  def is_female(self):
+    """Return True if person's gender value is FEMALE."""
+
+    return self.gender == self.FEMALE
+
+  @property
+  def is_male(self):
+    """Return True if person's gender value is MALE."""
+
+    return self.gender == self.MALE
 
   @property
   def object_delete_url(self):
@@ -135,10 +168,17 @@ class Person(TreeNodeModel):
     result = ''
     if self.dod:
       age = relativedelta(self.dod, self.dob).years
-      result = _('Died in age of %(age)s years') % {'age': age}
+      if self.is_female:
+        result = ngettext_lazy('died in the age of {f} year',
+                               'died in the age of {f} years',
+                               age).format(f=age)
+      elif self.is_male:
+        result = ngettext_lazy('died in the age of {m} year',
+                               'died in the age of {m} years',
+                               age).format(m=age)
     elif self.dob:
       age = relativedelta(now().date(), self.dob).years
-      result = _('%(age)s years') % {'age': age}
+      result = ngettext_lazy('{n} year', '{n} years', age).format(n=age)
 
     return result
 

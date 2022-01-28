@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
+{% block title %}{% trans 'Delete'%} {{ object }}{% endblock %}
+
 {% block content %}
 {% include 'includes/modals/confirm_delete_object.html' %}
 {% endblock content %}

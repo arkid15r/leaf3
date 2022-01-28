@@ -2,12 +2,13 @@
 
 {% load i18n %}
 
-{% block page-header %}
-{% trans 'Create a tree' as page_header_primary_text %}
+{% block title %}{{ page_title }}{% endblock %}
 
+{% block page-header %}
 {% include 'includes/page_header.html' %}
 {% endblock page-header %}
 
 {% block content %}
-{% include 'includes/forms/add.html' %}
+{% trans 'Add' as button_submit_text %}
+{% include 'includes/forms/create.html' %}
 {% endblock content %}

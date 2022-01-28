@@ -15,7 +15,7 @@ from apps.schema.models.person import Person
 class Tree(TimestampModel, UIDModel):
   """Tree model."""
 
-  creator_uid = StringProperty(label=_('Creator UID'), required=True)
+  creator_uid = StringProperty(label=_('Creator UID'))
   description = StringProperty(label=_('Description'), max_length=100)
   name = StringProperty(label=_('Name'), max_length=50, required=True)
 
@@ -46,18 +46,6 @@ class Tree(TimestampModel, UIDModel):
     return Entry.nodes.filter(tree_uid=self.uid)
 
   @property
-  def entry_create_url(self):
-    """Return entry create URL."""
-
-    return reverse_lazy('entry-create', args=(self.uid,))
-
-  @property
-  def entry_list_url(self):
-    """Return entry list URL."""
-
-    return reverse_lazy('entry-list', args=(self.uid,))
-
-  @property
   def locations(self):
     """Return tree location objects."""
     return Location.nodes.filter(tree_uid=self.uid)
@@ -78,7 +66,13 @@ class Tree(TimestampModel, UIDModel):
   def object_read_url(self):
     """Return tree read URL."""
 
-    return reverse('tree-manage', args=(self.uid,))
+    return reverse('tree-view', args=(self.uid,))
+
+  @property
+  def object_delete_url(self):
+    """Return tree delete URL."""
+
+    return reverse('tree-delete', args=(self.uid,))
 
   @property
   def persons(self):

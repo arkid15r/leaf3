@@ -8,16 +8,6 @@ urlpatterns = [
     path(
         'tree/<str:tree_uid>/',
         include([
-            # Entry.
-            path('entry/', entry.List.as_view(), name='entry-list'),
-            path('entry/new/', entry.Create.as_view(), name='entry-create'),
-            path('entry/<str:pk>/edit',
-                 entry.Update.as_view(),
-                 name='entry-update'),
-            path('entry/<str:pk>/delete/',
-                 entry.Delete.as_view(),
-                 name='entry-delete'),
-
             # Person.
             path('person/', person.List.as_view(), name='person-list'),
             path('person/new/', person.Create.as_view(), name='person-create'),
@@ -27,6 +17,19 @@ urlpatterns = [
             path('person/<str:pk>/delete/',
                  person.Delete.as_view(),
                  name='person-delete'),
+            path(
+                'person/<str:person_uid>/entry/',
+                include([
+                    # Entry.
+                    path('', entry.List.as_view(), name='entry-list'),
+                    path('new/', entry.Create.as_view(), name='entry-create'),
+                    path('<str:pk>/edit',
+                         entry.Update.as_view(),
+                         name='entry-update'),
+                    path('<str:pk>/delete/',
+                         entry.Delete.as_view(),
+                         name='entry-delete'),
+                ])),
 
             # Entity.
             path('entity/', entity.List.as_view(), name='entity-list'),

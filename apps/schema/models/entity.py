@@ -15,11 +15,13 @@ class Entity(TreeNodeModel):
 
   CATEGORY_BUSINESS = 'business'
   CATEGORY_EDUCATION = 'education'
+  CATEGORY_EMPLOYMENT = 'employment'
   CATEGORY_ORGANIZATION = 'organization'
 
   CATEGORIES = (
       (CATEGORY_BUSINESS, _('Business')),
       (CATEGORY_EDUCATION, _('Education')),
+      (CATEGORY_EMPLOYMENT, _('Employment')),
       (CATEGORY_ORGANIZATION, _('Organization')),
   )
 
