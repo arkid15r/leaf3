@@ -6,7 +6,7 @@
 {% trans 'Locations' as page_header_primary_text %}
 {% trans 'Add a location' as page_header_primary_button_text %}
 {% url 'location-create' tree.uid as page_header_primary_button_url %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=tree.location_create_url page_header_primary_button_icon='icon-pin' %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_secondary_url=tree.object_read_url page_header_primary_button_url=tree.location_create_url page_header_primary_button_icon='icon-pin' %}
 {% endblock page-header %}
 
 {% block content %}

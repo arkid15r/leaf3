@@ -3,6 +3,5 @@
 {% load i18n %}
 
 {% block content %}
-{% trans 'Create' as button_submit_text %}
-{% include 'includes/forms/create.html' %}
+{% include 'includes/forms/create.html' with page_header_secondary_url=tree.object_view_url %}
 {% endblock content %}

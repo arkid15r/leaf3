@@ -16,10 +16,26 @@ from apps.schema.models.person import Person
 class EntryForm(PersonFormBase):
   """Entry form."""
 
-  ERROR_CODE_DETAILS_REQUIRED = 'details_required'
+  ERROR_CODE_ENTITY_OR_LOCATION_REQUIRED = 'entity_or_location_required'
+  ERROR_CODE_ENTITY_REQUIRED = 'entity_required'
+  ERROR_CODE_FIELD_REQUIRED = 'required_field'
+  ERROR_CODE_ONE_OF_FIELDS_REQUIRED = 'one_of_fields_required'
   ERROR_CODE_PERSON_REQUIRED = 'person_required'
 
-  event_uid = forms.ChoiceField(label=_('Event'))
+  TRANSLATIONS = {
+      ERROR_CODE_ENTITY_REQUIRED: _(
+          'The "Entity" field is required for "{event}" event'),
+      ERROR_CODE_ENTITY_OR_LOCATION_REQUIRED: _(
+          'One of the "Entity" or "Location" fields is required for "{event}" event'),
+      ERROR_CODE_ONE_OF_FIELDS_REQUIRED: _(
+          'One of the "Person", "Entity", "Location" or "Text" fields is '
+          'required.'),
+      ERROR_CODE_PERSON_REQUIRED: _(
+          'The "Person" field is required for "{event}" event'),
+      ERROR_CODE_FIELD_REQUIRED: _('Required field'),
+  }
+
+  event_uid = forms.ChoiceField(label=_('Event'), required=True)
   entity_uid = forms.ChoiceField(label=_('Entity'), required=False)
   location_uid = forms.ChoiceField(label=_('Location'), required=False)
   person_uid = forms.ChoiceField(label=_('Person'), required=False)
@@ -30,13 +46,15 @@ class EntryForm(PersonFormBase):
     entities = Entity.nodes.filter(tree_uid=self.tree.uid)
     entities = BLANK_CHOICE_DASH + [(e.uid, str(e)) for e in entities]
 
-    events = BLANK_CHOICE_DASH + list(Entry.EVENTS)
+    events = BLANK_CHOICE_DASH + sorted(Entry.EVENTS, key=lambda e: e[1])
 
     locations = Location.nodes.filter(tree_uid=self.tree.uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],
                                            key=lambda l: l[1])
 
     persons = Person.nodes.filter(tree_uid=self.tree.uid)
+    if self.person:
+      persons.exclude(uid=self.person.uid)
     persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
 
     self.fields['entity_uid'].choices = entities
@@ -45,24 +63,17 @@ class EntryForm(PersonFormBase):
     self.fields['person_uid'].choices = persons
 
   def clean(self):
+    """Entry form clean."""
+
     entity_uid = self.cleaned_data['entity_uid']
-    event = self.cleaned_data['event_uid']
     location_uid = self.cleaned_data['location_uid']
     person_uid = self.cleaned_data['person_uid']
     text = self.cleaned_data['text']
 
     if not any((entity_uid, location_uid, person_uid, text)):
       raise forms.ValidationError(
-          _("One of the 'Person', 'Entity', 'Location' or 'Text' fields is "
-            "required."), code=self.ERROR_CODE_DETAILS_REQUIRED)
-
-    if event in (Entry.EVENT_GOT_MARRIED, Entry.EVENT_HAD_BABY):
-      if not person_uid:
-        self.add_error('person_uid', _('Required field'))
-        raise forms.ValidationError(_(
-            "The 'Person' field is required for '%(event)s' event") % {
-                'event': Entry.EVENT_CHOICES[event]
-            }, code=self.ERROR_CODE_PERSON_REQUIRED)
+          self.TRANSLATIONS[self.ERROR_CODE_ONE_OF_FIELDS_REQUIRED],
+          code=self.ERROR_CODE_ONE_OF_FIELDS_REQUIRED)
 
     return self.cleaned_data
 

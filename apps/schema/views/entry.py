@@ -13,6 +13,8 @@ from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
 class TreePersonNodeMixin(TreeMixin):
   """Tree person node mixin."""
 
+  tree_uid_field = 'tree_uid'
+
   def dispatch(self, request, *args, **kwargs):
     """Dispatch method."""
 

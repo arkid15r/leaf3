@@ -48,7 +48,8 @@ class Tree(TimestampModel, UIDModel):
   @property
   def locations(self):
     """Return tree location objects."""
-    return Location.nodes.filter(tree_uid=self.uid)
+    return Location.nodes.filter(tree_uid=self.uid).order_by(
+        'street', 'town', 'area', 'state', 'country')
 
   @property
   def location_create_url(self):
@@ -78,7 +79,8 @@ class Tree(TimestampModel, UIDModel):
   def persons(self):
     """Return tree person objects."""
 
-    return Person.nodes.filter(tree_uid=self.uid)
+    return Person.nodes.filter(tree_uid=self.uid).order_by(
+        'last_name', 'first_name')
 
   @property
   def person_create_url(self):

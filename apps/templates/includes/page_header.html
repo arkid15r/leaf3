@@ -4,7 +4,15 @@
       <div class="page-title">
         <h4 class="font-weight-semibold">{{ page_header_primary_text }}</h4>
         {% if page_header_secondary_text %}
-        <div class="text-muted">{{ page_header_secondary_text }}</div>
+        <div class="text-muted">
+          {% if page_header_secondary_url %}
+          <a href={{ page_header_secondary_url }}>
+            {{ page_header_secondary_text }}
+          </a>
+          {% else %}
+          {{ page_header_secondary_text }}
+          {% endif%}
+        </div>
         {% endif %}
       </div>
       <a href="" class="header-elements-toggle text-body d-md-none">

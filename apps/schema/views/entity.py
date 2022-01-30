@@ -17,6 +17,7 @@ class Create(CreateViewBase):
   translations = {
       'add_entity': _('Add an entity'),
   }
+  tree_uid_field = 'tree_uid'
 
   def get_context_data(self, **kwargs):
     """Generate context."""
@@ -52,7 +53,7 @@ class List(ListViewBase):
   """Entity list view."""
 
   model = Entity
-  ordering = 'created'
+  ordering = ('created',)
   template_name = 'schema/entity/list.html'
 
 

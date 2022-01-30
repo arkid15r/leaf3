@@ -29,7 +29,8 @@ class TreeNodesMixin(TreeMixin):
   def get_queryset(self):
     """Get queryset."""
 
-    return self.model.nodes.filter(tree_uid=self.tree.uid)
+    return self.model.nodes.filter(tree_uid=self.tree.uid).order_by(
+        *self.ordering)
 
 
 class CreateViewBase(TreeMixin, CreateView):

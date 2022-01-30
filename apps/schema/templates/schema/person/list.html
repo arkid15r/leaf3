@@ -5,7 +5,7 @@
 {% block page-header %}
 {% trans 'Persons' as page_header_primary_text %}
 {% trans 'Add a person' as page_header_primary_button_text %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=tree.person_create_url page_header_primary_button_icon='icon-user'%}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=tree.person_create_url page_header_secondary_url=tree.object_read_url page_header_primary_button_icon='icon-user' %}
 {% endblock page-header %}
 
 {% block content %}

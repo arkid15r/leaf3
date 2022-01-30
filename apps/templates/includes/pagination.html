@@ -8,10 +8,12 @@
   <ul class="pagination pagination-flat align-self-center m-auto">
     {% if page_obj.has_previous %}
     <li class="active page-item">
-      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo; {{ prev }}</a>
+      <a class="bg-dark page-link" href="?page={{ page_obj.previous_page_number }}">
+        &laquo; {{ prev }}
+      </a>
     </li>
     {% else %}
-    <li class="disabled page-item"><a class="page-link" href="#">&laquo; {{ prev }}</a></li>
+    <li class="disabled page-item"><a class="bg-dark page-link" href="#">&laquo; {{ prev }}</a></li>
     {% endif %}
 
     <li class="page-item disabled">
@@ -22,10 +24,10 @@
 
     {% if page_obj.has_next %}
     <li class="active page-item">
-      <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ next }} &raquo;</a>
+      <a class="bg-dark page-link" href="?page={{ page_obj.next_page_number }}">{{ next }} &raquo;</a>
     </li>
     {% else %}
-    <li class="disabled page-item"><a class="page-link" href="#">{{ next }} &raquo;</a></li>
+    <li class="disabled page-item"><a class="bg-dark page-link" href="#">{{ next }} &raquo;</a></li>
     {% endif %}
   </ul>
 </div>

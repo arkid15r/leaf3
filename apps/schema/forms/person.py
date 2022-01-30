@@ -27,7 +27,9 @@ class PersonForm(TreeFormBase):
     if self.instance:
       persons.exclude(uid=self.instance.uid)
 
-    persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in persons]
+    persons = BLANK_CHOICE_DASH + [
+        (p.uid, f'{str(p)} ({p.summary})' if p.summary else str(p)) for p in persons
+    ]
     locations = BLANK_CHOICE_DASH + [
         (l.uid, str(l)) for l in self.tree.locations
     ]
@@ -50,6 +52,7 @@ class PersonForm(TreeFormBase):
         'dob',
         'dod',
         'cod',
+        'cod_details',
         'details',
         'birthplace_uid',
         'residence_uid',

@@ -15,18 +15,14 @@ from apps.schema.models.person import Person
 class Entry(TreeNodeModel):
   """Entry model."""
 
+  EVENT_BEGIN = 'begin'
+  EVENT_CHANGE = 'change'
   EVENT_END = 'end'
-  EVENT_GRADUATION = 'graduation'
-  EVENT_HAD_BABY = 'had_baby'
-  EVENT_GOT_MARRIED = 'got_married'
-  EVENT_START = 'start'
 
   EVENT_CHOICES = {
-      EVENT_END: _('End (education, employment, etc)'),
-      EVENT_GRADUATION: _('Graduation'),
-      EVENT_HAD_BABY: _('Had a baby'),
-      EVENT_GOT_MARRIED: _('Got married'),
-      EVENT_START: _('Start (education, employment, etc)'),
+      EVENT_BEGIN: _('Begin'),
+      EVENT_CHANGE: _('Change'),
+      EVENT_END: _('End'),
   }
 
   EVENTS = tuple((key, value) for key, value in EVENT_CHOICES.items())

@@ -32,7 +32,7 @@ class Person(TreeNodeModel):
   dob = DateProperty(label=_('Date of birth'), index=True)
   dod = DateProperty(label=_('Date of death'))
 
-  cod = StringProperty(label=_('Cause of death'), max_length=25)
+  cod = StringProperty(label=_('Cause of death'), max_length=30)
   cod_details = StringProperty(label=_('Cause of death details'), max_length=200)
 
   # Persons.
@@ -83,7 +83,7 @@ class Person(TreeNodeModel):
 
     return self.cypher(
         f'MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (children:Person) return children'
-    )
+    )[0]
 
   @property
   def entry_create_url(self):
@@ -101,7 +101,12 @@ class Person(TreeNodeModel):
   def full_name(self):
     """Return full name."""
 
-    fields = [self.last_name, self.first_name]
+    fields = [self.last_name]
+    if self.maiden_name:
+      fields.append(f'({self.maiden_name})')
+
+    fields.append(self.first_name)
+
     if self.patronymic_name:
       fields.append(self.patronymic_name)
 
@@ -165,22 +170,37 @@ class Person(TreeNodeModel):
   def summary(self):
     """Return person summary information."""
 
-    result = ''
+    fields = []
     if self.dod:
-      age = relativedelta(self.dod, self.dob).years
-      if self.is_female:
-        result = ngettext_lazy('died in the age of {f} year',
-                               'died in the age of {f} years',
-                               age).format(f=age)
-      elif self.is_male:
-        result = ngettext_lazy('died in the age of {m} year',
-                               'died in the age of {m} years',
-                               age).format(m=age)
+      if self.dob:
+        age = relativedelta(self.dod, self.dob).years
+        if self.is_female:
+          fields.append(
+              ngettext_lazy('died in the age of {f} year',
+                            'died in the age of {f} years', age).format(f=age))
+        elif self.is_male:
+          fields.append(
+              ngettext_lazy('died in the age of {m} year',
+                            'died in the age of {m} years', age).format(m=age))
+      else:
+        if self.is_female:
+          fields.append(_('died in {f}').format(f=self.dod.year))
+        elif self.is_male:
+          fields.append(_('died in {m}').format(m=self.dod.year))
     elif self.dob:
-      age = relativedelta(now().date(), self.dob).years
-      result = ngettext_lazy('{n} year', '{n} years', age).format(n=age)
+      if self.cod:
+        fields.append(self.cod)
+      else:
+        age = relativedelta(now().date(), self.dob).years
+        fields.append(ngettext_lazy('{n} year', '{n} years', age).format(n=age))
 
-    return result
+    children_count = len(self.children)
+    if children_count:
+      fields.append(
+          ngettext_lazy('{c} child', '{c} children',
+                        children_count).format(c=children_count))
+
+    return ', '.join(fields)
 
   class Meta:
     """Person model meta."""

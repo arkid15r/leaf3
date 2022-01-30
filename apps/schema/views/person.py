@@ -17,6 +17,7 @@ class Create(CreateViewBase):
   translations = {
       'add_person': _('Add a person'),
   }
+  tree_uid_field = 'tree_uid'
 
   def get_context_data(self, **kwargs):
     """Generate context."""

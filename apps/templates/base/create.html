@@ -5,7 +5,7 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block page-header %}
-{% include 'includes/page_header.html' %}
+{% include 'includes/page_header.html' with page_header_secondary_url=tree.object_read_url %}
 {% endblock page-header %}
 
 {% block content %}

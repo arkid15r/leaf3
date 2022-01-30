@@ -17,6 +17,7 @@ class Create(CreateViewBase):
   translations = {
       'add_location': _('Add a location'),
   }
+  tree_uid_field = 'tree_uid'
 
   def get_context_data(self, **kwargs):
     """Generate context."""
@@ -51,7 +52,7 @@ class List(ListViewBase):
   """Location list view."""
 
   model = Location
-  ordering = ('street', 'city', 'state', 'country')
+  ordering = ('street', 'town', 'state', 'country')
   template_name = 'schema/location/list.html'
 
 
