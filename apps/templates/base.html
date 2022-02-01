@@ -13,18 +13,15 @@
 	<title>{% block title %}{% endblock title %}</title>
 
 	{# CSS #}
-	{% block css %}
-
+	{% block head-css %}
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
-
 	{% compress css %}
 	<link href="{% static 'css/all.min.css' %}" rel="stylesheet" type="text/css">
 	<link href="{% static 'css/icons/icomoon/styles.min.css' %}" rel="stylesheet" type="text/css">
 	{% endcompress %}
 
-	{% block css-extra %}{% endblock css-extra %}
-
-	{% endblock css %}
+	{% block css %}{% endblock css %}
+	{% endblock head-css %}
 
 	{# JS #}
 	{% block head-js %}
@@ -32,11 +29,14 @@
 	{% compress js %}
 	<script src="{% static 'js/main/jquery.min.js' %}"></script>
 	<script src="{% static 'js/main/bootstrap.bundle.min.js' %}"></script>
+
+
 	<script src="{% static 'js/app.js' %}"></script>
 	{% endcompress js %}
 
+	<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+	<script src="{% static 'js/demo_pages/datatables_basic.js' %}"></script>
 	{% block js %}{% endblock js %}
-
 	{% endblock head-js %}
 </head>
 

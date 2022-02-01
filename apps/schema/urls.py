@@ -6,6 +6,13 @@ from apps.schema.views import entity, entry, location, person
 
 urlpatterns = [
     path(
+        'api/tree/<str:tree_uid>/',
+        include([
+            path('person/',
+                 person.PersonListAPI.as_view(),
+                 name='api-person-list'),
+        ])),
+    path(
         'tree/<str:tree_uid>/',
         include([
             # Person.

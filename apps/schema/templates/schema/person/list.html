@@ -11,22 +11,83 @@
 {% block content %}
 <div class="card">
   <div class="table-responsive">
-    <table class="table text-nowrap">
+    <table class="table text-nowrap" id="persons">
       <thead>
         <tr>
           <th>{% trans 'Full name' %}</th>
-          <th>{% trans 'Birth date' %}</th>
+          <th>{% trans 'Year of birth' %}</th>
           <th>{% trans 'Birthplace' %}</th>
           <th>{% trans 'Residence' %}</th>
         </tr>
       </thead>
       <tbody>
-        {% for person in page_obj %}
-        {% include 'schema/person/includes/person_row.html' %}
-        {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
-{% include 'includes/pagination.html' %}
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#persons").DataTable({
+      autoWidth: false,
+      "lengthChange": false,
+      "order": [
+        [1, "asc"]
+      ],
+      pagingType: "simple",
+      language: {
+        info: "{% trans '_START_ - _END_ of _TOTAL_' %}",
+        paginate: {
+          'next': '{% trans "Next" %}' + ' &raquo;',
+          'previous': '&laquo; ' + '{% trans "Prev" %}'
+        },
+        search: "",
+        searchPlaceholder: "{% trans 'Search persons' %}"
+      },
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        url: "{% url 'api-person-list' tree.uid %}"
+      },
+      columnDefs: [{
+        "defaultContent": "",
+        "targets": "_all"
+      }],
+      columns: [{
+          data: "name",
+          render: function (data, type, row, meta) {
+            return `
+                <a href="#" class = "text-body font-weight-semibold">${data}</a>
+                <div class = "text-muted font-size-sm">${row.summary}</div>`;
+          }
+        },
+        {
+          data: "birth_year",
+        },
+        {
+          data: "birthplace",
+        },
+        {
+          data: "residence",
+        },
+        {
+          data: "buttons",
+          render: function (data, type, row, meta) {
+            return `
+          <a href="${row.object_update_url}" title={% trans 'Edit' %}>
+            <button type="button" class="btn btn-sm">
+              <i class="icon-pencil"></i>
+            </button>
+          </a>
+          <a href="${row.entry_list_url}" title={% trans 'Entries' %}>
+            <button type="button" class="btn btn-sm">
+              <i class="icon-list"></i>
+            </button>
+          </a>`;
+          }
+        }
+      ]
+    })
+  });
+</script>
 {% endblock content %}

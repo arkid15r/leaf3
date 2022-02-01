@@ -4,8 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.schema.forms.person import PersonForm
 from apps.schema.models.person import Person
+from apps.schema.serializers.person import PersonSerializer
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    ListViewBase, UpdateViewBase)
+                                    ListViewAPIBase, ListViewBase,
+                                    UpdateViewBase)
 
 
 class Create(CreateViewBase):
@@ -47,6 +49,17 @@ class Delete(DeleteViewBase):
     """Generate redirect URL."""
 
     return self.tree.person_list_url
+
+
+class PersonListAPI(ListViewAPIBase):
+  """Person list API endpoint."""
+
+  model = Person
+  name = _('Persons')
+  order_by_fields = ('name', 'birth_year', 'birthplace', 'residence')
+  search_fields = ('first_name', 'last_name', 'patronymic_name', 'maiden_name',
+                   'cod', 'birth_year')
+  serializer_class = PersonSerializer
 
 
 class List(ListViewBase):

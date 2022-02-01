@@ -34,6 +34,7 @@ EXTERNAL_APPS = [
     'compressor',
     'crispy_forms',
     'django_neomodel',
+    'rest_framework',
 ]
 
 PROJECT_APPS = [

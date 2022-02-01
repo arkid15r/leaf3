@@ -29,10 +29,14 @@ class Person(TreeNodeModel):
   maiden_name = StringProperty(label=_('Maiden name'), max_length=25)
 
   gender = StringProperty(label=_('Gender'), required=True, choices=GENDERS)
-  dob = DateProperty(label=_('Date of birth'), index=True)
+
+  birth_year = StringProperty(label=_('Year of birth'), index=True)
+  dob = DateProperty(label=_('Date of birth'))
+
+  death_year = StringProperty(label=_('Year of death'), index=True)
   dod = DateProperty(label=_('Date of death'))
 
-  cod = StringProperty(label=_('Cause of death'), max_length=30)
+  cod = StringProperty(label=_('Cause of death'), max_length=30, index=True)
   cod_details = StringProperty(label=_('Cause of death details'), max_length=200)
 
   # Persons.
@@ -63,7 +67,24 @@ class Person(TreeNodeModel):
   def __str__(self):
     """Person str()."""
 
-    return self.full_name
+    fields = [self.name]
+    if self.summary:
+      fields.append(f'({self.summary})')
+
+    return ' '.join(fields)
+
+  def save(self):
+    """Save person model."""
+
+    # Year of birth.
+    if not self.birth_year and self.dob:
+      self.birth_year = self.dob.year
+
+    # Year of death.
+    if not self.death_year and self.dod:
+      self.death_year = self.dod.year
+
+    return super().save()
 
   @property
   def birthplace(self):
@@ -98,21 +119,6 @@ class Person(TreeNodeModel):
     return reverse_lazy('entry-list', args=(self.tree_uid, self.uid))
 
   @property
-  def full_name(self):
-    """Return full name."""
-
-    fields = [self.last_name]
-    if self.maiden_name:
-      fields.append(f'({self.maiden_name})')
-
-    fields.append(self.first_name)
-
-    if self.patronymic_name:
-      fields.append(self.patronymic_name)
-
-    return ' '.join(fields)
-
-  @property
   def is_female(self):
     """Return True if person's gender value is FEMALE."""
 
@@ -123,6 +129,22 @@ class Person(TreeNodeModel):
     """Return True if person's gender value is MALE."""
 
     return self.gender == self.MALE
+
+  @property
+  def name(self):
+    """Return full name."""
+
+    if self.maiden_name:
+      fields = [f'{self.last_name}/{self.maiden_name}']
+    else:
+      fields = [self.last_name]
+
+    fields.append(self.first_name)
+
+    if self.patronymic_name:
+      fields.append(self.patronymic_name)
+
+    return ' '.join(fields)
 
   @property
   def object_delete_url(self):

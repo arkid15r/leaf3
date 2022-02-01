@@ -23,7 +23,7 @@ class TreeMixin(LoginRequiredMixin):
 
     try:
       self.tree = Tree.nodes.get(creator_uid=self.request.user.uid,
-                                 uid=self.kwargs[self.tree_uid_field])
+                                 uid=kwargs.pop(self.tree_uid_field))
     except Tree.DoesNotExist:
       raise Http404
 
