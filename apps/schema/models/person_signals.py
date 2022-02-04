@@ -14,9 +14,9 @@ def post_save(sender, instance, created, **kwargs):
   if instance.mother_uid:
     parent_uids.append(instance.mother_uid)
 
-  instance.parents_rel.disconnect_all()
+  instance.parent_rel.disconnect_all()
   for parent in Person.nodes.filter(uid__in=parent_uids):
-    instance.parents_rel.connect(parent)
+    instance.parent_rel.connect(parent)
 
   # Spouse.
   instance.spouse_rel.disconnect_all()

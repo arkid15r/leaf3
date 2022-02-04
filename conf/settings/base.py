@@ -35,6 +35,7 @@ EXTERNAL_APPS = [
     'crispy_forms',
     'django_neomodel',
     'rest_framework',
+    'webpack_loader',
 ]
 
 PROJECT_APPS = [
@@ -172,7 +173,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#staticfiles-dirs
-STATICFILES_DIRS = [os.path.join(APPS_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(APPS_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'client', 'static'),
+]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -254,3 +258,14 @@ NEOMODEL_NEO4J_BOLT_URL = env.str('NEO4J_DATABASE_URL')
 # https://github.com/skorokithakis/shortuuid
 SHORT_UUID_ALPHABET = '23456789abcdefghijkmnopqrstuvwxyz'
 SHORT_UUID_LENGTH = 10
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'client/webpack-stats.json'),
+        'POLL_INTERVAL': 0.3,
+        'TIMEOUT': None,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
+    }
+}

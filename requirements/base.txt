@@ -19,6 +19,9 @@ django-neomodel==0.0.7
 # https://www.django-rest-framework.org/tutorial/quickstart/
 djangorestframework==3.13.1
 
+# https://github.com/django-webpack/django-webpack-loader
+django-webpack-loader==1.4.1
+
 # https://dateutil.readthedocs.io/en/stable/
 python-dateutil==2.8.2
 

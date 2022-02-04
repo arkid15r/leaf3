@@ -3,22 +3,33 @@
 from django.urls import include, path
 
 from apps.schema.views import entity, entry, location, person
+from apps.schema.views.api import person as person_api
 
 urlpatterns = [
     path(
         'api/tree/<str:tree_uid>/',
         include([
-            path('person/',
-                 person.PersonListAPI.as_view(),
-                 name='api-person-list'),
+            path(
+                # Person.
+                'person/',
+                include([
+                    path('',
+                         person_api.DataTableList.as_view(),
+                         name='api-person-list'),
+                    path('<str:pk>/simple-tree/',
+                         person_api.SimpleTree.as_view(),
+                         name='api-person-simple-tree'),
+                ])),
         ])),
     path(
         'tree/<str:tree_uid>/',
         include([
             # Person.
-            path('person/', person.List.as_view(), name='person-list'),
             path('person/new/', person.Create.as_view(), name='person-create'),
-            path('person/<str:pk>/edit',
+            path('person/<str:pk>/view/',
+                 person.View.as_view(),
+                 name='person-view'),
+            path('person/<str:pk>/edit/',
                  person.Update.as_view(),
                  name='person-update'),
             path('person/<str:pk>/delete/',
@@ -30,7 +41,7 @@ urlpatterns = [
                     # Entry.
                     path('', entry.List.as_view(), name='entry-list'),
                     path('new/', entry.Create.as_view(), name='entry-create'),
-                    path('<str:pk>/edit',
+                    path('<str:pk>/edit/',
                          entry.Update.as_view(),
                          name='entry-update'),
                     path('<str:pk>/delete/',
@@ -41,7 +52,7 @@ urlpatterns = [
             # Entity.
             path('entity/', entity.List.as_view(), name='entity-list'),
             path('entity/new/', entity.Create.as_view(), name='entity-create'),
-            path('entity/<str:pk>/edit',
+            path('entity/<str:pk>/edit/',
                  entity.Update.as_view(),
                  name='entity-update'),
             path('entity/<str:pk>/delete/',
@@ -53,7 +64,7 @@ urlpatterns = [
             path('location/new/',
                  location.Create.as_view(),
                  name='location-create'),
-            path('location/<str:pk>/edit',
+            path('location/<str:pk>/edit/',
                  location.Update.as_view(),
                  name='location-update'),
             path('location/<str:pk>/delete/',

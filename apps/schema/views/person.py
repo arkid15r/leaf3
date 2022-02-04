@@ -1,13 +1,12 @@
 """Person views."""
 
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import TemplateView
 
 from apps.schema.forms.person import PersonForm
 from apps.schema.models.person import Person
-from apps.schema.serializers.person import PersonSerializer
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    ListViewAPIBase, ListViewBase,
-                                    UpdateViewBase)
+                                    TreeNodeMixin, UpdateViewBase)
 
 
 class Create(CreateViewBase):
@@ -36,7 +35,7 @@ class Create(CreateViewBase):
   def get_success_url(self, **unused_kwargs):
     """Generate redirect URL."""
 
-    return self.tree.person_list_url
+    return self.tree.object_read_url
 
 
 class Delete(DeleteViewBase):
@@ -49,25 +48,6 @@ class Delete(DeleteViewBase):
     """Generate redirect URL."""
 
     return self.tree.person_list_url
-
-
-class PersonListAPI(ListViewAPIBase):
-  """Person list API endpoint."""
-
-  model = Person
-  name = _('Persons')
-  order_by_fields = ('name', 'birth_year', 'birthplace', 'residence')
-  search_fields = ('first_name', 'last_name', 'patronymic_name', 'maiden_name',
-                   'cod', 'birth_year')
-  serializer_class = PersonSerializer
-
-
-class List(ListViewBase):
-  """Person list view."""
-
-  model = Person
-  ordering = ('dob', 'last_name', 'first_name')
-  template_name = 'schema/person/list.html'
 
 
 class Update(UpdateViewBase):
@@ -95,4 +75,18 @@ class Update(UpdateViewBase):
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return self.tree.person_list_url
+    return self.tree.object_read_url
+
+
+class View(TreeNodeMixin, TemplateView):
+  """Person view parent tree."""
+
+  model = Person
+  template_name = 'schema/person/view.html'
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({'person': self.get_object()})
+    return context

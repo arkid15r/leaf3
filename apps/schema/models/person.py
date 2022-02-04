@@ -52,17 +52,15 @@ class Person(TreeNodeModel):
 
   # Relationships.
   birthplace_rel = RelationshipTo('.location.Location', 'BORN')
-  residence_rel = RelationshipTo('.location.Location', 'LIVES')
-
-  parents_rel = RelationshipFrom('.person.Person', 'PARENT')
-  spouse_rel = Relationship('.person.Person', 'SPOUSE')
-
-  marriage_rel = Relationship('.person.Person',
-                              'MARRIED',
-                              model=TimeRangeRelationship)
   employment_rel = RelationshipTo('.entity.Entity',
                                   'WORKED',
                                   model=TimeRangeRelationship)
+  marriage_rel = Relationship('.person.Person',
+                              'MARRIED',
+                              model=TimeRangeRelationship)
+  parent_rel = RelationshipFrom('.person.Person', 'PARENT')
+  residence_rel = RelationshipTo('.location.Location', 'LIVED')
+  spouse_rel = Relationship('.person.Person', 'SPOUSE')
 
   def __str__(self):
     """Person str()."""
@@ -70,6 +68,21 @@ class Person(TreeNodeModel):
     fields = [self.name]
     if self.summary:
       fields.append(f'({self.summary})')
+
+    return ' '.join(fields)
+
+  def get_name(self, format='full'):
+    """Get name."""
+
+    if self.maiden_name and format == 'full':
+      fields = [f'{self.last_name}/{self.maiden_name}']
+    else:
+      fields = [self.last_name]
+
+    fields.append(self.first_name)
+
+    if self.patronymic_name and format != 'short':
+      fields.append(self.patronymic_name)
 
     return ' '.join(fields)
 
@@ -102,9 +115,15 @@ class Person(TreeNodeModel):
   def children(self):
     """Return person's children."""
 
-    return self.cypher(
-        f'MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (children:Person) return children'
-    )[0]
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
+        RETURN child
+        ORDER BY child.birth_year, child.gender DESC, child.first_name
+    """
+
+    nodes, unused_meta = self.cypher(query)
+
+    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def entry_create_url(self):
@@ -119,6 +138,19 @@ class Person(TreeNodeModel):
     return reverse_lazy('entry-list', args=(self.tree_uid, self.uid))
 
   @property
+  def children_count(self):
+    """Return True if person has children otherwise return False."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
+        RETURN COUNT(child)
+    """
+
+    nodes, unused_meta = self.cypher(query)
+
+    return nodes[0][0]
+
+  @property
   def is_female(self):
     """Return True if person's gender value is FEMALE."""
 
@@ -131,20 +163,16 @@ class Person(TreeNodeModel):
     return self.gender == self.MALE
 
   @property
+  def long_name(self):
+    """Return long name."""
+
+    return self.get_name(format='long')
+
+  @property
   def name(self):
     """Return full name."""
 
-    if self.maiden_name:
-      fields = [f'{self.last_name}/{self.maiden_name}']
-    else:
-      fields = [self.last_name]
-
-    fields.append(self.first_name)
-
-    if self.patronymic_name:
-      fields.append(self.patronymic_name)
-
-    return ' '.join(fields)
+    return self.get_name()
 
   @property
   def object_delete_url(self):
@@ -165,6 +193,20 @@ class Person(TreeNodeModel):
     return reverse_lazy('person-update', args=(self.tree_uid, self.uid))
 
   @property
+  def parents(self):
+    """Return person's parents."""
+
+    query = f"""
+        MATCH (parent: Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        RETURN parent
+        ORDER BY parent.birth_year
+    """
+
+    nodes, unused_meta = self.cypher(query)
+
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
   def residence(self):
     """Return residence location."""
 
@@ -175,6 +217,37 @@ class Person(TreeNodeModel):
       return Location.nodes.get(uid=self.residence_uid)
     except Location.DoesNotExist:
       pass
+
+  @property
+  def siblings(self):
+    """Return person's siblings."""
+
+    query = f"""
+        CALL {{
+            MATCH (Person {{ uid: "{self.father_uid}" }}) -[:PARENT]-> (child:Person)
+            WHERE NOT child.uid = "{self.uid}"
+            RETURN child
+
+            UNION
+
+            MATCH (Person {{ uid: "{self.mother_uid}" }}) -[:PARENT]-> (child:Person)
+            WHERE NOT child.uid = "{self.uid}"
+            RETURN child
+        }}
+
+        RETURN child
+        ORDER BY child.birth_year, child.gender DESC, child.first_name
+    """
+
+    nodes, unused_meta = self.cypher(query)
+
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
+  def short_name(self):
+    """Return short name."""
+
+    return self.get_name(format='short')
 
   @property
   def spouse(self):
