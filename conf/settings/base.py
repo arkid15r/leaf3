@@ -133,10 +133,10 @@ SECRET_KEY = env.str('SECRET_KEY')
 
 # Language, i18, l10n, timezones.
 # https://docs.djangoproject.com/en/stable/ref/settings/#language-code
-LANGUAGE_CODE = env.str('DJANGO_LANGUAGE_CODE', 'en')
+LANGUAGE_CODE = 'ru'
 
 # https://docs.djangoproject.com/en/4.0/ref/settings/#languages
-LANGUAGES = (env.list('DJANGO_LANGUAGE') or ('en', ugettext('English')),)
+LANGUAGES = (('ru', ugettext('Russian')),)
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#locale-paths
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]

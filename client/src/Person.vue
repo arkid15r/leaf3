@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="parentsCount > 0">
-      <h5>Ancestors</h5>
+      <h5>{{ $t("ancestors") }}</h5>
       <simple-tree
         direction="ancestor"
         :person-uid="personUid"
@@ -9,7 +9,7 @@
       />
     </div>
     <div v-if="childrenCount > 0">
-      <h5 class="mt-2">Descendants</h5>
+      <h5 class="mt-2">{{ $t("descendants") }}</h5>
       <simple-tree
         direction="descendant"
         :person-uid="personUid"
@@ -33,3 +33,16 @@ export default {
   },
 };
 </script>
+
+<i18n>
+{
+  "en": {
+    "ancestors": "Ancestors",
+    "descendants": "Descendants"
+  },
+  "ru": {
+    "ancestors": "Предки",
+    "descendants": "Потомки"
+  }
+}
+</i18n>

@@ -16,6 +16,13 @@ module.exports = {
   outputDir: path.resolve(__dirname, "../static/dist/"),
 
   chainWebpack: (config) => {
+    config.module
+      .rule("i18n")
+      .resourceQuery(/blockType=i18n/)
+      .type("javascript/auto")
+      .use("i18n")
+      .loader("@intlify/vue-i18n-loader");
+
     config.optimization.splitChunks({
       cacheGroups: {
         vendor: {
