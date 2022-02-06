@@ -2,8 +2,11 @@
 
 from rest_framework import serializers
 
+from apps.schema.serializers.base import (ListItemSerializerBase,
+                                          TreeNodeSerializerBase)
 
-class ListItemSerializer(serializers.Serializer):
+
+class ListItemSerializer(ListItemSerializerBase):
   """Person list item serializer."""
 
   birthplace = serializers.SerializerMethodField()
@@ -11,7 +14,6 @@ class ListItemSerializer(serializers.Serializer):
   name = serializers.SerializerMethodField()
   residence = serializers.SerializerMethodField()
   summary = serializers.SerializerMethodField()
-  uid = serializers.SerializerMethodField()
 
   def get_birthplace(self, obj):
     """Get birthplace."""
@@ -44,18 +46,12 @@ class ListItemSerializer(serializers.Serializer):
 
     return obj.summary
 
-  def get_uid(self, obj):
-    """Get object UID."""
 
-    return obj.uid
-
-
-class TreeNodeSerializer(serializers.Serializer):
+class TreeNodeSerializer(TreeNodeSerializerBase):
   """Person tree node serializer."""
 
   birth_year = serializers.SerializerMethodField()
   name = serializers.SerializerMethodField()
-  uid = serializers.SerializerMethodField()
 
   def get_birth_year(self, obj):
     """Get birth year."""
@@ -66,8 +62,3 @@ class TreeNodeSerializer(serializers.Serializer):
     """Get name."""
 
     return obj.short_name
-
-  def get_uid(self, obj):
-    """Get UID."""
-
-    return obj.uid

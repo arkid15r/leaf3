@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from apps.schema.forms.person import PersonForm
 from apps.schema.models.person import Person
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    TreeNodeMixin, UpdateViewBase)
+                                    TreePersonNodeMixin, UpdateViewBase)
 
 
 class Create(CreateViewBase):
@@ -67,7 +67,6 @@ class Update(UpdateViewBase):
     context.update({
         'page_header_primary_text': self.translations['edit_person'],
         'page_title': self.translations['edit_person'],
-        'tree': self.tree
     })
 
     return context
@@ -78,15 +77,8 @@ class Update(UpdateViewBase):
     return self.tree.object_read_url
 
 
-class View(TreeNodeMixin, TemplateView):
-  """Person view parent tree."""
+class View(TreePersonNodeMixin, TemplateView):
+  """Person view."""
 
   model = Person
   template_name = 'schema/person/view.html'
-
-  def get_context_data(self, **kwargs):
-    """Generate context."""
-
-    context = super().get_context_data(**kwargs)
-    context.update({'person': self.get_object()})
-    return context

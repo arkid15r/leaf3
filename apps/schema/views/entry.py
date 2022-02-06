@@ -1,40 +1,12 @@
 """Entry views."""
 
-from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from apps.schema.forms.entry import EntryForm
 from apps.schema.models.entry import Entry
-from apps.schema.models.person import Person
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    ListViewBase, TreeMixin, UpdateViewBase)
-
-
-class TreePersonNodeMixin(TreeMixin):
-  """Tree person node mixin."""
-
-  tree_uid_field = 'tree_uid'
-
-  def dispatch(self, request, *args, **kwargs):
-    """Dispatch method."""
-
-    if not request.user.is_authenticated:
-      return super().dispatch(request, *args, **kwargs)
-
-    try:
-      self.person = Person.nodes.get(tree_uid=self.kwargs['tree_uid'],
-                                     uid=self.kwargs['person_uid'])
-    except Person.DoesNotExist:
-      raise Http404
-
-    return super().dispatch(request, *args, **kwargs)
-
-  def get_context_data(self, **kwargs):
-    """Generate context."""
-
-    context = super().get_context_data(**kwargs)
-    context.update({'person': self.person})
-    return context
+                                    ListDataTableViewBase, TreePersonNodeMixin,
+                                    UpdateViewBase)
 
 
 class Create(TreePersonNodeMixin, CreateViewBase):
@@ -83,12 +55,22 @@ class Delete(TreePersonNodeMixin, DeleteViewBase):
     return self.person.entry_list_url
 
 
-class List(TreePersonNodeMixin, ListViewBase):
+class List(ListDataTableViewBase, TreePersonNodeMixin):
   """Entry list view."""
 
   model = Entry
-  ordering = 'created'
   template_name = 'schema/entry/list.html'
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({
+        'page_header_primary_text':
+            f'{self.person.short_name} / {_("Entries")}',
+    })
+
+    return context
 
 
 class Update(TreePersonNodeMixin, UpdateViewBase):

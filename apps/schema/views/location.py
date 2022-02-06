@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.schema.forms.location import LocationForm
 from apps.schema.models.location import Location
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    ListViewBase, UpdateViewBase)
+                                    ListDataTableViewBase, UpdateViewBase)
 
 
 class Create(CreateViewBase):
@@ -48,12 +48,11 @@ class Delete(DeleteViewBase):
     return self.tree.location_list_url
 
 
-class List(ListViewBase):
+class List(ListDataTableViewBase):
   """Location list view."""
 
-  model = Location
-  ordering = ('street', 'town', 'state', 'country')
   template_name = 'schema/location/list.html'
+  tree_uid_field = 'tree_uid'
 
 
 class Update(UpdateViewBase):

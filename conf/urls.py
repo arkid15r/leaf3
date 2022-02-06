@@ -10,7 +10,8 @@ urlpatterns = [
     path('', core_views.Main.as_view(), name='main'),
     path('', include('apps.tree.urls')),
     path('', include('apps.core.urls')),
-    path('', include('apps.schema.urls')),
+    path('', include('apps.schema.views.api.urls')),
+    path('', include('apps.schema.views.urls')),
     path(settings.ADMIN_URL, admin.site.urls),
     path(settings.ALL_AUTH_URL, include('allauth.urls')),
 ]

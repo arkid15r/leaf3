@@ -118,7 +118,7 @@ class Person(TreeNodeModel):
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
         RETURN child
-        ORDER BY child.birth_year, child.gender DESC, child.first_name
+        ORDER BY child.birth_year DESC, child.gender DESC, child.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -199,7 +199,7 @@ class Person(TreeNodeModel):
     query = f"""
         MATCH (parent: Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
         RETURN parent
-        ORDER BY parent.birth_year
+        ORDER BY parent.birth_year, parent.gender DESC
     """
 
     nodes, unused_meta = self.cypher(query)

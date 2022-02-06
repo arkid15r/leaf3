@@ -11,7 +11,7 @@
 {% endblock page-header %}
 
 {% block content %}
-<div id="trees" data-children-count="{{ person.children_count }}" data-parents-count="{{ person.parents | length }}"
+<div id="person" data-children-count="{{ person.children_count }}" data-parents-count="{{ person.parents | length }}"
   data-person-uid="{{ person.uid }}" data-tree-uid="{{ tree.uid }}">
   <person></person>
 </div>

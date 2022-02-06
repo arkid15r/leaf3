@@ -10,10 +10,76 @@
 {% endblock page-header %}
 
 {% block content %}
-<div class="row">
-  {% for location in page_obj %}
-  {% include 'schema/location/includes/card.html' %}
-  {% endfor %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table text-nowrap" id="locations">
+      <thead>
+        <tr>
+          <th>{% trans 'Street' %}</th>
+          <th>{% trans 'Town' %}</th>
+          <th>{% trans 'Area' %}</th>
+          <th>{% trans 'State' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
 </div>
-{% include 'includes/pagination.html' %}
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#locations").DataTable({
+      autoWidth: false,
+      "lengthChange": false,
+      "order": [
+        [1, "asc"]
+      ],
+      pagingType: "simple",
+      language: {
+        info: "{% trans '_START_ - _END_ of _TOTAL_' %}",
+        paginate: {
+          'next': '{% trans "Next" %}' + ' &raquo;',
+          'previous': '&laquo; ' + '{% trans "Prev" %}'
+        },
+        search: "",
+        searchPlaceholder: "{% trans 'Search location' %}"
+      },
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        url: "{% url 'api-location-list' tree.uid %}"
+      },
+      columnDefs: [{
+        "defaultContent": "",
+        "targets": "_all"
+      }],
+      columns: [{
+          data: "street",
+        },
+        {
+          data: "town",
+        },
+        {
+          data: "area",
+        },
+        {
+          data: "state",
+        },
+        {
+          data: "buttons",
+          render: function (data, type, row, meta) {
+            return `
+
+          <a href="/tree/{{ tree.uid }}/location/${row.uid}/edit/" title={% trans 'Edit' %}>
+            <button type="button" class="btn btn-sm">
+              <i class="icon-pencil"></i>
+            </button>
+          </a>`;
+          }
+        }
+      ]
+    })
+  });
+</script>
 {% endblock content %}

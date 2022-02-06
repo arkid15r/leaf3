@@ -1,9 +1,10 @@
 """Schema views base."""
 
 from django.http import Http404
-from django.views.generic import ListView
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from apps.schema.models.person import Person
 from apps.tree.views import TreeMixin
 
 
@@ -21,15 +22,31 @@ class TreeNodeMixin(TreeMixin):
       raise Http404
 
 
-class TreeNodesMixin(TreeMixin):
-  """Tree nodes mixin."""
+class TreePersonNodeMixin(TreeMixin):
+  """Tree person node mixin."""
 
   tree_uid_field = 'tree_uid'
 
-  def get_queryset(self):
-    """Get queryset."""
+  def dispatch(self, request, *args, **kwargs):
+    """Dispatch method."""
 
-    return self.model.nodes.filter(tree_uid=self.tree.uid)
+    if not request.user.is_authenticated:
+      return super().dispatch(request, *args, **kwargs)
+
+    try:
+      self.person = Person.nodes.get(tree_uid=self.kwargs['tree_uid'],
+                                     uid=kwargs.pop('person_uid'))
+    except Person.DoesNotExist:
+      raise Http404
+
+    return super().dispatch(request, *args, **kwargs)
+
+  def get_context_data(self, **kwargs):
+    """Generate context."""
+
+    context = super().get_context_data(**kwargs)
+    context.update({'person': self.person})
+    return context
 
 
 class CreateViewBase(TreeMixin, CreateView):
@@ -53,8 +70,8 @@ class DeleteViewBase(TreeNodeMixin, DeleteView):
   """Delete view base."""
 
 
-class ListViewBase(TreeNodesMixin, ListView):
-  """List view base."""
+class ListDataTableViewBase(TreeMixin, TemplateView):
+  """List data table view base."""
 
 
 class UpdateViewBase(TreeNodeMixin, UpdateView):

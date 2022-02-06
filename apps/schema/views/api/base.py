@@ -4,13 +4,24 @@ from neomodel import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.schema.views.base import ListViewBase
+from apps.schema.views.base import TreeMixin
 
 
-class DataTableListBase(ListViewBase, APIView):
+class TreeNodesMixin(TreeMixin):
+  """Tree nodes mixin."""
+
+  tree_uid_field = 'tree_uid'
+
+  def get_queryset(self):
+    """Get queryset."""
+
+    return self.model.nodes.filter(tree_uid=self.tree.uid)
+
+
+class DataTableListBase(TreeNodesMixin, APIView):
   """List view API base."""
 
-  def get(self, request, format=None):
+  def get(self, request, format=None):  # pylint: disable=redefined-builtin
     """Return filtered and sorted objects."""
 
     start = 0

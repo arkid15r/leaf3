@@ -36,13 +36,13 @@ class Entity(TreeNodeModel):
   # Relationships.
   location_rel = RelationshipTo('.location.Location', 'LOCATED')
 
-  def __str__(self):
+  def __str__(self):  # pylint: disable=invalid-str-returned
     """Entity str()."""
 
     return self.name
 
   @property
-  def category(self):
+  def category(self):  # pylint: disable=invalid-overridden-method
     """Return entity category."""
 
     for key, title in self.CATEGORIES:

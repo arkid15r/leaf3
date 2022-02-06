@@ -12,22 +12,69 @@
 {% block content %}
 <div class="card">
   <div class="table-responsive">
-    <table class="table text-nowrap">
+    <table class="table text-nowrap" id="persons">
       <thead>
         <tr>
           <th>{% trans 'Name' %}</th>
           <th>{% trans 'Category' %}</th>
-          <th>{% trans 'Address' %}</th>
+          <th>{% trans 'Location' %}</th>
         </tr>
       </thead>
       <tbody>
-        {% for entity in page_obj %}
-        {% include 'schema/entity/includes/entity_row.html' %}
-        {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
 
-{% include 'includes/pagination.html' %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#persons").DataTable({
+      autoWidth: false,
+      "lengthChange": false,
+      "order": [
+        [1, "asc"]
+      ],
+      pagingType: "simple",
+      language: {
+        info: "{% trans '_START_ - _END_ of _TOTAL_' %}",
+        paginate: {
+          'next': '{% trans "Next" %}' + ' &raquo;',
+          'previous': '&laquo; ' + '{% trans "Prev" %}'
+        },
+        search: "",
+        searchPlaceholder: "{% trans 'Search entity' %}"
+      },
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        url: "{% url 'api-entity-list' tree.uid %}"
+      },
+      columnDefs: [{
+        "defaultContent": "",
+        "targets": "_all"
+      }],
+      columns: [{
+          data: "name",
+        },
+        {
+          data: "category",
+        },
+        {
+          data: "location",
+        },
+        {
+          data: "buttons",
+          render: function (data, type, row, meta) {
+            return `
+              <a href="/tree/{{ tree.uid }}/entity/${row.uid}/edit/" title={% trans 'Edit' %}>
+                <button type="button" class="btn btn-sm">
+                  <i class="icon-pencil"></i>
+                </button>
+              </a>`;
+          }
+        }
+      ]
+    })
+  });
+</script>
 {% endblock content %}

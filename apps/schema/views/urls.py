@@ -1,32 +1,16 @@
-"""Schema URLs."""
+"""Schema views URLs."""
 
 from django.urls import include, path
 
 from apps.schema.views import entity, entry, location, person
-from apps.schema.views.api import person as person_api
 
 urlpatterns = [
-    path(
-        'api/tree/<str:tree_uid>/',
-        include([
-            path(
-                # Person.
-                'person/',
-                include([
-                    path('',
-                         person_api.DataTableList.as_view(),
-                         name='api-person-list'),
-                    path('<str:pk>/simple-tree/',
-                         person_api.SimpleTree.as_view(),
-                         name='api-person-simple-tree'),
-                ])),
-        ])),
     path(
         'tree/<str:tree_uid>/',
         include([
             # Person.
             path('person/new/', person.Create.as_view(), name='person-create'),
-            path('person/<str:pk>/view/',
+            path('person/<str:person_uid>/view/',
                  person.View.as_view(),
                  name='person-view'),
             path('person/<str:pk>/edit/',

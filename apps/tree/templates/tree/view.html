@@ -74,21 +74,24 @@
           data: "buttons",
           render: function (data, type, row, meta) {
             return `
-          <a href="/tree/{{ tree.uid }}/person/${row.uid}/view/" title="{% trans 'View person info' %}" target="_blank">
-            <button type="button" class="btn btn-sm">
-              <i class="icon-user"></i>
-            </button>
-          </a>
-          <a href="/tree/{{ tree.uid }}/person/${row.uid}/edit/" title={% trans 'Edit' %}>
-            <button type="button" class="btn btn-sm">
-              <i class="icon-pencil"></i>
-            </button>
-          </a>
-          <a href="/tree/{{ tree.uid }}/person/${row.uid}/entry/" title={% trans 'Entries' %}>
-            <button type="button" class="btn btn-sm">
-              <i class="icon-list"></i>
-            </button>
-          </a>`;
+                <a href="/tree/{{ tree.uid }}/person/${row.uid}/view/"
+                  title="{% trans 'View person info' %}" target="_blank">
+                  <button type="button" class="btn btn-sm">
+                    <i class="icon-user"></i>
+                  </button>
+                </a>
+                <a href="/tree/{{ tree.uid }}/person/${row.uid}/edit/"
+                  title={% trans 'Edit' %}>
+                  <button type="button" class="btn btn-sm">
+                    <i class="icon-pencil"></i>
+                  </button>
+                </a>
+                <a href="/tree/{{ tree.uid }}/person/${row.uid}/entry/"
+                  title={% trans 'Entries' %}>
+                  <button type="button" class="btn btn-sm">
+                    <i class="icon-history"></i>
+                  </button>
+                </a>`;
           }
         }
       ]

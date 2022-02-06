@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.schema.forms.entity import EntityForm
 from apps.schema.models.entity import Entity
 from apps.schema.views.base import (CreateViewBase, DeleteViewBase,
-                                    ListViewBase, UpdateViewBase)
+                                    ListDataTableViewBase, UpdateViewBase)
 
 
 class Create(CreateViewBase):
@@ -49,12 +49,12 @@ class Delete(DeleteViewBase):
     return self.tree.entity_list_url
 
 
-class List(ListViewBase):
+class List(ListDataTableViewBase):
   """Entity list view."""
 
   model = Entity
-  ordering = ('created',)
   template_name = 'schema/entity/list.html'
+  tree_uid_field = 'tree_uid'
 
 
 class Update(UpdateViewBase):

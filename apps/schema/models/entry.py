@@ -104,6 +104,7 @@ class Entry(TreeNodeModel):
     except Person.DoesNotExist:
       pass
 
+  @property
   def summary(self):
     """Return entry summary."""
 

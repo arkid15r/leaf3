@@ -3,15 +3,14 @@
 {% load i18n %}
 
 {% block page-header %}
-{% trans 'Entries' as page_header_primary_text %}
 {% trans 'Add an entry' as page_header_primary_button_text %}
-{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=person.entry_create_url page_header_primary_button_icon='icon-history' %}
+{% include 'includes/page_header.html' with page_header_secondary_text=tree.name page_header_primary_button_url=person.entry_create_url page_header_secondary_url=tree.object_read_url page_header_primary_button_icon='icon-history' %}
 {% endblock page-header %}
 
 {% block content %}
 <div class="card">
   <div class="table-responsive">
-    <table class="table text-nowrap">
+    <table class="table text-nowrap" id="entries">
       <thead>
         <tr>
           <th>{% trans 'Date' %}</th>
@@ -19,13 +18,57 @@
         </tr>
       </thead>
       <tbody>
-        {% for entry in page_obj %}
-        {% include 'schema/entry/includes/entry_row.html' %}
-        {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
 
-{% include 'includes/pagination.html' %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#entries").DataTable({
+      autoWidth: false,
+      "lengthChange": false,
+      "order": [
+        [1, "asc"]
+      ],
+      pagingType: "simple",
+      language: {
+        info: "{% trans '_START_ - _END_ of _TOTAL_' %}",
+        paginate: {
+          'next': '{% trans "Next" %}' + ' &raquo;',
+          'previous': '&laquo; ' + '{% trans "Prev" %}'
+        },
+        search: "",
+        searchPlaceholder: "{% trans 'Search entry' %}"
+      },
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        url: "{% url 'api-entry-list' tree.uid person.uid %}"
+      },
+      columnDefs: [{
+        "defaultContent": "",
+        "targets": "_all"
+      }],
+      columns: [{
+          data: "occurred",
+        },
+        {
+          data: "summary",
+        },
+        {
+          data: "buttons",
+          render: function (data, type, row, meta) {
+            return `
+              <a href="/tree/{{ tree.uid }}/person/{{ person.uid }}/entry/${row.uid}/edit/" title={% trans 'Edit' %}>
+                <button type="button" class="btn btn-sm">
+                  <i class="icon-pencil"></i>
+                </button>
+              </a>`;
+          }
+        }
+      ]
+    })
+  });
+</script>
 {% endblock content %}
