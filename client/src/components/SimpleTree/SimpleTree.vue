@@ -7,6 +7,11 @@ import axios from "axios";
 import Tree from "./Tree.js";
 
 export default {
+  computed: {
+    elementId: function () {
+      return this.personUid + "-" + this.direction;
+    },
+  },
   props: ["direction", "personUid", "treeUid"],
   mounted() {
     axios
@@ -29,11 +34,6 @@ export default {
           })
         )
       );
-  },
-  computed: {
-    elementId: function () {
-      return this.personUid + "-" + this.direction;
-    },
   },
 };
 </script>

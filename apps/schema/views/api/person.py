@@ -17,9 +17,22 @@ class DataTableList(DataTableListBase):
   model = Person
   name = _('Persons')
   order_by_fields = ('name', 'birth_year', 'birthplace', 'residence')
-  search_fields = ('first_name', 'last_name', 'patronymic_name', 'maiden_name',
-                   'cod', 'birth_year')
+  search_fields = ('first_name', 'last_name', 'maiden_name', 'cod',
+                   'birth_year')
   serializer_class = person.ListItemSerializer
+
+
+class Item(TreeNodeMixin, APIView):
+  """Person item API endpoint."""
+
+  model = Person
+  name = _('Person')
+  serializer_class = person.ItemSerializer
+
+  def get(self, request, **kwargs):
+    """Return person."""
+
+    return Response(self.serializer_class(self.get_object()).data)
 
 
 class SimpleTree(TreeNodeMixin, APIView):

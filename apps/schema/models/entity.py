@@ -18,19 +18,20 @@ class Entity(TreeNodeModel):
   CATEGORY_EMPLOYMENT = 'employment'
   CATEGORY_ORGANIZATION = 'organization'
 
-  CATEGORIES = (
-      (CATEGORY_BUSINESS, _('Business')),
-      (CATEGORY_EDUCATION, _('Education')),
-      (CATEGORY_EMPLOYMENT, _('Employment')),
-      (CATEGORY_ORGANIZATION, _('Organization')),
-  )
+  CATEGORIES = {
+      CATEGORY_BUSINESS: _('Business'),
+      CATEGORY_EDUCATION: _('Education'),
+      CATEGORY_EMPLOYMENT: _('Employment'),
+      CATEGORY_ORGANIZATION: _('Organization'),
+  }
+  CATEGORY_CHOICES = tuple((key, value) for key, value in CATEGORIES.items())
 
   name = StringProperty(label=_('Name'), max_length=50, required=True)
   summary = StringProperty(label=_('Summary'), max_length=100)
   details = StringProperty(label=_('Details'), max_length=1000)
   url = StringProperty(label=_('URL'), max_length=1000)
 
-  category_uid = StringProperty(choices=CATEGORIES)
+  category_uid = StringProperty(choices=CATEGORY_CHOICES)
   location_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
   # Relationships.
@@ -45,9 +46,7 @@ class Entity(TreeNodeModel):
   def category(self):  # pylint: disable=invalid-overridden-method
     """Return entity category."""
 
-    for key, title in self.CATEGORIES:
-      if key == self.category_uid:
-        return title
+    return self.CATEGORIES[self.category_uid]
 
   @property
   def location(self):

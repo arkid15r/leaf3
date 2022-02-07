@@ -3,7 +3,24 @@
 from rest_framework import serializers
 
 from apps.schema.serializers.base import (ListItemSerializerBase,
-                                          TreeNodeSerializerBase)
+                                          TreeNodeSerializerBase, UIDSerializer)
+
+
+class ItemSerializer(UIDSerializer):
+  """Person item serializer."""
+
+  has_children = serializers.SerializerMethodField()
+  has_parents = serializers.SerializerMethodField()
+
+  def get_has_children(self, obj):
+    """Get has_children."""
+
+    return obj.has_children
+
+  def get_has_parents(self, obj):
+    """Get has_parents."""
+
+    return obj.has_parents
 
 
 class ListItemSerializer(ListItemSerializerBase):
@@ -18,10 +35,10 @@ class ListItemSerializer(ListItemSerializerBase):
   def get_birthplace(self, obj):
     """Get birthplace."""
 
-    if not obj.birthplace:
+    if not obj.birth_place:
       return
 
-    return obj.birthplace.short_address
+    return obj.birth_place.short_address
 
   def get_birth_year(self, obj):
     """Get birth year."""

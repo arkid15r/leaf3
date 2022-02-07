@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import Person from "./Person.vue";
 
-const mountToId = "#trees";
+const mountToId = "#person";
 const mountTo = document.querySelector(mountToId);
 
 const i18n = createI18n({

@@ -11,8 +11,7 @@
 {% endblock page-header %}
 
 {% block content %}
-<div id="person" data-children-count="{{ person.children_count }}" data-parents-count="{{ person.parents | length }}"
-  data-person-uid="{{ person.uid }}" data-tree-uid="{{ tree.uid }}">
+<div id="person" data-person-uid="{{ person.uid }}" data-tree-uid="{{ tree.uid }}">
   <person></person>
 </div>
 {% render_bundle 'person' %}

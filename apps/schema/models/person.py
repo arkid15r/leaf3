@@ -21,18 +21,26 @@ class Person(TreeNodeModel):
   FEMALE = 'F'
   MALE = 'M'
 
-  GENDERS = ((FEMALE, _('Female')), (MALE, _('Male')))
+  GENDERS = {
+      FEMALE: _('Female'),
+      MALE: _('Male'),
+  }
+
+  GENDER_CHOICES = tuple((key, value) for key, value in GENDERS.items())
 
   first_name = StringProperty(label=_('First name'), max_length=25, required=True)
   patronymic_name = StringProperty(label=_('Patronymic name'), max_length=25)
-  last_name = StringProperty(label=_('Last name'), required=True, max_length=50)
+  last_name = StringProperty(label=_('Last name'), required=True, max_length=50, index=True)
   maiden_name = StringProperty(label=_('Maiden name'), max_length=25)
 
-  gender = StringProperty(label=_('Gender'), required=True, choices=GENDERS)
+  gender = StringProperty(label=_('Gender'), required=True, choices=GENDER_CHOICES, index=True)
 
+  birth_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   birth_year = StringProperty(label=_('Year of birth'), index=True)
   dob = DateProperty(label=_('Date of birth'))
 
+  burial_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+  death_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   death_year = StringProperty(label=_('Year of death'), index=True)
   dod = DateProperty(label=_('Date of death'))
 
@@ -47,11 +55,12 @@ class Person(TreeNodeModel):
   details = StringProperty(label=_('Details'), max_length=10000)
 
   # Locations.
-  birthplace_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   residence_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
   # Relationships.
-  birthplace_rel = RelationshipTo('.location.Location', 'BORN')
+  birth_place_rel = RelationshipTo('.location.Location', 'BORN_IN')
+  death_place_rel = RelationshipTo('.location.Location', 'DIED_IN')
+  burial_place_rel = RelationshipTo('.location.Location', 'BURIED_IN')
   employment_rel = RelationshipTo('.entity.Entity',
                                   'WORKED',
                                   model=TimeRangeRelationship)
@@ -100,14 +109,26 @@ class Person(TreeNodeModel):
     return super().save()
 
   @property
-  def birthplace(self):
-    """Return birthplace location."""
+  def birth_place(self):
+    """Return birth place location."""
 
-    if not self.birthplace_uid:
+    if not self.birth_place_uid:
       return
 
     try:
-      return Location.nodes.get(uid=self.birthplace_uid)
+      return Location.nodes.get(uid=self.birth_place_uid)
+    except Location.DoesNotExist:
+      pass
+
+  @property
+  def burial_place(self):
+    """Return burial place location."""
+
+    if not self.burial_place_uid:
+      return
+
+    try:
+      return Location.nodes.get(uid=self.burial_place_uid)
     except Location.DoesNotExist:
       pass
 
@@ -116,13 +137,36 @@ class Person(TreeNodeModel):
     """Return person's children."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
-        RETURN child
-        ORDER BY child.birth_year DESC, child.gender DESC, child.first_name
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (c:Person)
+        RETURN c
+        ORDER BY c.birth_year DESC, c.gender DESC, c.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
 
+  @property
+  def death_place(self):
+    """Return death place location."""
+
+    if not self.death_place_uid:
+      return
+
+    try:
+      return Location.nodes.get(uid=self.death_place_uid)
+    except Location.DoesNotExist:
+      pass
+
+  @property
+  def entries(self):
+    """Return person's entries."""
+
+    query = f"""
+        MATCH (entry: Entry {{ actor_uid: "{self.uid}" }})
+        RETURN entry
+    """
+
+    nodes, unused_meta = self.cypher(query)
     return [self.inflate(node[0]) for node in nodes]
 
   @property
@@ -138,16 +182,55 @@ class Person(TreeNodeModel):
     return reverse_lazy('entry-list', args=(self.tree_uid, self.uid))
 
   @property
-  def children_count(self):
-    """Return True if person has children otherwise return False."""
+  def grandparents(self):
+    """Return person's grandparents."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
-        RETURN COUNT(child)
+        MATCH (gp:Person) -[:PARENT]-> (p:Person) -[:PARENT]->
+              (Person {{ uid: "{self.uid}" }})
+        RETURN gp
+        ORDER BY p.gender DESC, gp.gender DESC
     """
 
     nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
 
+  @property
+  def great_grandparents(self):
+    """Return person's great-grandparents."""
+
+    query = f"""
+        MATCH (ggp: Person) -[:PARENT]-> (gp:Person) -[:PARENT]->
+              (p:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        RETURN ggp
+        ORDER BY p.gender DESC, gp.gender DESC, ggp.gender DESC
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
+  def has_children(self):
+    """Return True if person has children."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (c:Person)
+        RETURN COUNT(c) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
+  def has_parents(self):
+    """Return True if person has parents."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]- (p:Person)
+        RETURN COUNT(p) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
     return nodes[0][0]
 
   @property
@@ -199,11 +282,10 @@ class Person(TreeNodeModel):
     query = f"""
         MATCH (parent: Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
         RETURN parent
-        ORDER BY parent.birth_year, parent.gender DESC
+        ORDER BY parent.gender DESC
     """
 
     nodes, unused_meta = self.cypher(query)
-
     return [self.inflate(node[0]) for node in nodes]
 
   @property
@@ -236,11 +318,10 @@ class Person(TreeNodeModel):
         }}
 
         RETURN child
-        ORDER BY child.birth_year, child.gender DESC, child.first_name
+        ORDER BY child.birth_year DESC, child.gender DESC, child.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
-
     return [self.inflate(node[0]) for node in nodes]
 
   @property
@@ -266,28 +347,33 @@ class Person(TreeNodeModel):
     """Return person summary information."""
 
     fields = []
-    if self.dod:
-      if self.dob:
-        age = relativedelta(self.dod, self.dob).years
+    if self.death_year and self.death_year != '-':
+      if self.birth_year:
+        age = int(self.death_year) - int(self.birth_year)
         if self.is_female:
           fields.append(
-              ngettext_lazy('died in the age of {f} year',
-                            'died in the age of {f} years', age).format(f=age))
+              ngettext_lazy('died in {year} in the age of {f} year',
+                            'died in {year} in the age of {f} years',
+                            age).format(f=age, year=self.death_year))
         elif self.is_male:
           fields.append(
-              ngettext_lazy('died in the age of {m} year',
-                            'died in the age of {m} years', age).format(m=age))
+              ngettext_lazy('died in {year} in the age of {m} year',
+                            'died in {year} in the age of {m} years',
+                            age).format(m=age, year=self.death_year))
       else:
         if self.is_female:
-          fields.append(_('died in {f}').format(f=self.dod.year))
+          fields.append(_('died in {f}').format(f=self.death_year))
         elif self.is_male:
-          fields.append(_('died in {m}').format(m=self.dod.year))
-    elif self.dob:
-      if self.cod:
-        fields.append(self.cod)
+          fields.append(_('died in {m}').format(m=self.death_year))
+    elif self.birth_year:
+      if self.death_year == '-':
+        fields.append(_('{birth_year}').format(birth_year=self.birth_year))
       else:
         age = relativedelta(now().date(), self.dob).years
         fields.append(ngettext_lazy('{n} year', '{n} years', age).format(n=age))
+
+      if self.cod:
+        fields.append(self.cod)
 
     children_count = len(self.children)
     if children_count:

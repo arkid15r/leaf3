@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-06 01:50+0000\n"
+"POT-Creation-Date: 2022-02-07 05:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: ru\n"
@@ -34,10 +34,9 @@ msgid "Address"
 msgstr "Адрес"
 
 #: apps/schema/forms/entry.py:27
-#, fuzzy, python-brace-format
-#| msgid "The 'Entity' field is required for '%(event)s' event"
+#, python-brace-format
 msgid "The \"Entity\" field is required for \"{event}\" event"
-msgstr "Поле 'Объект' является обязательным для события '%(event)s'"
+msgstr "Поле 'Объект' является обязательным для события \"{event}\""
 
 #: apps/schema/forms/entry.py:29
 #, python-brace-format
@@ -45,14 +44,16 @@ msgid ""
 "One of the \"Entity\" or \"Location\" fields is required for \"{event}\" "
 "event"
 msgstr ""
-"Необходимо указать одно из полей \"Объект\" или \"Место\" для события \"%{event}\""
+"Необходимо указать одно из полей \"Объект\" или \"Место\" для события "
+"\"{event}\""
 
 #: apps/schema/forms/entry.py:31
 msgid ""
 "One of the \"Person\", \"Entity\", \"Location\" or \"Text\" fields is "
 "required."
 msgstr ""
-"Необходимо указать одно их полей \"Человек\", \"Объект\", \"Место\" или \"Текст\"."
+"Необходимо указать одно их полей \"Человек\", \"Объект\", \"Место\" или "
+"\"Текст\"."
 
 #: apps/schema/forms/entry.py:34
 #, fuzzy, python-brace-format
@@ -68,7 +69,7 @@ msgstr "Обязательное поле"
 msgid "Event"
 msgstr "Событие"
 
-#: apps/schema/forms/entry.py:39 apps/schema/models/entity.py:86
+#: apps/schema/forms/entry.py:39 apps/schema/models/entity.py:85
 msgid "Entity"
 msgstr "Объект"
 
@@ -77,31 +78,40 @@ msgstr "Объект"
 msgid "Location"
 msgstr "Место"
 
-#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:304
+#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:392
+#: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr "Человек"
 
-#: apps/schema/forms/person.py:16 apps/tree/templates/tree/view.html:19
-msgid "Birthplace"
+#: apps/schema/forms/person.py:18
+msgid "Birth place"
 msgstr "Место рождения"
 
-#: apps/schema/forms/person.py:17 apps/schema/models/person.py:31
+#: apps/schema/forms/person.py:19
+msgid "Burial place"
+msgstr "Место захоронения"
+
+#: apps/schema/forms/person.py:20
+msgid "Death place"
+msgstr "Место смерти"
+
+#: apps/schema/forms/person.py:22 apps/schema/models/person.py:36
 msgid "Gender"
 msgstr "Пол"
 
-#: apps/schema/forms/person.py:18
+#: apps/schema/forms/person.py:24
 msgid "Father"
 msgstr "Отец"
 
-#: apps/schema/forms/person.py:19
+#: apps/schema/forms/person.py:25
 msgid "Mother"
 msgstr "Мать"
 
-#: apps/schema/forms/person.py:20 apps/tree/templates/tree/view.html:20
+#: apps/schema/forms/person.py:26 apps/tree/templates/tree/view.html:20
 msgid "Residence"
 msgstr "Место жительства"
 
-#: apps/schema/forms/person.py:21
+#: apps/schema/forms/person.py:27
 msgid "Spouse"
 msgstr "Супруг(а)"
 
@@ -133,57 +143,117 @@ msgstr "Работа"
 msgid "Organization"
 msgstr "Организация"
 
-#: apps/schema/models/entity.py:28
+#: apps/schema/models/entity.py:29
 #: apps/schema/templates/schema/entity/list.html:18 apps/tree/models.py:20
 msgid "Name"
 msgstr "Название"
 
-#: apps/schema/models/entity.py:29
+#: apps/schema/models/entity.py:30
 #: apps/schema/templates/schema/entry/list.html:17
 msgid "Summary"
 msgstr "Краткая информация"
 
-#: apps/schema/models/entity.py:30 apps/schema/models/person.py:47
+#: apps/schema/models/entity.py:31 apps/schema/models/person.py:55
 msgid "Details"
 msgstr "Подробная информация"
 
-#: apps/schema/models/entity.py:31
+#: apps/schema/models/entity.py:32
 msgid "URL"
 msgstr "Сайт"
 
-#: apps/schema/models/entity.py:87
+#: apps/schema/models/entity.py:86
 #: apps/schema/templates/schema/entity/list.html:6
 #: apps/schema/views/api/entity.py:14
 #: apps/tree/templates/tree/includes/page_header.html:19
 msgid "Entities"
 msgstr "Объекты"
 
-#: apps/schema/models/entry.py:23
-msgid "Begin"
+#: apps/schema/models/entry.py:26 apps/schema/views/api/entry.py:49
+msgid "Born"
+msgstr "Родился/родилась"
+
+#: apps/schema/models/entry.py:27
+msgid "Buried"
+msgstr "Похоронен(а)"
+
+#: apps/schema/models/entry.py:28
+msgid "Died"
+msgstr "Умер(ла)"
+
+#: apps/schema/models/entry.py:29
+msgid "Gave birth"
+msgstr "Родил(а)"
+
+#: apps/schema/models/entry.py:37
+msgid "Started"
 msgstr "Начало"
 
-#: apps/schema/models/entry.py:24
-msgid "Change"
+#: apps/schema/models/entry.py:38
+msgid "Changed"
 msgstr "Изменение"
 
-#: apps/schema/models/entry.py:25
-msgid "End"
+#: apps/schema/models/entry.py:39
+msgid "Ended"
 msgstr "Окончание"
 
-#: apps/schema/models/entry.py:34
+#: apps/schema/models/entry.py:53
 #: apps/schema/templates/schema/entry/list.html:16
 msgid "Date"
 msgstr "Дата"
 
-#: apps/schema/models/entry.py:36
+#: apps/schema/models/entry.py:54
+msgid "Year"
+msgstr "Год"
+
+#: apps/schema/models/entry.py:57
 msgid "Text"
 msgstr "Текст"
 
-#: apps/schema/models/entry.py:128
+#: apps/schema/models/entry.py:185
+#, fuzzy, python-brace-format
+msgid "Born {f}"
+msgstr "Родилась {f} г."
+
+#: apps/schema/models/entry.py:187
+#, python-brace-format
+msgid "Born {m}"
+msgstr "Родился {m} г."
+
+#: apps/schema/models/entry.py:191
+#, python-brace-format
+msgid "Born in {f}"
+msgstr "Родилась в {f} г."
+
+#: apps/schema/models/entry.py:193
+#, python-brace-format
+msgid "Born in {m}"
+msgstr "Родился в {m} г."
+
+#: apps/schema/models/entry.py:201
+#, python-brace-format
+msgid "Died {f}"
+msgstr "Умерла {f} г."
+
+#: apps/schema/models/entry.py:203
+#, python-brace-format
+msgid "Died {m}"
+msgstr "Умер {m} г."
+
+#: apps/schema/models/entry.py:207
+#, python-brace-format
+msgid "Died in {f}"
+msgstr "Умерла в {f} г."
+
+#: apps/schema/models/entry.py:209
+#, python-brace-format
+msgid "Died in {m}"
+msgstr "Умер в {m} г."
+
+#: apps/schema/models/entry.py:230
 msgid "Entry"
 msgstr "Запись"
 
-#: apps/schema/models/entry.py:129 apps/schema/views/api/entry.py:15
+#: apps/schema/models/entry.py:231 apps/schema/views/api/entry.py:18
 #: apps/tree/templates/tree/view.html:90
 msgid "Entries"
 msgstr "Записи"
@@ -214,83 +284,88 @@ msgstr "Страна"
 msgid "Locations"
 msgstr "Места"
 
-#: apps/schema/models/person.py:24
+#: apps/schema/models/person.py:25
 msgid "Female"
 msgstr "Женский"
 
-#: apps/schema/models/person.py:24
+#: apps/schema/models/person.py:26
 msgid "Male"
 msgstr "Мужской"
 
-#: apps/schema/models/person.py:26
+#: apps/schema/models/person.py:31
 msgid "First name"
 msgstr "Имя"
 
-#: apps/schema/models/person.py:27
+#: apps/schema/models/person.py:32
 msgid "Patronymic name"
 msgstr "Отчество"
 
-#: apps/schema/models/person.py:28
+#: apps/schema/models/person.py:33
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/schema/models/person.py:29
+#: apps/schema/models/person.py:34
 msgid "Maiden name"
 msgstr "Девичья фамилия"
 
-#: apps/schema/models/person.py:33 apps/tree/templates/tree/view.html:18
+#: apps/schema/models/person.py:39 apps/tree/templates/tree/view.html:18
 msgid "Year of birth"
 msgstr "Год рождения"
 
-#: apps/schema/models/person.py:34
+#: apps/schema/models/person.py:40
 msgid "Date of birth"
 msgstr "Дата рождения"
 
-#: apps/schema/models/person.py:36
+#: apps/schema/models/person.py:44
 msgid "Year of death"
 msgstr "Год смерти"
 
-#: apps/schema/models/person.py:37
+#: apps/schema/models/person.py:45
 msgid "Date of death"
 msgstr "Дата смерти"
 
-#: apps/schema/models/person.py:39
+#: apps/schema/models/person.py:47
 msgid "Cause of death"
 msgstr "Причина смерти"
 
-#: apps/schema/models/person.py:40
+#: apps/schema/models/person.py:48
 msgid "Cause of death details"
 msgstr "Сведения о причине смерти"
 
-#: apps/schema/models/person.py:274
+#: apps/schema/models/person.py:357
 #, python-brace-format
-msgid "died in the age of {f} year"
-msgid_plural "died in the age of {f} years"
-msgstr[0] "умерла в возрасте {f} года"
-msgstr[1] "умерла в возрасте {f} лет"
-msgstr[2] "умерла в возрасте {f} лет"
-msgstr[3] "умерла в возрасте {f} лет"
+msgid "died in {year} in the age of {f} year"
+msgid_plural "died in {year} in the age of {f} years"
+msgstr[0] "умерла в {year} г., {f} года"
+msgstr[1] "умерла в {year} г., {f} года"
+msgstr[2] "умерла в {year} г., {f} лет"
+msgstr[3] "умерла в {year} г., {f} лет"
 
-#: apps/schema/models/person.py:278
+#: apps/schema/models/person.py:362
 #, python-brace-format
-msgid "died in the age of {m} year"
-msgid_plural "died in the age of {m} years"
-msgstr[0] "умер в возрасте {m} года"
-msgstr[1] "умер в возрасте {m} лет"
-msgstr[2] "умер в возрасте {m} лет"
-msgstr[3] "умер в возрасте {m} лет"
+msgid "died in {year} in the age of {m} year"
+msgid_plural "died in {year} in the age of {m} years"
+msgstr[0] "умер в {year} г., {m} года"
+msgstr[1] "умер в {year} г., {m} года"
+msgstr[2] "умер в {year} г., {m} лет"
+msgstr[3] "умер в {year} г., {m} лет"
 
-#: apps/schema/models/person.py:282
+#: apps/schema/models/person.py:367
 #, python-brace-format
 msgid "died in {f}"
 msgstr "умерла в {f} г."
 
-#: apps/schema/models/person.py:284
+#: apps/schema/models/person.py:369
 #, python-brace-format
 msgid "died in {m}"
 msgstr "умер в {m} г."
 
-#: apps/schema/models/person.py:290
+#: apps/schema/models/person.py:372
+#, python-brace-format
+msgid "{birth_year}"
+msgstr "{birth_year} г.р."
+
+#: apps/schema/models/person.py:375
 #, python-brace-format
 msgid "{n} year"
 msgid_plural "{n} years"
@@ -299,7 +374,7 @@ msgstr[1] "{n} года"
 msgstr[2] "{n} лет"
 msgstr[3] "{n} лет"
 
-#: apps/schema/models/person.py:295
+#: apps/schema/models/person.py:383
 #, python-brace-format
 msgid "{c} child"
 msgid_plural "{c} children"
@@ -308,7 +383,7 @@ msgstr[1] "{c} детей"
 msgstr[2] "{c} детей"
 msgstr[3] "{c} детей"
 
-#: apps/schema/models/person.py:305 apps/schema/views/api/person.py:18
+#: apps/schema/models/person.py:393 apps/schema/views/api/person.py:18
 #: apps/tree/templates/tree/view.html:6
 msgid "Persons"
 msgstr "Люди"
@@ -342,10 +417,8 @@ msgid "Prev"
 msgstr "Назад"
 
 #: apps/schema/templates/schema/entity/list.html:45
-#, fuzzy
-#| msgid "Search persons"
 msgid "Search entity"
-msgstr "Найти человека"
+msgstr "Найти объект"
 
 #: apps/schema/templates/schema/entity/list.html:69
 #: apps/schema/templates/schema/entry/list.html:63
@@ -359,10 +432,8 @@ msgid "Add an entry"
 msgstr "Добавить запись"
 
 #: apps/schema/templates/schema/entry/list.html:42
-#, fuzzy
-#| msgid "Search persons"
 msgid "Search entry"
-msgstr "Найти человека"
+msgstr "Найти запись"
 
 #: apps/schema/templates/schema/location/list.html:7
 #: apps/schema/views/location.py:18
@@ -371,19 +442,19 @@ msgstr "Добавить место"
 
 #: apps/schema/templates/schema/location/list.html:18
 msgid "Street"
-msgstr ""
+msgstr "Улица"
 
 #: apps/schema/templates/schema/location/list.html:46
-#, fuzzy
-#| msgid "Add a location"
 msgid "Search location"
-msgstr "Добавить место"
+msgstr "Найти место"
 
-#: apps/schema/views/api/person.py:29
-#, fuzzy
-#| msgid "Edit tree"
+#: apps/schema/views/api/entry.py:35
+msgid "Timeline"
+msgstr ""
+
+#: apps/schema/views/api/person.py:42
 msgid "Simple tree"
-msgstr "Изменить дерево"
+msgstr "Простое дерево"
 
 #: apps/schema/views/entity.py:67
 msgid "Edit entity"
@@ -520,6 +591,10 @@ msgstr "Создать дерево"
 msgid "Full name"
 msgstr "Полное имя"
 
+#: apps/tree/templates/tree/view.html:19
+msgid "Birthplace"
+msgstr "Место рождения"
+
 #: apps/tree/templates/tree/view.html:45
 msgid "Search persons"
 msgstr "Найти человека"
@@ -533,5 +608,15 @@ msgid "Edit tree"
 msgstr "Изменить дерево"
 
 #: conf/settings/base.py:139
-msgid "English"
-msgstr "Английский"
+msgid "Russian"
+msgstr "Русский"
+
+#, fuzzy, python-brace-format
+#~| msgid "Born in {f}"
+#~ msgid "%(event) {f}"
+#~ msgstr "Родилась в {f} г."
+
+#, fuzzy, python-brace-format
+#~| msgid "{event} in {m}"
+#~ msgid "%(event) {m}"
+#~ msgstr "{event} в {m} г."

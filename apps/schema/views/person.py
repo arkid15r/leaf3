@@ -47,7 +47,7 @@ class Delete(DeleteViewBase):
   def get_success_url(self):
     """Generate redirect URL."""
 
-    return self.tree.person_list_url
+    return self.tree.object_read_url
 
 
 class Update(UpdateViewBase):

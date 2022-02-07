@@ -12,7 +12,7 @@ class EntryFormTests(TestCase):
   """Entry form tests."""
 
   def test_required_fields(self):
-    form = EntryForm(tree=MagicMock(), data={'event_uid': Entry.EVENT_BEGIN})
+    form = EntryForm(tree=MagicMock(), data={'event_uid': Entry.EVENT_STARTED})
 
     self.assertFalse(form.is_valid())
     errors = form.errors.as_data()

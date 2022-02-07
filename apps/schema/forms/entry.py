@@ -46,7 +46,8 @@ class EntryForm(PersonFormBase):
     entities = Entity.nodes.filter(tree_uid=self.tree.uid)
     entities = BLANK_CHOICE_DASH + [(e.uid, str(e)) for e in entities]
 
-    events = BLANK_CHOICE_DASH + sorted(Entry.EVENTS, key=lambda e: e[1])
+    events = BLANK_CHOICE_DASH + sorted(Entry.AVAILABLE_EVENT_CHOICES,
+                                        key=lambda e: e[1])
 
     locations = Location.nodes.filter(tree_uid=self.tree.uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],
@@ -62,15 +63,26 @@ class EntryForm(PersonFormBase):
     self.fields['location_uid'].choices = locations
     self.fields['person_uid'].choices = persons
 
+    if self.instance and self.instance.is_auto_created:
+      del self.fields['event_uid']
+
+      if self.instance.is_no_entity_event:
+        del self.fields['entity_uid']
+      if self.instance.is_no_person_event:
+        del self.fields['person_uid']
+
   def clean(self):
     """Entry form clean."""
 
-    entity_uid = self.cleaned_data['entity_uid']
-    location_uid = self.cleaned_data['location_uid']
-    person_uid = self.cleaned_data['person_uid']
-    text = self.cleaned_data['text']
+    entity_uid = self.cleaned_data.get('entity_uid')
+    location_uid = self.cleaned_data.get('location_uid')
+    person_uid = self.cleaned_data.get('person_uid')
+    text = self.cleaned_data.get('text')
 
-    if not any((entity_uid, location_uid, person_uid, text)):
+    instance = self.instance
+
+    if (not instance.is_auto_created and not any(
+        (entity_uid, location_uid, person_uid, text))):
       raise forms.ValidationError(
           self.TRANSLATIONS[self.ERROR_CODE_ONE_OF_FIELDS_REQUIRED],
           code=self.ERROR_CODE_ONE_OF_FIELDS_REQUIRED)
