@@ -94,6 +94,7 @@ class EntryForm(PersonFormBase):
 
     fields = (
         'occurred',
+        'occurred_year',
         'event_uid',
         'person_uid',
         'entity_uid',

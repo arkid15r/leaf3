@@ -1,5 +1,9 @@
 <template>
-  <div :id="elementId"></div>
+  <div v-show="loaded">
+    <h5 v-if="direction == 'ancestor'">{{ $t("ancestors") }}</h5>
+    <h5 v-if="direction == 'descendant'">{{ $t("descendants") }}</h5>
+    <div :id="elementId"></div>
+  </div>
 </template>
 
 <script>
@@ -12,13 +16,18 @@ export default {
       return this.personUid + "-" + this.direction;
     },
   },
+  data() {
+    return {
+      loaded: false,
+    };
+  },
   props: ["direction", "personUid", "treeUid"],
   mounted() {
     axios
       .get(
         `/api/tree/${this.treeUid}/person/${this.personUid}/simple-tree/?direction=${this.direction}`
       )
-      .then((response) =>
+      .then((response) => {
         document.getElementById(this.elementId).appendChild(
           Tree(response.data, {
             label: (d) => {
@@ -32,8 +41,22 @@ export default {
             link: (d) => `/tree/${this.treeUid}/person/${d.uid}/view/`,
             width: 1100,
           })
-        )
-      );
+        );
+        this.loaded = true;
+      });
   },
 };
 </script>
+
+<i18n>
+{
+  "en": {
+    "ancestors": "Ancestors",
+    "descendants": "Descendants",
+  },
+  "ru": {
+    "ancestors": "Предки",
+    "descendants": "Потомки",
+  }
+}
+</i18n>

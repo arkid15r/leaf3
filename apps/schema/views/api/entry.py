@@ -11,14 +11,8 @@ from apps.schema.views.api.base import DataTableListBase
 from apps.schema.views.base import TreePersonNodeMixin
 
 
-class DataTableList(TreePersonNodeMixin, DataTableListBase):
-  """Entry list API endpoint."""
-
-  model = Entry
-  name = _('Entries')
-  order_by_fields = ('occurred', 'summary')
-  search_fields = ('occurred', 'summary')
-  serializer_class = entry.ListItemSerializer
+class EntryListBase(TreePersonNodeMixin):
+  """Entry list base."""
 
   def get_queryset(self):
     """Get queryset."""
@@ -28,26 +22,30 @@ class DataTableList(TreePersonNodeMixin, DataTableListBase):
                                        'position', 'occurred')
 
 
-class Timeline(TreePersonNodeMixin, APIView):
+class EntryList(EntryListBase, APIView):
+  """Entry list base class."""
+
+  serializer_class = entry.ItemSerializer
+
+  def get(self, request, format=None):  # pylint: disable=redefined-builtin
+    """Return filtered and sorted objects."""
+
+    return Response(self.serializer_class(self.get_queryset(), many=True).data)
+
+
+class DataTableList(EntryListBase, DataTableListBase):
+  """Entry list API endpoint."""
+
+  model = Entry
+  name = _('Entries')
+  order_by_fields = ('occurred', 'text')
+  search_fields = ('text',)
+  serializer_class = entry.ListItemSerializer
+
+
+class Timeline(EntryList):
   """Person timeline API endpoint."""
 
   model = Entry
   name = _('Timeline')
-  serializer_class = entry.TreeNodeSerializer
-
-  def get(self, request, **kwargs):
-    """Return person's timeline."""
-
-    items = [{
-        'occurred': e.occurred,
-        'summary': e.summary,
-        'uid': e.uid
-    } for e in self.get_queryset()]
-
-    items.append({
-        'occurred': self.person.birth_year,
-        'summary': _('Born'),
-        'uid': self.person.uid,
-    })
-
-    return Response(items)
+  serializer_class = entry.ItemSerializer

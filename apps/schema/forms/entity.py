@@ -18,7 +18,7 @@ class EntityForm(TreeFormBase):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
 
-    categories = BLANK_CHOICE_DASH + list(Entity.CATEGORIES)
+    categories = BLANK_CHOICE_DASH + list(Entity.CATEGORY_CHOICES)
 
     locations = Location.nodes.filter(tree_uid=self.tree.uid)
     locations = BLANK_CHOICE_DASH + sorted([(l.uid, str(l)) for l in locations],

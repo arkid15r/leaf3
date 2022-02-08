@@ -13,5 +13,5 @@ class DataTableList(DataTableListBase):
   model = Entity
   name = _('Entities')
   order_by_fields = ('name', 'category', 'location')
-  search_fields = ('name', 'category', 'location')
+  search_fields = ('name',)
   serializer_class = entity.ListItemSerializer

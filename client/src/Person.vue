@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-if="person.has_parents">
-      <h5>{{ $t("ancestors") }}</h5>
       <simple-tree
         direction="ancestor"
         :person-uid="personUid"
@@ -9,12 +8,14 @@
       />
     </div>
     <div v-if="person.has_children">
-      <h5 class="mt-2">{{ $t("descendants") }}</h5>
       <simple-tree
         direction="descendant"
         :person-uid="personUid"
         :tree-uid="treeUid"
       />
+    </div>
+    <div v-if="person.has_timeline">
+      <timeline :person-uid="personUid" :tree-uid="treeUid" />
     </div>
   </div>
 </template>
@@ -22,13 +23,14 @@
 <script>
 import axios from "axios";
 import SimpleTree from "./components/SimpleTree/SimpleTree.vue";
+import Timeline from "./components/Timeline/Timeline.vue";
 
 export default {
   name: "person",
-  components: { SimpleTree },
+  components: { SimpleTree, Timeline },
   data() {
     return {
-      person: null,
+      person: {},
     };
   },
   created() {
@@ -42,16 +44,3 @@ export default {
   },
 };
 </script>
-
-<i18n>
-{
-  "en": {
-    "ancestors": "Ancestors",
-    "descendants": "Descendants"
-  },
-  "ru": {
-    "ancestors": "Предки",
-    "descendants": "Потомки"
-  }
-}
-</i18n>

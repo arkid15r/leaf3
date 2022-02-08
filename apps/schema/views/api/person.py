@@ -16,8 +16,8 @@ class DataTableList(DataTableListBase):
 
   model = Person
   name = _('Persons')
-  order_by_fields = ('name', 'birth_year', 'birthplace', 'residence')
-  search_fields = ('first_name', 'last_name', 'maiden_name', 'cod',
+  order_by_fields = ('name', 'birth_year', 'birth_place', 'residence')
+  search_fields = ('first_name', 'last_name', 'maiden_name', 'death_cause',
                    'birth_year')
   serializer_class = person.ListItemSerializer
 

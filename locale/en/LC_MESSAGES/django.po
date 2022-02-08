@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-07 05:32+0000\n"
+"POT-Creation-Date: 2022-02-08 21:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: en\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:392
+#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:414
 #: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr ""
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Death place"
 msgstr ""
 
-#: apps/schema/forms/person.py:22 apps/schema/models/person.py:36
+#: apps/schema/forms/person.py:22 apps/schema/models/person.py:38
 msgid "Gender"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: apps/schema/models/entity.py:31 apps/schema/models/person.py:55
+#: apps/schema/models/entity.py:31 apps/schema/models/person.py:57
 msgid "Details"
 msgstr ""
 
@@ -161,92 +161,180 @@ msgstr ""
 msgid "Entities"
 msgstr ""
 
-#: apps/schema/models/entry.py:26 apps/schema/views/api/entry.py:49
-msgid "Born"
-msgstr ""
-
-#: apps/schema/models/entry.py:27
-msgid "Buried"
-msgstr ""
-
-#: apps/schema/models/entry.py:28
-msgid "Died"
-msgstr ""
-
-#: apps/schema/models/entry.py:29
-msgid "Gave birth"
-msgstr ""
-
-#: apps/schema/models/entry.py:37
+#: apps/schema/models/entry.py:25
 msgid "Started"
 msgstr ""
 
-#: apps/schema/models/entry.py:38
+#: apps/schema/models/entry.py:26
 msgid "Changed"
 msgstr ""
 
-#: apps/schema/models/entry.py:39
+#: apps/schema/models/entry.py:27
 msgid "Ended"
 msgstr ""
 
+#: apps/schema/models/entry.py:41
+msgid "Born"
+msgstr ""
+
+#: apps/schema/models/entry.py:42
+msgid "Buried"
+msgstr ""
+
+#: apps/schema/models/entry.py:43
+msgid "Died"
+msgstr ""
+
+#: apps/schema/models/entry.py:44
+msgid "Had a child"
+msgstr ""
+
+#: apps/schema/models/entry.py:45
+msgid "Had a cousin"
+msgstr ""
+
+#: apps/schema/models/entry.py:46
+msgid "Had a grandchild"
+msgstr ""
+
+#: apps/schema/models/entry.py:47
+msgid "Had a great grandchild"
+msgstr ""
+
+#: apps/schema/models/entry.py:48
+msgid "Had a nephew or a niece"
+msgstr ""
+
+#: apps/schema/models/entry.py:49
+msgid "Had a sibling"
+msgstr ""
+
 #: apps/schema/models/entry.py:53
-#: apps/schema/templates/schema/entry/list.html:16
-msgid "Date"
+msgid "A birth of a daughter"
 msgstr ""
 
 #: apps/schema/models/entry.py:54
-msgid "Year"
+msgid "A birth of a son"
 msgstr ""
 
 #: apps/schema/models/entry.py:57
-msgid "Text"
+msgid "A birth of a granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry.py:185
+#: apps/schema/models/entry.py:58
+msgid "A birth of a grandson"
+msgstr ""
+
+#: apps/schema/models/entry.py:61
+msgid "A birth of a great granddaughter"
+msgstr ""
+
+#: apps/schema/models/entry.py:62
+msgid "A birth of a great grandson"
+msgstr ""
+
+#: apps/schema/models/entry.py:65
+msgid "A birth of a niece"
+msgstr ""
+
+#: apps/schema/models/entry.py:66
+msgid "A birth of a nephew"
+msgstr ""
+
+#: apps/schema/models/entry.py:69
+msgid "A birth of a sister"
+msgstr ""
+
+#: apps/schema/models/entry.py:70
+msgid "A birth of a brother"
+msgstr ""
+
+#: apps/schema/models/entry.py:75
 #, python-brace-format
-msgid "Born {f}"
+msgid "Was born on {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:187
+#: apps/schema/models/entry.py:76
 #, python-brace-format
-msgid "Born {m}"
+msgid "Was born on {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:191
+#: apps/schema/models/entry.py:79
 #, python-brace-format
-msgid "Born in {f}"
+msgid "Was born in {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:193
+#: apps/schema/models/entry.py:80
 #, python-brace-format
-msgid "Born in {m}"
+msgid "Was born in {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:201
+#: apps/schema/models/entry.py:83
 #, python-brace-format
-msgid "Died {f}"
+msgid "Buried on {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:203
+#: apps/schema/models/entry.py:84
 #, python-brace-format
-msgid "Died {m}"
+msgid "Buried on {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:207
+#: apps/schema/models/entry.py:87
+#, python-brace-format
+msgid "Buried in {f}"
+msgstr ""
+
+#: apps/schema/models/entry.py:88
+#, python-brace-format
+msgid "Buried in {m}"
+msgstr ""
+
+#: apps/schema/models/entry.py:91
+msgid "A birth of a cousin sister"
+msgstr ""
+
+#: apps/schema/models/entry.py:92
+msgid "A birth of a cousin brother"
+msgstr ""
+
+#: apps/schema/models/entry.py:95
+#, python-brace-format
+msgid "Died on {f}"
+msgstr ""
+
+#: apps/schema/models/entry.py:96
+#, python-brace-format
+msgid "Died on {m}"
+msgstr ""
+
+#: apps/schema/models/entry.py:99
 #, python-brace-format
 msgid "Died in {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:209
+#: apps/schema/models/entry.py:100
 #, python-brace-format
 msgid "Died in {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:230
+#: apps/schema/models/entry.py:139
+#: apps/schema/templates/schema/entry/list.html:16
+msgid "Date"
+msgstr ""
+
+#: apps/schema/models/entry.py:140
+msgid "Year"
+msgstr ""
+
+#: apps/schema/models/entry.py:143
+msgid "Text"
+msgstr ""
+
+#: apps/schema/models/entry.py:328
 msgid "Entry"
 msgstr ""
 
-#: apps/schema/models/entry.py:231 apps/schema/views/api/entry.py:18
+#: apps/schema/models/entry.py:329 apps/schema/views/api/entry.py:40
 #: apps/tree/templates/tree/view.html:90
 msgid "Entries"
 msgstr ""
@@ -277,98 +365,102 @@ msgstr ""
 msgid "Locations"
 msgstr ""
 
-#: apps/schema/models/person.py:25
+#: apps/schema/models/person.py:27
 msgid "Female"
 msgstr ""
 
-#: apps/schema/models/person.py:26
+#: apps/schema/models/person.py:28
 msgid "Male"
 msgstr ""
 
-#: apps/schema/models/person.py:31
+#: apps/schema/models/person.py:33
 msgid "First name"
 msgstr ""
 
-#: apps/schema/models/person.py:32
+#: apps/schema/models/person.py:34
 msgid "Patronymic name"
 msgstr ""
 
-#: apps/schema/models/person.py:33
+#: apps/schema/models/person.py:35
 msgid "Last name"
 msgstr ""
 
-#: apps/schema/models/person.py:34
+#: apps/schema/models/person.py:36
 msgid "Maiden name"
 msgstr ""
 
-#: apps/schema/models/person.py:39 apps/tree/templates/tree/view.html:18
+#: apps/schema/models/person.py:41 apps/tree/templates/tree/view.html:18
 msgid "Year of birth"
 msgstr ""
 
-#: apps/schema/models/person.py:40
+#: apps/schema/models/person.py:42
 msgid "Date of birth"
 msgstr ""
 
 #: apps/schema/models/person.py:44
-msgid "Year of death"
-msgstr ""
-
-#: apps/schema/models/person.py:45
-msgid "Date of death"
-msgstr ""
-
-#: apps/schema/models/person.py:47
 msgid "Cause of death"
 msgstr ""
 
-#: apps/schema/models/person.py:48
+#: apps/schema/models/person.py:45
 msgid "Cause of death details"
 msgstr ""
 
-#: apps/schema/models/person.py:357
+#: apps/schema/models/person.py:46
+msgid "Date of death"
+msgstr ""
+
+#: apps/schema/models/person.py:48
+msgid "Year of death"
+msgstr ""
+
+#: apps/schema/models/person.py:51
+msgid "Date of burial"
+msgstr ""
+
+#: apps/schema/models/person.py:379
 #, python-brace-format
 msgid "died in {year} in the age of {f} year"
 msgid_plural "died in {year} in the age of {f} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:362
+#: apps/schema/models/person.py:384
 #, python-brace-format
 msgid "died in {year} in the age of {m} year"
 msgid_plural "died in {year} in the age of {m} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:367
+#: apps/schema/models/person.py:389
 #, python-brace-format
 msgid "died in {f}"
 msgstr ""
 
-#: apps/schema/models/person.py:369
+#: apps/schema/models/person.py:391
 #, python-brace-format
 msgid "died in {m}"
 msgstr ""
 
-#: apps/schema/models/person.py:372
+#: apps/schema/models/person.py:394
 #, python-brace-format
 msgid "{birth_year}"
 msgstr ""
 
-#: apps/schema/models/person.py:375
+#: apps/schema/models/person.py:397
 #, python-brace-format
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:383
+#: apps/schema/models/person.py:405
 #, python-brace-format
 msgid "{c} child"
 msgid_plural "{c} children"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:393 apps/schema/views/api/person.py:18
+#: apps/schema/models/person.py:415 apps/schema/views/api/person.py:18
 #: apps/tree/templates/tree/view.html:6
 msgid "Persons"
 msgstr ""
@@ -433,7 +525,7 @@ msgstr ""
 msgid "Search location"
 msgstr ""
 
-#: apps/schema/views/api/entry.py:35
+#: apps/schema/views/api/entry.py:50
 msgid "Timeline"
 msgstr ""
 

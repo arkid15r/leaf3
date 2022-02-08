@@ -25,6 +25,7 @@ class TreeNodeMixin(TreeMixin):
 class TreePersonNodeMixin(TreeMixin):
   """Tree person node mixin."""
 
+  person_uid_field = 'person_uid'
   tree_uid_field = 'tree_uid'
 
   def dispatch(self, request, *args, **kwargs):
@@ -34,8 +35,8 @@ class TreePersonNodeMixin(TreeMixin):
       return super().dispatch(request, *args, **kwargs)
 
     try:
-      self.person = Person.nodes.get(tree_uid=self.kwargs['tree_uid'],
-                                     uid=kwargs.pop('person_uid'))
+      self.person = Person.nodes.get(tree_uid=self.kwargs[self.tree_uid_field],
+                                     uid=kwargs.pop(self.person_uid_field))
     except Person.DoesNotExist:
       raise Http404
 

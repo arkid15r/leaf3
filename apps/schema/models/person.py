@@ -18,6 +18,8 @@ from apps.schema.models.location import Location
 class Person(TreeNodeModel):
   """Person model."""
 
+  EMPTY_VALUE = '-'
+
   FEMALE = 'F'
   MALE = 'M'
 
@@ -37,32 +39,31 @@ class Person(TreeNodeModel):
 
   birth_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   birth_year = StringProperty(label=_('Year of birth'), index=True)
-  dob = DateProperty(label=_('Date of birth'))
+  birth_date = DateProperty(label=_('Date of birth'))
 
-  burial_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+  death_cause = StringProperty(label=_('Cause of death'), max_length=30, index=True)
+  death_cause_details = StringProperty(label=_('Cause of death details'), max_length=200)
+  death_date = DateProperty(label=_('Date of death'))
   death_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   death_year = StringProperty(label=_('Year of death'), index=True)
-  dod = DateProperty(label=_('Date of death'))
 
-  cod = StringProperty(label=_('Cause of death'), max_length=30, index=True)
-  cod_details = StringProperty(label=_('Cause of death details'), max_length=200)
+  burial_place_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
+  burial_date = DateProperty(label=_('Date of burial'))
 
-  # Persons.
   father_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   mother_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
   spouse_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
   details = StringProperty(label=_('Details'), max_length=10000)
-
-  # Locations.
   residence_uid = StringProperty(max_length=settings.SHORT_UUID_LENGTH)
 
   # Relationships.
   birth_place_rel = RelationshipTo('.location.Location', 'BORN_IN')
-  death_place_rel = RelationshipTo('.location.Location', 'DIED_IN')
   burial_place_rel = RelationshipTo('.location.Location', 'BURIED_IN')
+  death_place_rel = RelationshipTo('.location.Location', 'DIED_IN')
+
   employment_rel = RelationshipTo('.entity.Entity',
-                                  'WORKED',
+                                  'WORKED_IN',
                                   model=TimeRangeRelationship)
   marriage_rel = Relationship('.person.Person',
                               'MARRIED',
@@ -99,14 +100,22 @@ class Person(TreeNodeModel):
     """Save person model."""
 
     # Year of birth.
-    if not self.birth_year and self.dob:
-      self.birth_year = self.dob.year
+    if not self.birth_year and self.birth_date:
+      self.birth_year = self.birth_date.year
 
     # Year of death.
-    if not self.death_year and self.dod:
-      self.death_year = self.dod.year
+    if not self.death_year and self.death_date:
+      self.death_year = self.death_date.year
 
     return super().save()
+
+  def was_alive_in(self, year):
+    """Return True if person was alive in a given year."""
+
+    if not year or not self.death_year or self.death_year == self.EMPTY_VALUE:
+      return False
+
+    return year <= self.death_year
 
   @property
   def birth_place(self):
@@ -133,6 +142,21 @@ class Person(TreeNodeModel):
       pass
 
   @property
+  def cousins(self):
+    """Return person's cousins."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+              (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
+              (:Person) -[:PARENT]-> (c:Person)
+        RETURN DISTINCT c
+        ORDER BY c.birth_year DESC, c.gender DESC, c.last_name, c.first_name
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
   def children(self):
     """Return person's children."""
 
@@ -156,18 +180,6 @@ class Person(TreeNodeModel):
       return Location.nodes.get(uid=self.death_place_uid)
     except Location.DoesNotExist:
       pass
-
-  @property
-  def entries(self):
-    """Return person's entries."""
-
-    query = f"""
-        MATCH (entry: Entry {{ actor_uid: "{self.uid}" }})
-        RETURN entry
-    """
-
-    nodes, unused_meta = self.cypher(query)
-    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def entry_create_url(self):
@@ -228,6 +240,18 @@ class Person(TreeNodeModel):
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]- (p:Person)
         RETURN COUNT(p) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
+  def has_timeline(self):
+    """Return True if person has a timeline."""
+
+    query = f"""
+        MATCH (entry: Entry {{ actor_uid: "{self.uid}" }})
+        RETURN COUNT(entry) > 0
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -369,11 +393,11 @@ class Person(TreeNodeModel):
       if self.death_year == '-':
         fields.append(_('{birth_year}').format(birth_year=self.birth_year))
       else:
-        age = relativedelta(now().date(), self.dob).years
+        age = relativedelta(now().date(), self.birth_date).years
         fields.append(ngettext_lazy('{n} year', '{n} years', age).format(n=age))
 
-      if self.cod:
-        fields.append(self.cod)
+      if self.death_cause:
+        fields.append(self.death_cause)
 
     children_count = len(self.children)
     if children_count:

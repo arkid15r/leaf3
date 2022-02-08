@@ -4,7 +4,7 @@ from neomodel import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.schema.views.base import TreeMixin
+from apps.schema.views.base import TreeMixin, TreePersonNodeMixin
 
 
 class TreeNodesMixin(TreeMixin):
@@ -28,12 +28,12 @@ class DataTableListBase(TreeNodesMixin, APIView):
     length = 10
 
     try:
-      length = int(request.query_params.get('length'), length)
+      length = int(request.query_params.get('length', length))
     except ValueError:
       pass
 
     try:
-      start = int(request.query_params.get('start'), start)
+      start = int(request.query_params.get('start', start))
     except ValueError:
       pass
 

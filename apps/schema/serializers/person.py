@@ -11,6 +11,7 @@ class ItemSerializer(UIDSerializer):
 
   has_children = serializers.SerializerMethodField()
   has_parents = serializers.SerializerMethodField()
+  has_timeline = serializers.SerializerMethodField()
 
   def get_has_children(self, obj):
     """Get has_children."""
@@ -22,17 +23,22 @@ class ItemSerializer(UIDSerializer):
 
     return obj.has_parents
 
+  def get_has_timeline(self, obj):
+    """Get has_timeline."""
+
+    return obj.has_timeline
+
 
 class ListItemSerializer(ListItemSerializerBase):
   """Person list item serializer."""
 
-  birthplace = serializers.SerializerMethodField()
+  birth_place = serializers.SerializerMethodField()
   birth_year = serializers.SerializerMethodField()
   name = serializers.SerializerMethodField()
   residence = serializers.SerializerMethodField()
   summary = serializers.SerializerMethodField()
 
-  def get_birthplace(self, obj):
+  def get_birth_place(self, obj):
     """Get birthplace."""
 
     if not obj.birth_place:
