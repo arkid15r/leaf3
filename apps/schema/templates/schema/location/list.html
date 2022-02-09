@@ -15,10 +15,7 @@
     <table class="table text-nowrap" id="locations">
       <thead>
         <tr>
-          <th>{% trans 'Street' %}</th>
-          <th>{% trans 'Town' %}</th>
-          <th>{% trans 'Area' %}</th>
-          <th>{% trans 'State' %}</th>
+          <th>{% trans 'Summary' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -55,16 +52,7 @@
         "targets": "_all"
       }],
       columns: [{
-          data: "street",
-        },
-        {
-          data: "town",
-        },
-        {
-          data: "area",
-        },
-        {
-          data: "state",
+          data: "summary",
         },
         {
           data: "buttons",

@@ -41,9 +41,10 @@ class PersonForm(TreeFormBase):
     male_persons = copy.deepcopy(all_persons).exclude(gender=Person.FEMALE)
     male_persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in male_persons]
 
-    locations = BLANK_CHOICE_DASH + [
-        (l.uid, str(l)) for l in self.tree.locations
-    ]
+    locations = BLANK_CHOICE_DASH + sorted(
+        [(l.uid, str(l)) for l in self.tree.locations],
+        key=lambda l: l[1],
+        reverse=True)
 
     all_persons = BLANK_CHOICE_DASH + [(p.uid, str(p)) for p in all_persons]
 

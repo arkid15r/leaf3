@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 21:46+0000\n"
+"POT-Creation-Date: 2022-02-09 20:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: ru\n"
@@ -24,12 +24,12 @@ msgstr ""
 msgid "Home"
 msgstr "Начало"
 
-#: apps/schema/forms/entity.py:15
+#: apps/schema/forms/entity.py:15 apps/schema/forms/location.py:14
 #: apps/schema/templates/schema/entity/list.html:19
 msgid "Category"
 msgstr "Категория"
 
-#: apps/schema/forms/entity.py:16 apps/schema/models/location.py:14
+#: apps/schema/forms/entity.py:16 apps/schema/models/location.py:21
 msgid "Address"
 msgstr "Адрес"
 
@@ -73,7 +73,7 @@ msgstr "Событие"
 msgid "Entity"
 msgstr "Объект"
 
-#: apps/schema/forms/entry.py:40 apps/schema/models/location.py:83
+#: apps/schema/forms/entry.py:40 apps/schema/models/location.py:123
 #: apps/schema/templates/schema/entity/list.html:20
 msgid "Location"
 msgstr "Место"
@@ -82,6 +82,10 @@ msgstr "Место"
 #: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr "Человек"
+
+#: apps/schema/forms/location.py:15
+msgid "Located in"
+msgstr "Находится в"
 
 #: apps/schema/forms/person.py:18
 msgid "Birth place"
@@ -143,13 +147,14 @@ msgstr "Работа"
 msgid "Organization"
 msgstr "Организация"
 
-#: apps/schema/models/entity.py:29
+#: apps/schema/models/entity.py:29 apps/schema/models/location.py:30
 #: apps/schema/templates/schema/entity/list.html:18 apps/tree/models.py:20
 msgid "Name"
 msgstr "Название"
 
 #: apps/schema/models/entity.py:30
 #: apps/schema/templates/schema/entry/list.html:17
+#: apps/schema/templates/schema/location/list.html:18
 msgid "Summary"
 msgstr "Краткая информация"
 
@@ -216,156 +221,153 @@ msgstr "Родился племянник/племянница"
 msgid "Had a sibling"
 msgstr "Родился брат/сестра"
 
-#: apps/schema/models/entry.py:53
+#: apps/schema/models/entry.py:55
 msgid "A birth of a daughter"
 msgstr "Родилась дочь"
 
-#: apps/schema/models/entry.py:54
+#: apps/schema/models/entry.py:56
 msgid "A birth of a son"
 msgstr "Родился сын"
 
-#: apps/schema/models/entry.py:57
+#: apps/schema/models/entry.py:59
+msgid "A birth of a cousin sister"
+msgstr "Родилась двоюродная сестра"
+
+#: apps/schema/models/entry.py:60
+msgid "A birth of a cousin brother"
+msgstr "Родился двоюродный брат"
+
+#: apps/schema/models/entry.py:63
 msgid "A birth of a granddaughter"
 msgstr "Родилась внучка"
 
-#: apps/schema/models/entry.py:58
+#: apps/schema/models/entry.py:64
 msgid "A birth of a grandson"
 msgstr "Родился внук"
 
-#: apps/schema/models/entry.py:61
+#: apps/schema/models/entry.py:67
 msgid "A birth of a great granddaughter"
 msgstr "Родилась правнучка"
 
-#: apps/schema/models/entry.py:62
+#: apps/schema/models/entry.py:68
 msgid "A birth of a great grandson"
 msgstr "Родился правнук"
 
-#: apps/schema/models/entry.py:65
+#: apps/schema/models/entry.py:71
 msgid "A birth of a niece"
 msgstr "Родилась племянница"
 
-#: apps/schema/models/entry.py:66
+#: apps/schema/models/entry.py:72
 msgid "A birth of a nephew"
 msgstr "Родился племянник"
 
-#: apps/schema/models/entry.py:69
+#: apps/schema/models/entry.py:75
 msgid "A birth of a sister"
 msgstr "Родилась сестра"
 
-#: apps/schema/models/entry.py:70
+#: apps/schema/models/entry.py:76
 msgid "A birth of a brother"
 msgstr "Родился брат"
 
-#: apps/schema/models/entry.py:75
+#: apps/schema/models/entry.py:81
 #, python-brace-format
 msgid "Was born on {f}"
 msgstr "Родилась {f}"
 
-#: apps/schema/models/entry.py:76
+#: apps/schema/models/entry.py:82
 #, python-brace-format
 msgid "Was born on {m}"
 msgstr "Родился {m}"
 
-#: apps/schema/models/entry.py:79
+#: apps/schema/models/entry.py:85
 #, python-brace-format
 msgid "Was born in {f}"
 msgstr "Родилась в {f} г."
 
-#: apps/schema/models/entry.py:80
+#: apps/schema/models/entry.py:86
 #, python-brace-format
 msgid "Was born in {m}"
 msgstr "Родился в {m} г."
 
-#: apps/schema/models/entry.py:83
+#: apps/schema/models/entry.py:89
+#, python-brace-format
+msgid "Buried{f}"
+msgstr "Похоронена{f}"
+
+#: apps/schema/models/entry.py:90
+#, python-brace-format
+msgid "Buried{m}"
+msgstr "Похоронен{m}"
+
+#: apps/schema/models/entry.py:93
 #, python-brace-format
 msgid "Buried on {f}"
 msgstr "Похоронена {f}"
 
-#: apps/schema/models/entry.py:84
+#: apps/schema/models/entry.py:94
 #, python-brace-format
 msgid "Buried on {m}"
 msgstr "Похоронен {m}"
 
-#: apps/schema/models/entry.py:87
-#, python-brace-format
-msgid "Buried in {f}"
-msgstr "Похоронена в {f}"
-
-#: apps/schema/models/entry.py:88
-#, python-brace-format
-msgid "Buried in {m}"
-msgstr "Похоронен в {m}"
-
-#: apps/schema/models/entry.py:91
-msgid "A birth of a cousin sister"
-msgstr "Родилась двоюродная сестра"
-
-#: apps/schema/models/entry.py:92
-msgid "A birth of a cousin brother"
-msgstr "Родился двоюродный брат"
-
-#: apps/schema/models/entry.py:95
+#: apps/schema/models/entry.py:97
 #, python-brace-format
 msgid "Died on {f}"
 msgstr "Умерла {f}"
 
-#: apps/schema/models/entry.py:96
+#: apps/schema/models/entry.py:98
 #, python-brace-format
 msgid "Died on {m}"
 msgstr "Умер {m}"
 
-#: apps/schema/models/entry.py:99
+#: apps/schema/models/entry.py:101
 #, python-brace-format
 msgid "Died in {f}"
 msgstr "Умерла в {f} г."
 
-#: apps/schema/models/entry.py:100
+#: apps/schema/models/entry.py:102
 #, python-brace-format
 msgid "Died in {m}"
 msgstr "Умер в {m} г."
 
-#: apps/schema/models/entry.py:139
+#: apps/schema/models/entry.py:142
 #: apps/schema/templates/schema/entry/list.html:16
 msgid "Date"
 msgstr "Дата"
 
-#: apps/schema/models/entry.py:140
+#: apps/schema/models/entry.py:143
 msgid "Year"
 msgstr "Год"
 
-#: apps/schema/models/entry.py:143
+#: apps/schema/models/entry.py:146
 msgid "Text"
 msgstr "Текст"
 
-#: apps/schema/models/entry.py:328
+#: apps/schema/models/entry.py:339
 msgid "Entry"
 msgstr "Запись"
 
-#: apps/schema/models/entry.py:329 apps/schema/views/api/entry.py:40
+#: apps/schema/models/entry.py:340 apps/schema/views/api/entry.py:40
 #: apps/tree/templates/tree/view.html:90
 msgid "Entries"
 msgstr "Записи"
 
-#: apps/schema/models/location.py:15
-#: apps/schema/templates/schema/location/list.html:19
+#: apps/schema/models/location.py:22
 msgid "Town"
 msgstr "Город / село"
 
-#: apps/schema/models/location.py:16
-#: apps/schema/templates/schema/location/list.html:20
+#: apps/schema/models/location.py:23
 msgid "Area"
 msgstr "Район"
 
-#: apps/schema/models/location.py:17
-#: apps/schema/templates/schema/location/list.html:21
+#: apps/schema/models/location.py:24
 msgid "State"
 msgstr "Область"
 
-#: apps/schema/models/location.py:18
+#: apps/schema/models/location.py:25
 msgid "Country"
 msgstr "Страна"
 
-#: apps/schema/models/location.py:84
+#: apps/schema/models/location.py:124
 #: apps/schema/templates/schema/location/list.html:6
 #: apps/schema/views/api/location.py:14
 #: apps/tree/templates/tree/includes/page_header.html:21
@@ -489,14 +491,14 @@ msgstr "Добавить объект"
 
 #: apps/schema/templates/schema/entity/list.html:39
 #: apps/schema/templates/schema/entry/list.html:36
-#: apps/schema/templates/schema/location/list.html:40
+#: apps/schema/templates/schema/location/list.html:37
 #: apps/tree/templates/tree/view.html:39
 msgid "_START_ - _END_ of _TOTAL_"
 msgstr "_START_ - _END_ из _TOTAL_"
 
 #: apps/schema/templates/schema/entity/list.html:41
 #: apps/schema/templates/schema/entry/list.html:38
-#: apps/schema/templates/schema/location/list.html:42
+#: apps/schema/templates/schema/location/list.html:39
 #: apps/templates/includes/pagination.html:3
 #: apps/tree/templates/tree/view.html:41
 msgid "Next"
@@ -504,7 +506,7 @@ msgstr "Вперёд"
 
 #: apps/schema/templates/schema/entity/list.html:42
 #: apps/schema/templates/schema/entry/list.html:39
-#: apps/schema/templates/schema/location/list.html:43
+#: apps/schema/templates/schema/location/list.html:40
 #: apps/templates/includes/pagination.html:4
 #: apps/tree/templates/tree/view.html:42
 msgid "Prev"
@@ -516,7 +518,7 @@ msgstr "Найти объект"
 
 #: apps/schema/templates/schema/entity/list.html:69
 #: apps/schema/templates/schema/entry/list.html:63
-#: apps/schema/templates/schema/location/list.html:74
+#: apps/schema/templates/schema/location/list.html:62
 #: apps/tree/templates/tree/view.html:84
 msgid "Edit"
 msgstr "Изменить дерево"
@@ -534,11 +536,7 @@ msgstr "Найти запись"
 msgid "Add a location"
 msgstr "Добавить место"
 
-#: apps/schema/templates/schema/location/list.html:18
-msgid "Street"
-msgstr "Улица"
-
-#: apps/schema/templates/schema/location/list.html:46
+#: apps/schema/templates/schema/location/list.html:43
 msgid "Search location"
 msgstr "Найти место"
 
@@ -661,11 +659,11 @@ msgstr "UID владельца"
 msgid "Description"
 msgstr "Описание"
 
-#: apps/tree/models.py:101
+#: apps/tree/models.py:100
 msgid "Tree"
 msgstr "Дерево"
 
-#: apps/tree/models.py:102
+#: apps/tree/models.py:101
 msgid "Trees"
 msgstr "Деревья"
 
@@ -704,3 +702,14 @@ msgstr "Изменить дерево"
 #: conf/settings/base.py:139
 msgid "Russian"
 msgstr "Русский"
+
+#, python-brace-format
+#~ msgid "Buried in {f}"
+#~ msgstr "Похоронена в {f}"
+
+#, python-brace-format
+#~ msgid "Buried in {m}"
+#~ msgstr "Похоронен в {m}"
+
+#~ msgid "Street"
+#~ msgstr "Улица"

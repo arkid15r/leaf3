@@ -19,7 +19,7 @@ class Tree(TimestampModel, UIDModel):
   description = StringProperty(label=_('Description'), max_length=100)
   name = StringProperty(label=_('Name'), max_length=50, required=True)
 
-  def __str__(self):
+  def __str__(self):  # pylint: disable=invalid-str-returned
     return self.name
 
   @property
@@ -48,8 +48,7 @@ class Tree(TimestampModel, UIDModel):
   @property
   def locations(self):
     """Return tree location objects."""
-    return Location.nodes.filter(tree_uid=self.uid).order_by(
-        'street', 'town', 'area', 'state', 'country')
+    return Location.nodes.filter(tree_uid=self.uid)
 
   @property
   def location_create_url(self):

@@ -3,7 +3,7 @@
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from neomodel import StringProperty
+from neomodel import RelationshipTo, StringProperty
 
 from apps.schema.models.base import TreeNodeModel
 
@@ -11,26 +11,41 @@ from apps.schema.models.base import TreeNodeModel
 class Location(TreeNodeModel):
   """Location model."""
 
-  street = StringProperty(label=_('Address'), max_length=50)
-  town = StringProperty(label=_('Town'), max_length=50, required=True)
-  area = StringProperty(label=_('Area'), max_length=50)
-  state = StringProperty(label=_('State'), max_length=50)
-  country = StringProperty(label=_('Country'), max_length=50)
+  CATEGORY_ADDRESS = 'street'
+  CATEGORY_TOWN = 'town'
+  CATEGORY_AREA = 'area'
+  CATEGORY_STATE = 'state'
+  CATEGORY_COUNTRY = 'country'
 
-  def __str__(self):
+  CATEGORIES = {
+      CATEGORY_ADDRESS: _('Address'),
+      CATEGORY_TOWN: _('Town'),
+      CATEGORY_AREA: _('Area'),
+      CATEGORY_STATE: _('State'),
+      CATEGORY_COUNTRY: _('Country'),
+  }
+  CATEGORY_CHOICES = tuple((key, value) for key, value in CATEGORIES.items())
+
+  category_uid = StringProperty(choices=CATEGORY_CHOICES)
+  name = StringProperty(label=_('Name'), max_length=50)
+  parent_uid = StringProperty(max_length=50, required=False)
+
+  # Relationships.
+  parent_rel = RelationshipTo('.location.Location', 'LOCATED_IN')
+
+  def __str__(self):  # pylint: disable=invalid-str-returned
     """Location str()."""
 
-    return self.detailed_address
+    return self.full_address
 
-  def join_fields(self, field_names):
+  def join_fields(self, categories):
     """Returns joined fields."""
 
-    fields = []
-    for field_name in field_names:
-      value = getattr(self, field_name)
-      if not value:
+    fields = [self.name]
+    for node in self.parents:
+      if categories and node.category_uid not in categories:
         continue
-      fields.append(value)
+      fields.append(node.name)
 
     return ', '.join(fields)
 
@@ -69,6 +84,32 @@ class Location(TreeNodeModel):
     """Return location update URL."""
 
     return reverse_lazy('location-update', args=(self.tree_uid, self.uid))
+
+  @property
+  def parent(self):
+    """Return parent location."""
+
+    if not self.parent_uid:
+      return
+
+    try:
+      return Location.nodes.get(uid=self.parent_uid)
+    except Location.DoesNotExist:
+      pass
+
+  @property
+  def parents(self):
+    """Return location chain."""
+
+    # *1..5 in relationship determenes level of the recursion.
+    query = f"""
+        MATCH (:Location {{ uid: "{self.uid}" }}) -[:LOCATED_IN *1..5]->
+              (parent: Location)
+        RETURN parent
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def short_address(self):

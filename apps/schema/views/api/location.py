@@ -12,6 +12,6 @@ class DataTableList(DataTableListBase):
 
   model = Location
   name = _('Locations')
-  order_by_fields = ('street', 'town', 'area', 'state')
-  search_fields = ('street', 'town', 'area', 'state')
+  order_by_fields = ('summary',)
+  search_fields = ('name',)
   serializer_class = location.ListItemSerializer

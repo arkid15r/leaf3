@@ -1,7 +1,7 @@
 """Entry models."""
 
 from django.conf import settings
-from django.template.defaultfilters import date, safe
+from django.template.defaultfilters import date
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -319,16 +319,16 @@ class Entry(TreeNodeModel):
 
     fields.append(self.ENTRY_EVENTS_TEMPLATES[key][gender].format(**context))
 
-    if self.person_uid:
+    if self.person:
       fields.append(self.person.long_name)
 
-    if self.location_uid:
+    if self.location:
       fields.append(str(self.location))
 
     text = ', '.join(fields)
 
     if self.text:
-      text = safe(f'{text}<br>{self.text}')
+      text = f'{text}<br>{self.text}'
 
     return text
 

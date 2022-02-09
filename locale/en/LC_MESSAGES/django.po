@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 21:46+0000\n"
+"POT-Creation-Date: 2022-02-09 20:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: en\n"
@@ -22,12 +22,12 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: apps/schema/forms/entity.py:15
+#: apps/schema/forms/entity.py:15 apps/schema/forms/location.py:14
 #: apps/schema/templates/schema/entity/list.html:19
 msgid "Category"
 msgstr ""
 
-#: apps/schema/forms/entity.py:16 apps/schema/models/location.py:14
+#: apps/schema/forms/entity.py:16 apps/schema/models/location.py:21
 msgid "Address"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Entity"
 msgstr ""
 
-#: apps/schema/forms/entry.py:40 apps/schema/models/location.py:83
+#: apps/schema/forms/entry.py:40 apps/schema/models/location.py:123
 #: apps/schema/templates/schema/entity/list.html:20
 msgid "Location"
 msgstr ""
@@ -74,6 +74,10 @@ msgstr ""
 #: apps/schema/forms/entry.py:41 apps/schema/models/person.py:414
 #: apps/schema/views/api/person.py:29
 msgid "Person"
+msgstr ""
+
+#: apps/schema/forms/location.py:15
+msgid "Located in"
 msgstr ""
 
 #: apps/schema/forms/person.py:18
@@ -136,13 +140,14 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
-#: apps/schema/models/entity.py:29
+#: apps/schema/models/entity.py:29 apps/schema/models/location.py:30
 #: apps/schema/templates/schema/entity/list.html:18 apps/tree/models.py:20
 msgid "Name"
 msgstr ""
 
 #: apps/schema/models/entity.py:30
 #: apps/schema/templates/schema/entry/list.html:17
+#: apps/schema/templates/schema/location/list.html:18
 msgid "Summary"
 msgstr ""
 
@@ -209,156 +214,153 @@ msgstr ""
 msgid "Had a sibling"
 msgstr ""
 
-#: apps/schema/models/entry.py:53
+#: apps/schema/models/entry.py:55
 msgid "A birth of a daughter"
 msgstr ""
 
-#: apps/schema/models/entry.py:54
+#: apps/schema/models/entry.py:56
 msgid "A birth of a son"
 msgstr ""
 
-#: apps/schema/models/entry.py:57
+#: apps/schema/models/entry.py:59
+msgid "A birth of a cousin sister"
+msgstr ""
+
+#: apps/schema/models/entry.py:60
+msgid "A birth of a cousin brother"
+msgstr ""
+
+#: apps/schema/models/entry.py:63
 msgid "A birth of a granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry.py:58
+#: apps/schema/models/entry.py:64
 msgid "A birth of a grandson"
 msgstr ""
 
-#: apps/schema/models/entry.py:61
+#: apps/schema/models/entry.py:67
 msgid "A birth of a great granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry.py:62
+#: apps/schema/models/entry.py:68
 msgid "A birth of a great grandson"
 msgstr ""
 
-#: apps/schema/models/entry.py:65
+#: apps/schema/models/entry.py:71
 msgid "A birth of a niece"
 msgstr ""
 
-#: apps/schema/models/entry.py:66
+#: apps/schema/models/entry.py:72
 msgid "A birth of a nephew"
 msgstr ""
 
-#: apps/schema/models/entry.py:69
+#: apps/schema/models/entry.py:75
 msgid "A birth of a sister"
 msgstr ""
 
-#: apps/schema/models/entry.py:70
+#: apps/schema/models/entry.py:76
 msgid "A birth of a brother"
 msgstr ""
 
-#: apps/schema/models/entry.py:75
+#: apps/schema/models/entry.py:81
 #, python-brace-format
 msgid "Was born on {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:76
+#: apps/schema/models/entry.py:82
 #, python-brace-format
 msgid "Was born on {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:79
+#: apps/schema/models/entry.py:85
 #, python-brace-format
 msgid "Was born in {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:80
+#: apps/schema/models/entry.py:86
 #, python-brace-format
 msgid "Was born in {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:83
+#: apps/schema/models/entry.py:89
+#, python-brace-format
+msgid "Buried{f}"
+msgstr ""
+
+#: apps/schema/models/entry.py:90
+#, python-brace-format
+msgid "Buried{m}"
+msgstr ""
+
+#: apps/schema/models/entry.py:93
 #, python-brace-format
 msgid "Buried on {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:84
+#: apps/schema/models/entry.py:94
 #, python-brace-format
 msgid "Buried on {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:87
-#, python-brace-format
-msgid "Buried in {f}"
-msgstr ""
-
-#: apps/schema/models/entry.py:88
-#, python-brace-format
-msgid "Buried in {m}"
-msgstr ""
-
-#: apps/schema/models/entry.py:91
-msgid "A birth of a cousin sister"
-msgstr ""
-
-#: apps/schema/models/entry.py:92
-msgid "A birth of a cousin brother"
-msgstr ""
-
-#: apps/schema/models/entry.py:95
+#: apps/schema/models/entry.py:97
 #, python-brace-format
 msgid "Died on {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:96
+#: apps/schema/models/entry.py:98
 #, python-brace-format
 msgid "Died on {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:99
+#: apps/schema/models/entry.py:101
 #, python-brace-format
 msgid "Died in {f}"
 msgstr ""
 
-#: apps/schema/models/entry.py:100
+#: apps/schema/models/entry.py:102
 #, python-brace-format
 msgid "Died in {m}"
 msgstr ""
 
-#: apps/schema/models/entry.py:139
+#: apps/schema/models/entry.py:142
 #: apps/schema/templates/schema/entry/list.html:16
 msgid "Date"
 msgstr ""
 
-#: apps/schema/models/entry.py:140
+#: apps/schema/models/entry.py:143
 msgid "Year"
 msgstr ""
 
-#: apps/schema/models/entry.py:143
+#: apps/schema/models/entry.py:146
 msgid "Text"
 msgstr ""
 
-#: apps/schema/models/entry.py:328
+#: apps/schema/models/entry.py:339
 msgid "Entry"
 msgstr ""
 
-#: apps/schema/models/entry.py:329 apps/schema/views/api/entry.py:40
+#: apps/schema/models/entry.py:340 apps/schema/views/api/entry.py:40
 #: apps/tree/templates/tree/view.html:90
 msgid "Entries"
 msgstr ""
 
-#: apps/schema/models/location.py:15
-#: apps/schema/templates/schema/location/list.html:19
+#: apps/schema/models/location.py:22
 msgid "Town"
 msgstr ""
 
-#: apps/schema/models/location.py:16
-#: apps/schema/templates/schema/location/list.html:20
+#: apps/schema/models/location.py:23
 msgid "Area"
 msgstr ""
 
-#: apps/schema/models/location.py:17
-#: apps/schema/templates/schema/location/list.html:21
+#: apps/schema/models/location.py:24
 msgid "State"
 msgstr ""
 
-#: apps/schema/models/location.py:18
+#: apps/schema/models/location.py:25
 msgid "Country"
 msgstr ""
 
-#: apps/schema/models/location.py:84
+#: apps/schema/models/location.py:124
 #: apps/schema/templates/schema/location/list.html:6
 #: apps/schema/views/api/location.py:14
 #: apps/tree/templates/tree/includes/page_header.html:21
@@ -472,14 +474,14 @@ msgstr ""
 
 #: apps/schema/templates/schema/entity/list.html:39
 #: apps/schema/templates/schema/entry/list.html:36
-#: apps/schema/templates/schema/location/list.html:40
+#: apps/schema/templates/schema/location/list.html:37
 #: apps/tree/templates/tree/view.html:39
 msgid "_START_ - _END_ of _TOTAL_"
 msgstr ""
 
 #: apps/schema/templates/schema/entity/list.html:41
 #: apps/schema/templates/schema/entry/list.html:38
-#: apps/schema/templates/schema/location/list.html:42
+#: apps/schema/templates/schema/location/list.html:39
 #: apps/templates/includes/pagination.html:3
 #: apps/tree/templates/tree/view.html:41
 msgid "Next"
@@ -487,7 +489,7 @@ msgstr ""
 
 #: apps/schema/templates/schema/entity/list.html:42
 #: apps/schema/templates/schema/entry/list.html:39
-#: apps/schema/templates/schema/location/list.html:43
+#: apps/schema/templates/schema/location/list.html:40
 #: apps/templates/includes/pagination.html:4
 #: apps/tree/templates/tree/view.html:42
 msgid "Prev"
@@ -499,7 +501,7 @@ msgstr ""
 
 #: apps/schema/templates/schema/entity/list.html:69
 #: apps/schema/templates/schema/entry/list.html:63
-#: apps/schema/templates/schema/location/list.html:74
+#: apps/schema/templates/schema/location/list.html:62
 #: apps/tree/templates/tree/view.html:84
 msgid "Edit"
 msgstr ""
@@ -517,11 +519,7 @@ msgstr ""
 msgid "Add a location"
 msgstr ""
 
-#: apps/schema/templates/schema/location/list.html:18
-msgid "Street"
-msgstr ""
-
-#: apps/schema/templates/schema/location/list.html:46
+#: apps/schema/templates/schema/location/list.html:43
 msgid "Search location"
 msgstr ""
 
@@ -644,11 +642,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: apps/tree/models.py:101
+#: apps/tree/models.py:100
 msgid "Tree"
 msgstr ""
 
-#: apps/tree/models.py:102
+#: apps/tree/models.py:101
 msgid "Trees"
 msgstr ""
 
