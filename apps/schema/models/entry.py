@@ -55,6 +55,10 @@ class Entry(TreeNodeModel):
       Person.FEMALE: _('A birth of a daughter'),
       Person.MALE: _('A birth of a son'),
   }
+  AUTO_EVENT_HAD_COUSIN_TEMPLATES = {
+      Person.FEMALE: _('A birth of a cousin sister'),
+      Person.MALE: _('A birth of a cousin brother'),
+  }
   AUTO_EVENT_HAD_GRANDCHILD_TEMPLATES = {
       Person.FEMALE: _('A birth of a granddaughter'),
       Person.MALE: _('A birth of a grandson'),
@@ -89,10 +93,6 @@ class Entry(TreeNodeModel):
           Person.FEMALE: _('Buried on {f}'),
           Person.MALE: _('Buried on {m}'),
       },
-      AUTO_EVENT_HAD_COUSIN: {
-          Person.FEMALE: _('A birth of a cousin sister'),
-          Person.MALE: _('A birth of a cousin brother'),
-      },
       f'{AUTO_EVENT_DIED}_date': {
           Person.FEMALE: _('Died on {f}'),
           Person.MALE: _('Died on {m}'),
@@ -103,6 +103,8 @@ class Entry(TreeNodeModel):
       },
       f'{AUTO_EVENT_HAD_CHILD}_date': AUTO_EVENT_HAD_CHILD_TEMPLATES,
       f'{AUTO_EVENT_HAD_CHILD}_year': AUTO_EVENT_HAD_CHILD_TEMPLATES,
+      f'{AUTO_EVENT_HAD_COUSIN}_date': AUTO_EVENT_HAD_COUSIN_TEMPLATES,
+      f'{AUTO_EVENT_HAD_COUSIN}_year': AUTO_EVENT_HAD_COUSIN_TEMPLATES,
       f'{AUTO_EVENT_HAD_GRANDCHILD}_date': AUTO_EVENT_HAD_GRANDCHILD_TEMPLATES,
       f'{AUTO_EVENT_HAD_NEPHEW_OR_NIECE}_date': AUTO_EVENT_HAD_NEPHEW_OR_NIECE_TEMPLATES,
       f'{AUTO_EVENT_HAD_NEPHEW_OR_NIECE}_year': AUTO_EVENT_HAD_NEPHEW_OR_NIECE_TEMPLATES,
