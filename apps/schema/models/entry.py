@@ -106,6 +106,11 @@ class Entry(TreeNodeModel):
       f'{AUTO_EVENT_HAD_COUSIN}_date': AUTO_EVENT_HAD_COUSIN_TEMPLATES,
       f'{AUTO_EVENT_HAD_COUSIN}_year': AUTO_EVENT_HAD_COUSIN_TEMPLATES,
       f'{AUTO_EVENT_HAD_GRANDCHILD}_date': AUTO_EVENT_HAD_GRANDCHILD_TEMPLATES,
+      f'{AUTO_EVENT_HAD_GRANDCHILD}_year': AUTO_EVENT_HAD_GRANDCHILD_TEMPLATES,
+      f'{AUTO_EVENT_HAD_GREAT_GRANDCHILD}_date': (
+          AUTO_EVENT_HAD_GREAT_GRANDCHILD_TEMPLATES),
+      f'{AUTO_EVENT_HAD_GREAT_GRANDCHILD}_year': (
+          AUTO_EVENT_HAD_GRANDCHILD_TEMPLATES),
       f'{AUTO_EVENT_HAD_NEPHEW_OR_NIECE}_date': AUTO_EVENT_HAD_NEPHEW_OR_NIECE_TEMPLATES,
       f'{AUTO_EVENT_HAD_NEPHEW_OR_NIECE}_year': AUTO_EVENT_HAD_NEPHEW_OR_NIECE_TEMPLATES,
       f'{AUTO_EVENT_HAD_SIBLING}_date': AUTO_EVENT_HAD_SIBLING_TEMPLATES,
@@ -148,7 +153,7 @@ class Entry(TreeNodeModel):
   def __str__(self):
     """Entity str()."""
 
-    return str(self.actor)
+    return self.summary
 
   @staticmethod
   def add_relative(actor, event, person):
@@ -293,6 +298,7 @@ class Entry(TreeNodeModel):
   def summary(self):
     """Return entry summary."""
 
+    date_format = 'j E Y, l'
     fields = []
 
     key = self.event_uid
@@ -300,7 +306,10 @@ class Entry(TreeNodeModel):
 
     if self.occurred:
       key = f'{key}_date'
-      context.update({'f': date(self.occurred), 'm': date(self.occurred)})
+      context.update({
+          'f': date(self.occurred, date_format).lower(),
+          'm': date(self.occurred, date_format).lower(),
+      })
     else:
       key = f'{key}_year'
       context.update({'f': self.occurred_year, 'm': self.occurred_year})

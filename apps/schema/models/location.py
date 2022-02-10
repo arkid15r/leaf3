@@ -41,13 +41,27 @@ class Location(TreeNodeModel):
   def join_fields(self, categories):
     """Returns joined fields."""
 
-    fields = [self.name]
-    for node in self.parents:
+    fields = []
+    for node in self.chain:
       if categories and node.category_uid not in categories:
         continue
       fields.append(node.name)
 
     return ', '.join(fields)
+
+  @property
+  def chain(self):
+    """Return location chain."""
+
+    # *0..5 in relationship determines level of recursion.
+    query = f"""
+        MATCH (:Location {{ uid: "{self.uid}" }}) -[:LOCATED_IN *0..5]->
+              (parent: Location)
+        RETURN parent
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def detailed_address(self):
@@ -96,20 +110,6 @@ class Location(TreeNodeModel):
       return Location.nodes.get(uid=self.parent_uid)
     except Location.DoesNotExist:
       pass
-
-  @property
-  def parents(self):
-    """Return location chain."""
-
-    # *1..5 in relationship determenes level of the recursion.
-    query = f"""
-        MATCH (:Location {{ uid: "{self.uid}" }}) -[:LOCATED_IN *1..5]->
-              (parent: Location)
-        RETURN parent
-    """
-
-    nodes, unused_meta = self.cypher(query)
-    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def short_address(self):

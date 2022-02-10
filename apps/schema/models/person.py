@@ -112,10 +112,16 @@ class Person(TreeNodeModel):
   def was_alive_in(self, year):
     """Return True if person was alive in a given year."""
 
-    if not year or not self.death_year or self.death_year == self.EMPTY_VALUE:
+    if not year:
       return False
 
-    return year <= self.death_year
+    if not self.birth_year or self.death_year == self.EMPTY_VALUE:
+      return False
+
+    if self.death_year:
+      return self.birth_year <= year <= self.death_year
+
+    return self.birth_year <= year
 
   @property
   def birth_place(self):
@@ -232,6 +238,12 @@ class Person(TreeNodeModel):
 
     nodes, unused_meta = self.cypher(query)
     return nodes[0][0]
+
+  @property
+  def has_death_year(self):
+    """Return True if person's death year is known."""
+
+    return self.death_year and self.death_year != '-'
 
   @property
   def has_parents(self):

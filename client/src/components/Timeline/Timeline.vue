@@ -9,7 +9,9 @@
             :key="entry.text"
             class="list-feed-item border-warning"
           >
-            <div class="text-muted font-size-sm mb-1">{{ entry.occurred }}</div>
+            <div class="text-muted font-size-sm mb-1">
+              {{ entry.occurred || entry.occurred_year }}
+            </div>
             <span v-html="entry.text"></span>
           </div>
         </div>
@@ -27,12 +29,12 @@ export default {
       return `${this.personUid}-timeline`;
     },
   },
+  props: ["personUid", "treeUid"],
   data() {
     return {
       entries: [],
     };
   },
-  props: ["personUid", "treeUid"],
   mounted() {
     axios
       .get(`/api/tree/${this.treeUid}/person/${this.personUid}/timeline/`)

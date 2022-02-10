@@ -17,9 +17,10 @@ class EntryListBase(TreePersonNodeMixin):
   def get_queryset(self):
     """Get queryset."""
 
-    return self.model.nodes.filter(actor_uid=self.person.uid,
-                                   tree_uid=self.tree.uid).order_by(
-                                       'position', 'occurred')
+    return self.model.nodes.filter(
+        actor_uid=self.person.uid,
+        tree_uid=self.tree.uid).exclude(occurred_year='').order_by(
+            'position', 'occurred_year', 'occurred')
 
 
 class EntryList(EntryListBase, APIView):
