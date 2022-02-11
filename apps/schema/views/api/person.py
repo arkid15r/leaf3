@@ -43,9 +43,11 @@ class SimpleTree(TreeNodeMixin, APIView):
   serializer_class = person.TreeNodeSerializer
 
   def build_ancestor_tree(self, person):
-    """Build ancestor tree for a person. The 'children' attribute of a node is
-       required in order to get the tree visualized properly. Apparently it
-       contains parents of each person."""
+    """Build person's ancestors tree.
+
+    The 'children' attribute of a node is required in order to get the tree
+    visualized properly. Apparently it contains parents of each person.
+    """
 
     data = self.serializer_class(person).data
     data['children'] = []
@@ -63,30 +65,88 @@ class SimpleTree(TreeNodeMixin, APIView):
 
     return data
 
+  def build_cousin_tree(self, person):
+    """Build person's cousins tree."""
+
+    data = self.serializer_class(person).data
+    data['children'] = []
+
+    p_idx = 0
+    for parent in person.parents:  # Add nodes for parents.
+      if not parent.has_nephews_or_nieces:
+        continue
+
+      data['children'].append(self.serializer_class(parent).data)
+      parent_data = data['children'][p_idx]
+      parent_data['children'] = []
+      p_idx += 1
+
+      ps_idx = 0
+      for p_sibling in parent.siblings:  # Add nodes for parent siblings.
+        if not p_sibling.has_children:
+          continue
+
+        parent_data['children'].append(self.serializer_class(p_sibling).data)
+        cousin_data = parent_data['children'][ps_idx]
+        cousin_data['children'] = []
+        ps_idx += 1
+
+        # Add nodes for parent siblings' children.
+        for ps_child in p_sibling.children:
+          cousin_data['children'].append(self.serializer_class(ps_child).data)
+
+    return data
+
   def build_descendant_tree(self, person):
-    """Build descendant tree for a person."""
+    """Build person's descendants tree."""
 
     data = self.serializer_class(person).data
     data['children'] = []
 
     nodes = person.children
     while nodes:
-      node = nodes.pop(-1)
+      node = nodes.pop(0)
 
       # Add descendants.
       data['children'].append(self.build_descendant_tree(node))
 
     return data
 
+  def build_newphew_niece_tree(self, person):
+    """Build person's nephews/nieces tree."""
+
+    data = self.serializer_class(person).data
+    data['children'] = []
+
+    s_idx = 0
+    for sibling in person.siblings:  # Add nodes for siblings.
+      if not sibling.has_children:
+        continue
+
+      data['children'].append(self.serializer_class(sibling).data)
+      sibling_data = data['children'][s_idx]
+      sibling_data['children'] = []
+      s_idx += 1
+
+      for s_child in sibling.children:  # Add nodes for siblings' children.
+        sibling_data['children'].append(self.serializer_class(s_child).data)
+
+    return data
+
   def get(self, request, **kwargs):
-    """Return person's parent tree."""
+    """Return tree."""
 
-    direction = request.query_params.get('direction')
-    nodes = []
+    view = request.query_params.get('view')
 
-    if direction == 'ancestor':
+    if view == 'ancestors':
       nodes = self.build_ancestor_tree(self.get_object())
-    elif direction == 'descendant':
+    elif view == 'cousins':
+      nodes = self.build_cousin_tree(self.get_object())
+    elif view == 'descendants':
       nodes = self.build_descendant_tree(self.get_object())
+    elif view == 'nephews-nieces':
+      nodes = self.build_newphew_niece_tree(self.get_object())
+    else:
+      nodes = []
 
     return Response(nodes)

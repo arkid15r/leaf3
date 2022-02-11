@@ -153,10 +153,10 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-              (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
-              (:Person) -[:PARENT]-> (c:Person)
+            (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]-> (c:Person)
         RETURN DISTINCT c
-        ORDER BY c.birth_year DESC, c.gender DESC, c.last_name, c.first_name
+        ORDER BY c.birth_year, c.gender DESC, c.last_name, c.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -169,7 +169,7 @@ class Person(TreeNodeModel):
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (c:Person)
         RETURN c
-        ORDER BY c.birth_year DESC, c.gender DESC, c.first_name
+        ORDER BY c.birth_year, c.gender DESC, c.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -205,7 +205,7 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (gp:Person) -[:PARENT]-> (p:Person) -[:PARENT]->
-              (Person {{ uid: "{self.uid}" }})
+            (Person {{ uid: "{self.uid}" }})
         RETURN gp
         ORDER BY p.gender DESC, gp.gender DESC
     """
@@ -219,7 +219,7 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (ggp: Person) -[:PARENT]-> (gp:Person) -[:PARENT]->
-              (p:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+            (p:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
         RETURN ggp
         ORDER BY p.gender DESC, gp.gender DESC, ggp.gender DESC
     """
@@ -240,10 +240,37 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
+  def has_cousins(self):
+    """Return True if person has at least one cousin."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]-> (c:Person)
+        RETURN COUNT (c) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
   def has_death_year(self):
     """Return True if person's death year is known."""
 
     return self.death_year and self.death_year != '-'
+
+  @property
+  def has_nephews_or_nieces(self):
+    """Return True if person has at least one nephew or niece."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (n:Person)
+        RETURN COUNT (n) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
 
   @property
   def has_parents(self):
@@ -292,6 +319,20 @@ class Person(TreeNodeModel):
     """Return full name."""
 
     return self.get_name()
+
+  @property
+  def nephews_and_nieces(self):
+    """Return person's nephews and nieces."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (n:Person)
+        RETURN n
+        ORDER BY n.birth_year
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
 
   @property
   def object_delete_url(self):
@@ -354,7 +395,7 @@ class Person(TreeNodeModel):
         }}
 
         RETURN child
-        ORDER BY child.birth_year DESC, child.gender DESC, child.first_name
+        ORDER BY child.birth_year, child.gender DESC, child.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -401,11 +442,15 @@ class Person(TreeNodeModel):
           fields.append(_('died in {f}').format(f=self.death_year))
         elif self.is_male:
           fields.append(_('died in {m}').format(m=self.death_year))
+
     elif self.birth_year:
       if self.death_year == '-':
         fields.append(_('{birth_year}').format(birth_year=self.birth_year))
       else:
-        age = relativedelta(now().date(), self.birth_date).years
+        if self.birth_date:
+          age = relativedelta(now().date(), self.birth_date).years
+        else:
+          age = now().year - int(self.birth_year)
         fields.append(ngettext_lazy('{n} year', '{n} years', age).format(n=age))
 
       if self.death_cause:

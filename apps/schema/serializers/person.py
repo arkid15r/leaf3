@@ -10,6 +10,8 @@ class ItemSerializer(UIDSerializer):
   """Person item serializer."""
 
   has_children = serializers.SerializerMethodField()
+  has_cousins = serializers.SerializerMethodField()
+  has_nephews_or_nieces = serializers.SerializerMethodField()
   has_parents = serializers.SerializerMethodField()
   has_timeline = serializers.SerializerMethodField()
 
@@ -17,6 +19,16 @@ class ItemSerializer(UIDSerializer):
     """Get has_children."""
 
     return obj.has_children
+
+  def get_has_cousins(self, obj):
+    """Get has_cousins."""
+
+    return obj.has_cousins
+
+  def get_has_nephews_or_nieces(self, obj):
+    """Get has_nephews_or_nieces."""
+
+    return obj.has_nephews_or_nieces
 
   def get_has_parents(self, obj):
     """Get has_parents."""

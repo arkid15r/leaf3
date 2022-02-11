@@ -2,16 +2,33 @@
   <div>
     <div v-if="person.has_parents">
       <simple-tree
-        direction="ancestor"
         :person-uid="personUid"
         :tree-uid="treeUid"
+        view="ancestors"
       />
     </div>
     <div v-if="person.has_children">
       <simple-tree
-        direction="descendant"
         :person-uid="personUid"
         :tree-uid="treeUid"
+        direction="rtl"
+        view="descendants"
+      />
+    </div>
+    <div v-if="person.has_nephews_or_nieces">
+      <simple-tree
+        :person-uid="personUid"
+        :tree-uid="treeUid"
+        direction="rtl"
+        view="nephews-nieces"
+      />
+    </div>
+    <div v-if="person.has_cousins">
+      <simple-tree
+        :person-uid="personUid"
+        :tree-uid="treeUid"
+        direction="rtl"
+        view="cousins"
       />
     </div>
     <div v-if="person.has_timeline">

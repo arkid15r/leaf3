@@ -1,7 +1,9 @@
 <template>
   <div v-show="loaded">
-    <h5 v-if="direction == 'ancestor'">{{ $t("ancestors") }}</h5>
-    <h5 v-if="direction == 'descendant'">{{ $t("descendants") }}</h5>
+    <h5 v-if="view == 'ancestors'">{{ $t("ancestors") }}</h5>
+    <h5 v-if="view == 'cousins'">{{ $t("cousins") }}</h5>
+    <h5 v-if="view == 'descendants'">{{ $t("descendants") }}</h5>
+    <h5 v-if="view == 'nephews-nieces'">{{ $t("nephews-nieces") }}</h5>
     <div :id="elementId"></div>
   </div>
 </template>
@@ -13,7 +15,7 @@ import Tree from "./Tree.js";
 export default {
   computed: {
     elementId: function () {
-      return this.personUid + "-" + this.direction;
+      return this.personUid + "-" + this.view;
     },
   },
   data() {
@@ -21,15 +23,16 @@ export default {
       loaded: false,
     };
   },
-  props: ["direction", "personUid", "treeUid"],
+  props: ["direction", "personUid", "treeUid", "view"],
   mounted() {
     axios
       .get(
-        `/api/tree/${this.treeUid}/person/${this.personUid}/simple-tree/?direction=${this.direction}`
+        `/api/tree/${this.treeUid}/person/${this.personUid}/simple-tree/?view=${this.view}`
       )
       .then((response) => {
         document.getElementById(this.elementId).appendChild(
           Tree(response.data, {
+            direction: this.direction,
             label: (d) => {
               if (d.birth_year) {
                 return `${d.name}, ${d.birth_year}`;
@@ -51,12 +54,16 @@ export default {
 <i18n>
 {
   "en": {
-    "ancestors": "Ancestors",
-    "descendants": "Descendants",
+    "ancestors": "Ancestor tree",
+    "cousins": "Cousins",
+    "descendants": "Descendant tree",
+    "nephews-nieces": "Nephews and nieces",
   },
   "ru": {
-    "ancestors": "Предки",
-    "descendants": "Потомки",
+    "ancestors": "Дерево предков",
+    "cousins": "Двоюродные братья и сёстры",
+    "descendants": "Дерево потомков",
+    "nephews-nieces": "Племянники и племянницы",
   }
 }
 </i18n>
