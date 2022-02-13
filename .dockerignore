@@ -1,0 +1,5 @@
+__pycache__
+.git
+*.sqlite3
+*.environ
+node_modules
