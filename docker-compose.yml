@@ -18,7 +18,7 @@ services:
 
   graph-db:
     env_file: env/prod/neo4j.env
-    image: neo4j:latest
+    image: neo4j:4.4.4-community
     ports:
         - 7474:7474
         - 7687:7687
@@ -38,7 +38,7 @@ services:
 
   sql-db:
     command: --default-authentication-plugin=mysql_native_password
-    env_file: env/prod/neo4j.env
+    env_file: env/prod/mysql.env
     image: mysql:8.0.28
     ports:
         - 3306:3306

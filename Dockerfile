@@ -38,14 +38,13 @@ RUN python -m venv /home/leaf3/venv
 RUN /home/leaf3/venv/bin/pip install --upgrade pip
 RUN /home/leaf3/venv/bin/pip install --no-cache-dir -r requirements/prod.txt
 
-
-RUN chown leaf3:leaf3 -R /home/leaf3/
-
 # Frontend.
 WORKDIR /home/leaf3/client/
 RUN yarnpkg install && yarnpkg build
 
 # RUN mkdir /home/leaf3/static
+
+RUN chown leaf3:leaf3 -R /home/leaf3/
 
 WORKDIR /home/leaf3/
 
