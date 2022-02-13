@@ -13,10 +13,8 @@ services:
     restart: always
     user: leaf3:leaf3
     volumes:
+      - ./env/prod/leaf3.environ:/home/leaf3/conf/.environ
       - static_files:/home/leaf3/static
-      - type: bind
-        source: ./env/prod/leaf3.environ
-        target: /home/leaf3/conf/.environ
 
   graph-db:
     env_file: env/prod/neo4j.env
