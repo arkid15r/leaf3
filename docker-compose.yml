@@ -39,7 +39,7 @@ services:
   sql-db:
     command: --default-authentication-plugin=mysql_native_password
     env_file: env/prod/neo4j.env
-    image: mysql
+    image: mysql:8.0.28
     ports:
         - 3306:3306
     restart: always
