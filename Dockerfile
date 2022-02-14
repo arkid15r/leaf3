@@ -41,10 +41,7 @@ RUN /home/leaf3/venv/bin/pip install --no-cache-dir -r requirements/prod.txt
 # Frontend.
 WORKDIR /home/leaf3/client/
 RUN yarnpkg install && yarnpkg build
-
-# RUN mkdir /home/leaf3/static
-
-RUN chown leaf3:leaf3 -R /home/leaf3/
+RUN mkdir /home/leaf3/static; chown leaf3:leaf3 -R /home/leaf3/
 
 WORKDIR /home/leaf3/
 
@@ -55,4 +52,4 @@ EXPOSE 8181
 USER leaf3
 
 # Run the process.
-# CMD /home/leaf3/venv/bin/gunicorn --user leaf3 --bind 0.0.0.0:8181 --workers 2 conf.wsgi:application
+CMD /home/leaf3/venv/bin/gunicorn --user leaf3 --bind 0.0.0.0:8181 conf.wsgi:application
