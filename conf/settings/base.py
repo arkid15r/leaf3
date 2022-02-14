@@ -13,7 +13,7 @@ APPS_DIR = BASE_DIR / 'apps'
 
 # https://django-environ.readthedocs.io/en/latest/tips.html
 env = environ.Env()
-env.read_env(os.path.join(BASE_DIR, 'conf/.env'))
+env.read_env(os.path.join(BASE_DIR, 'conf/.environ'))
 
 # Installed applications.
 DJANGO_APPS = [
@@ -44,6 +44,12 @@ PROJECT_APPS = [
     'apps.tree',
     'apps.user',
 ]
+
+# https://docs.djangoproject.com/en/4.0/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', [])
+
+# https://docs.djangoproject.com/en/4.0/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = env.list('DJANGO_CSRF_TRUSTED_ORIGINS', [])
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + PROJECT_APPS
@@ -80,6 +86,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#login-url
 LOGIN_URL = 'account_login'
+
+# https://docs.djangoproject.com/en/4.0/ref/settings/#logout-redirect-url
+LOGIN_REDIRECT_URL = 'tree-dashboard'
 
 # Databases.
 # https://docs.djangoproject.com/en/stable/ref/databases/
@@ -129,7 +138,7 @@ TEMPLATES = [
 ]
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#secret-key
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 
 # Language, i18, l10n, timezones.
 # https://docs.djangoproject.com/en/stable/ref/settings/#language-code
@@ -175,7 +184,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/stable/ref/settings/#staticfiles-dirs
 STATICFILES_DIRS = [
     os.path.join(APPS_DIR, 'static'),
-    # os.path.join(BASE_DIR, 'client', 'static'),
+    os.path.join(BASE_DIR, 'client', 'dist'),
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-finders
@@ -262,7 +271,7 @@ SHORT_UUID_LENGTH = 10
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'dist/',
+        'BUNDLE_DIR_NAME': '',
         'STATS_FILE': os.path.join(BASE_DIR, 'client/webpack-stats.json'),
         'POLL_INTERVAL': 0.3,
         'TIMEOUT': None,

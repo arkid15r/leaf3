@@ -13,7 +13,7 @@ module.exports = {
   productionSourceMap: false,
   publicPath:
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8080/",
-  outputDir: path.resolve(__dirname, "../static/dist/"),
+  outputDir: path.resolve(__dirname, "dist"),
 
   chainWebpack: (config) => {
     config.module

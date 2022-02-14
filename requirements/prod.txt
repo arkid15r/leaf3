@@ -1,1 +1,7 @@
 -r base.txt
+
+# https://docs.gunicorn.org/en/latest/
+gunicorn==20.1.0
+
+# https://mysqlclient.readthedocs.io/
+mysqlclient==2.1.0
