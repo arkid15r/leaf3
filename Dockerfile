@@ -13,6 +13,7 @@ RUN apt-get -y --no-install-recommends install \
   build-essential \
   default-libmysqlclient-dev \
   gcc \
+  gettext \
   libgeos-dev \
   npm \
   yarnpkg
