@@ -5,6 +5,7 @@ services:
     build: .
     command: /home/leaf3/run.sh
     depends_on:
+      # TODO(ark): implement condition: service_healthy
       - graph-db
       - sql-db
     deploy:
