@@ -10,6 +10,7 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 
 from apps.schema.forms.base import TreeFormBase
 from apps.schema.models.person import Person
+from apps.schema.validators import person
 
 
 class PersonForm(TreeFormBase):
@@ -56,6 +57,60 @@ class PersonForm(TreeFormBase):
     self.fields['residence_uid'].choices = locations
     self.fields['spouse_uid'].choices = all_persons
 
+    self.fields['birth_year'].help_text = _('Enter birth year or - if birth year is unknown.')
+    self.fields['death_year'].help_text = _('Enter death year or - if death year is unknown.')
+
+    self.fields['birth_year'].validators.append(person.validate_year)
+    self.fields['death_year'].validators.append(person.validate_year)
+
+  def clean(self):
+    """Clean data."""
+
+    data = self.cleaned_data
+
+    # First name, last name.
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+
+    if not first_name and not last_name:
+      raise forms.ValidationError(
+          _('Either first name or last name is required.'))
+
+    # Birth.
+    birth_date = data.get('birth_date')
+    birth_year = data.get('birth_year')
+
+    if birth_year == Person.EMPTY_VALUE:
+      birth_year = -1
+    if birth_year:
+      birth_year = int(birth_year)
+
+    if (birth_date and birth_year is not None
+        and birth_date.year != birth_year):
+      raise forms.ValidationError(_('The birth year and birth date year must match.'))
+
+    # Death.
+    death_date = data.get('death_date')
+    death_year = data.get('death_year')
+
+    if death_year == Person.EMPTY_VALUE:
+      death_year = -1
+    if death_year:
+      death_year = int(death_year)
+
+    if (death_date and death_year is not None
+        and death_date.year != death_year):
+      raise forms.ValidationError(
+          _('The death year and death date year must match.'))
+
+    # Burial.
+    burial_date = data.get('burial_date')
+    if burial_date and death_date and burial_date < death_date:
+      raise forms.ValidationError(
+          _('The burial date cannot be earlier than death date.'))
+
+    return data
+
   class Meta:
     """Person form meta."""
 
@@ -64,6 +119,7 @@ class PersonForm(TreeFormBase):
         'first_name',
         'patronymic_name',
         'maiden_name',
+        'other_names',
         'gender',
         'birth_year',
         'birth_date',
@@ -76,6 +132,7 @@ class PersonForm(TreeFormBase):
         'death_year',
         'death_date',
         'death_place_uid',
+        'burial_date',
         'burial_place_uid',
         'death_cause',
         'death_cause_details',

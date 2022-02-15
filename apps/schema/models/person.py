@@ -31,10 +31,11 @@ class Person(TreeNodeModel):
 
   GENDER_CHOICES = tuple((key, value) for key, value in GENDERS.items())
 
-  first_name = StringProperty(label=_('First name'), max_length=25, required=True)
-  patronymic_name = StringProperty(label=_('Patronymic name'), max_length=25)
-  last_name = StringProperty(label=_('Last name'), required=True, max_length=50, index=True)
+  first_name = StringProperty(label=_('First name'), max_length=25)
+  last_name = StringProperty(label=_('Last name'), max_length=50, index=True)
   maiden_name = StringProperty(label=_('Maiden name'), max_length=25)
+  other_names = StringProperty(label=_('Other names'), max_length=50)
+  patronymic_name = StringProperty(label=_('Patronymic name'), max_length=25)
 
   gender = StringProperty(label=_('Gender'), required=True, choices=GENDER_CHOICES, index=True)
 
@@ -477,8 +478,7 @@ class Person(TreeNodeModel):
     elif self.birth_year:
       if self.age:
         fields.append(
-            ngettext_lazy('born in {n} year', '{n} years',
-                          self.age).format(n=self.age))
+            ngettext_lazy('{n} y.o.', '{n} y.o.', self.age).format(n=self.age))
       else:
         fields.append(_('born in {birth_year}').format(birth_year=self.birth_year))
 
