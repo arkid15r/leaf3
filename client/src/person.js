@@ -2,13 +2,12 @@ import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import Person from "./Person.vue";
 
-const mountToId = "#person";
-const mountTo = document.querySelector(mountToId);
+const rootElement = "#person";
 
 const i18n = createI18n({
   locale: document.querySelector("html").getAttribute("lang"),
 });
 
-const app = createApp(Person, { ...mountTo.dataset });
-app.use(i18n);
-app.mount(mountToId);
+createApp(Person, { ...document.querySelector(rootElement).dataset })
+  .use(i18n)
+  .mount(rootElement);
