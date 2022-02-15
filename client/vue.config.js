@@ -50,6 +50,7 @@ module.exports = {
     config.devServer
       .public("http://localhost:8080")
       .host("localhost")
+      .disableHostCheck(true)
       .port(8080)
       .hotOnly(true)
       .watchOptions({ poll: 1000 })
