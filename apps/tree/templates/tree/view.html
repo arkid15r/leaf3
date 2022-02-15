@@ -57,8 +57,9 @@
           data: "name",
           render: function (data, type, row, meta) {
             return `
-                <a href="#" class = "text-body font-weight-semibold">${data}</a>
-                <div class = "text-muted font-size-sm">${row.summary}</div>`;
+                <a href="/tree/{{ tree.uid }}/person/${row.uid}/edit/"
+                  class="text-body font-weight-semibold">${data}</a>
+                <div class="text-muted font-size-sm">${row.summary}</div>`;
           }
         },
         {
@@ -77,13 +78,7 @@
                 <a href="/tree/{{ tree.uid }}/person/${row.uid}/view/"
                   title="{% trans 'View person info' %}" target="_blank">
                   <button type="button" class="btn btn-sm">
-                    <i class="icon-user"></i>
-                  </button>
-                </a>
-                <a href="/tree/{{ tree.uid }}/person/${row.uid}/edit/"
-                  title={% trans 'Edit' %}>
-                  <button type="button" class="btn btn-sm">
-                    <i class="icon-pencil"></i>
+                    <i class="icon-tree6"></i>
                   </button>
                 </a>
                 <a href="/tree/{{ tree.uid }}/person/${row.uid}/entry/"
