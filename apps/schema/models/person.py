@@ -1,8 +1,9 @@
 """Person models."""
 
+from datetime import datetime
+
 from django.conf import settings
 from django.urls import reverse_lazy
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
 
@@ -124,6 +125,24 @@ class Person(TreeNodeModel):
     return self.birth_year <= year
 
   @property
+  def age(self):
+    """Get peron's age or total number of years lived."""
+
+    total_years = None
+
+    if self.is_alive:
+      if self.birth_date:
+        total_years = relativedelta(datetime.now(), self.birth_date).years
+      elif self.has_birth_year:
+        total_years = datetime.now().year - int(self.birth_year)
+    elif self.birth_date and self.death_date:
+      total_years = relativedelta(self.death_date, self.birth_date).years
+    elif self.has_birth_year and self.has_death_year:
+      total_years = int(self.death_year) - int(self.birth_year)
+
+    return total_years
+
+  @property
   def birth_place(self):
     """Return birth place location."""
 
@@ -228,6 +247,12 @@ class Person(TreeNodeModel):
     return [self.inflate(node[0]) for node in nodes]
 
   @property
+  def has_birth_year(self):
+    """Return True if person's birth year is known."""
+
+    return self.birth_year and self.birth_year != self.EMPTY_VALUE
+
+  @property
   def has_children(self):
     """Return True if person has children."""
 
@@ -257,7 +282,7 @@ class Person(TreeNodeModel):
   def has_death_year(self):
     """Return True if person's death year is known."""
 
-    return self.death_year and self.death_year != '-'
+    return self.death_year and self.death_year != self.EMPTY_VALUE
 
   @property
   def has_nephews_or_nieces(self):
@@ -295,6 +320,12 @@ class Person(TreeNodeModel):
 
     nodes, unused_meta = self.cypher(query)
     return nodes[0][0]
+
+  @property
+  def is_alive(self):
+    """Return True if person is still alive."""
+
+    return not self.death_date and not self.death_year
 
   @property
   def is_female(self):
@@ -424,19 +455,19 @@ class Person(TreeNodeModel):
     """Return person summary information."""
 
     fields = []
-    if self.death_year and self.death_year != '-':
-      if self.birth_year:
-        age = int(self.death_year) - int(self.birth_year)
+
+    if self.has_death_year:
+      if self.age:
         if self.is_female:
           fields.append(
               ngettext_lazy('died in {year} in the age of {f} year',
                             'died in {year} in the age of {f} years',
-                            age).format(f=age, year=self.death_year))
-        elif self.is_male:
+                            self.age).format(f=self.age, year=self.death_year))
+        else:
           fields.append(
               ngettext_lazy('died in {year} in the age of {m} year',
                             'died in {year} in the age of {m} years',
-                            age).format(m=age, year=self.death_year))
+                            self.age).format(m=self.age, year=self.death_year))
       else:
         if self.is_female:
           fields.append(_('died in {f}').format(f=self.death_year))
@@ -444,17 +475,15 @@ class Person(TreeNodeModel):
           fields.append(_('died in {m}').format(m=self.death_year))
 
     elif self.birth_year:
-      if self.death_year == '-':
-        fields.append(_('{birth_year}').format(birth_year=self.birth_year))
+      if self.age:
+        fields.append(
+            ngettext_lazy('born in {n} year', '{n} years',
+                          self.age).format(n=self.age))
       else:
-        if self.birth_date:
-          age = relativedelta(now().date(), self.birth_date).years
-        else:
-          age = now().year - int(self.birth_year)
-        fields.append(ngettext_lazy('{n} year', '{n} years', age).format(n=age))
+        fields.append(_('born in {birth_year}').format(birth_year=self.birth_year))
 
-      if self.death_cause:
-        fields.append(self.death_cause)
+    if not self.is_alive and self.death_cause:
+      fields.append(self.death_cause)
 
     children_count = len(self.children)
     if children_count:
