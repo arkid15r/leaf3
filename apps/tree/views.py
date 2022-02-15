@@ -57,6 +57,7 @@ class Create(LoginRequiredMixin, CreateView):
 
     context = super().get_context_data(**kwargs)
     context.update({
+        'button_submit_text': _('Create'),
         'page_header_primary_text': self.translations['add_tree'],
         'page_title': self.translations['add_tree'],
     })
