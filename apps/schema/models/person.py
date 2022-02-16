@@ -235,13 +235,29 @@ class Person(TreeNodeModel):
 
   @property
   def great_grandparents(self):
-    """Return person's great-grandparents."""
+    """Return person's great grandparents."""
 
     query = f"""
-        MATCH (ggp: Person) -[:PARENT]-> (gp:Person) -[:PARENT]->
+        MATCH (g_gp: Person) -[:PARENT]-> (gp:Person) -[:PARENT]->
             (p:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
-        RETURN ggp
-        ORDER BY p.gender DESC, gp.gender DESC, ggp.gender DESC
+        RETURN g_gp
+        ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
+  def great_great_grandparents(self):
+    """Return person's great-great grandparents."""
+
+    query = f"""
+        MATCH (gg_gp: Person) -[:PARENT]-> (g_gp: Person)
+            -[:PARENT]-> (gp:Person) -[:PARENT]-> (p:Person)
+            -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        RETURN gg_gp
+        ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC
+            gg_gp.gender DESC
     """
 
     nodes, unused_meta = self.cypher(query)

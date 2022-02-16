@@ -7,7 +7,7 @@
 {% block title %}{{ tree }}{% endblock %}
 
 {% block page-header %}
-{% include 'includes/page_header.html' with page_header_primary_text=person.name page_header_secondary_text=tree.name  page_header_secondary_url=tree.object_read_url %}
+{% include 'includes/page_header.html' with page_header_primary_text=person.name page_header_primary_url=person.object_update_url page_header_primary_icon='icon-pencil' page_header_secondary_text=tree.name page_header_secondary_url=tree.object_read_url %}
 {% endblock page-header %}
 
 {% block content %}

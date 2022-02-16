@@ -101,8 +101,15 @@ def post_save(sender, instance, created, **kwargs):
     Entry.add_relative(grandparent, Entry.AUTO_EVENT_HAD_GRANDCHILD, person)
 
   # Great grandparents.
-  for great_grandparent in person.great_grandparents:
-    if not great_grandparent.was_alive_in(person.birth_year):
+  for g_grandparent in person.great_grandparents:
+    if not g_grandparent.was_alive_in(person.birth_year):
       continue
-    Entry.add_relative(great_grandparent, Entry.AUTO_EVENT_HAD_GREAT_GRANDCHILD,
+    Entry.add_relative(g_grandparent, Entry.AUTO_EVENT_HAD_GREAT_GRANDCHILD,
                        person)
+
+  # Great-great grandparents.
+  for gg_grandparent in person.great_great_grandparents:
+    if not gg_grandparent.was_alive_in(person.birth_year):
+      continue
+    Entry.add_relative(gg_grandparent,
+                       Entry.AUTO_EVENT_HAD_GREAT_GREAT_GRANDCHILD, person)
