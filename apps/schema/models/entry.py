@@ -40,14 +40,30 @@ class Entry(EntryTranslation, TreeNodeModel):
     return self.summary
 
   @staticmethod
-  def add_relative(actor, event, person):
-    """Add a relative."""
+  def add_relative_birth(relative, event, person):
+    """
+      Add an entry about <person>'s birth to <relative>'s entry list.
+    """
 
-    entry = Entry.auto_create(actor, event, person_uid=person.uid)
+    entry = Entry.auto_create(relative, event, person_uid=person.uid)
     entry.person_uid = person.uid
     entry.location_uid = person.birth_place_uid
     entry.occurred = person.birth_date
     entry.occurred_year = person.birth_year
+
+    entry.save()
+
+  @staticmethod
+  def add_relative_death(relative, event, person):
+    """
+      Add an entry about <person>'s death to <relative>'s entry list.
+    """
+
+    entry = Entry.auto_create(actor, event, person_uid=person.uid)
+    entry.person_uid = person.uid
+    entry.location_uid = person.death_place_uid
+    entry.occurred = person.death_date
+    entry.occurred_year = person.death_year
 
     entry.save()
 
@@ -132,7 +148,7 @@ class Entry(EntryTranslation, TreeNodeModel):
 
   @property
   def is_no_person_event(self):
-    """Return True if entry should not have a person."""
+    """Return True if entry should not have (an additional) person."""
 
     return self.event_uid in (
         Entry.AUTO_EVENT_BORN,
@@ -210,7 +226,7 @@ class Entry(EntryTranslation, TreeNodeModel):
     if self.person:
       gender = self.person.gender
 
-    fields.append(self.ENTRY_EVENTS_TEMPLATES[key][gender].format(**context))
+    fields.append(self.ENTRY_EVENT_DICT[key][gender].format(**context))
 
     if self.person:
       fields.append(self.person.long_name)

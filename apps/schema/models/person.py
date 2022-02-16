@@ -144,6 +144,20 @@ class Person(TreeNodeModel):
     return total_years
 
   @property
+  def aunts_and_uncles(self):
+    """Return person's aunts and uncles."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) <-[:PARENT]- (:Person) -[:PARENT]-> (aou:Person)
+        RETURN DISTINCT aou
+        ORDER BY aou.birth_year
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
   def birth_place(self):
     """Return birth place location."""
 
@@ -220,6 +234,20 @@ class Person(TreeNodeModel):
     return reverse_lazy('entry-list', args=(self.tree_uid, self.uid))
 
   @property
+  def grandchildren(self):
+    """Return person's grandchildren."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (:Person)
+            -[:PARENT]-> (gc: Person)
+        RETURN gc
+        ORDER BY gc.birth_year, gc.gender DESC, gc.first_name
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
   def grandparents(self):
     """Return person's grandparents."""
 
@@ -256,7 +284,7 @@ class Person(TreeNodeModel):
             -[:PARENT]-> (gp:Person) -[:PARENT]-> (p:Person)
             -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
         RETURN gg_gp
-        ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC
+        ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC,
             gg_gp.gender DESC
     """
 
@@ -374,13 +402,13 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (n:Person)
-        RETURN n
-        ORDER BY n.birth_year
+            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (non:Person)
+        RETURN non
+        ORDER BY non.birth_year
     """
 
     nodes, unused_meta = self.cypher(query)
-    return nodes[0][0]
+    return [self.inflate(node[0]) for node in nodes]
 
   @property
   def object_delete_url(self):
@@ -430,20 +458,12 @@ class Person(TreeNodeModel):
     """Return person's siblings."""
 
     query = f"""
-        CALL {{
-            MATCH (Person {{ uid: "{self.father_uid}" }}) -[:PARENT]-> (child:Person)
-            WHERE NOT child.uid = "{self.uid}"
-            RETURN child
-
-            UNION
-
-            MATCH (Person {{ uid: "{self.mother_uid}" }}) -[:PARENT]-> (child:Person)
-            WHERE NOT child.uid = "{self.uid}"
-            RETURN child
-        }}
-
-        RETURN child
-        ORDER BY child.birth_year, child.gender DESC, child.first_name
+        MATCH (p: Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) -[:PARENT]-> (sibling: Person)
+        WHERE sibling.father_uid = p.father_uid AND
+            sibling.mother_uid = p.mother_uid
+        RETURN DISTINCT sibling
+        ORDER BY sibling.birth_year, sibling.gender DESC, sibling.first_name
     """
 
     nodes, unused_meta = self.cypher(query)

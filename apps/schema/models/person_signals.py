@@ -70,46 +70,82 @@ def post_save(sender, instance, created, **kwargs):
       if person.burial_place:
         person.burial_place_rel.connect(person.burial_place)
 
-  # Parents and their siblings.
-  for parent in person.parents:
-    # Daughter/son.
-    Entry.add_relative(parent, Entry.AUTO_EVENT_HAD_CHILD, person)
+  # Aunts/uncles.
+  for aou in person.aunts_and_uncles:
+    if aou.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(aou, Entry.AUTO_EVENT_HAD_NEPHEW_OR_NIECE,
+                               person)
 
-    # Nephew/niece.
-    for parent_sibling in parent.siblings:
-      if not parent_sibling.was_alive_in(person.birth_year):
-        continue
-      Entry.add_relative(parent_sibling, Entry.AUTO_EVENT_HAD_NEPHEW_OR_NIECE,
-                         person)
-
-  # Siblings.
-  for sibling in person.siblings:
-    if not sibling.was_alive_in(person.birth_year):
-      continue
-    Entry.add_relative(sibling, Entry.AUTO_EVENT_HAD_SIBLING, person)
+    if aou.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(aou, Entry.AUTO_EVENT_LOST_NEPHEW_OR_NIECE,
+                               person)
 
   # Cousins.
   for cousin in person.cousins:
-    if not cousin.was_alive_in(person.birth_year):
-      continue
-    Entry.add_relative(cousin, Entry.AUTO_EVENT_HAD_COUSIN, person)
+    if cousin.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(cousin, Entry.AUTO_EVENT_HAD_COUSIN, person)
+
+    if cousin.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(cousin, Entry.AUTO_EVENT_LOST_COUSIN, person)
+
+  # Grandchildren.
+  for grandchild in person.grandchildren:
+    if grandchild.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(grandchild, Entry.AUTO_EVENT_LOST_GRANDPARENT,
+                               person)
 
   # Grandparents.
   for grandparent in person.grandparents:
-    if not grandparent.was_alive_in(person.birth_year):
-      continue
-    Entry.add_relative(grandparent, Entry.AUTO_EVENT_HAD_GRANDCHILD, person)
+    if grandparent.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(grandparent, Entry.AUTO_EVENT_HAD_GRANDCHILD,
+                               person)
+
+    if grandparent.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(grandparent, Entry.AUTO_EVENT_LOST_GRANDCHILD,
+                               person)
 
   # Great grandparents.
   for g_grandparent in person.great_grandparents:
-    if not g_grandparent.was_alive_in(person.birth_year):
-      continue
-    Entry.add_relative(g_grandparent, Entry.AUTO_EVENT_HAD_GREAT_GRANDCHILD,
-                       person)
+    if g_grandparent.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(g_grandparent,
+                               Entry.AUTO_EVENT_HAD_GREAT_GRANDCHILD, person)
+
+    if g_grandparent.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(g_grandparent,
+                               Entry.AUTO_EVENT_LOST_GREAT_GRANDCHILD, person)
 
   # Great-great grandparents.
   for gg_grandparent in person.great_great_grandparents:
-    if not gg_grandparent.was_alive_in(person.birth_year):
-      continue
-    Entry.add_relative(gg_grandparent,
-                       Entry.AUTO_EVENT_HAD_GREAT_GREAT_GRANDCHILD, person)
+    if gg_grandparent.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(gg_grandparent,
+                               Entry.AUTO_EVENT_HAD_GREAT_GREAT_GRANDCHILD,
+                               person)
+
+    if gg_grandparent.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(gg_grandparent,
+                               Entry.AUTO_EVENT_LOST_GREAT_GREAT_GRANDCHILD,
+                               person)
+
+  # Nephews/nieces.
+  for non in person.nephews_and_nieces:
+    if non.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(non, Entry.AUTO_EVENT_HAD_AUNT_OR_UNCLE, person)
+
+    if non.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(non, Entry.AUTO_EVENT_LOST_AUNT_OR_UNCLE, person)
+
+  # Parents.
+  for parent in person.parents:
+    if parent.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(parent, Entry.AUTO_EVENT_HAD_CHILD, person)
+
+    if parent.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(parent, Entry.AUTO_EVENT_LOST_CHILD, person)
+
+  # Siblings.
+  for sibling in person.siblings:
+    if sibling.was_alive_in(person.birth_year):
+      Entry.add_relative_birth(sibling, Entry.AUTO_EVENT_HAD_SIBLING, person)
+
+    if sibling.was_alive_in(person.death_year) and person.has_death_year:
+      Entry.add_relative_death(sibling, Entry.AUTO_EVENT_LOST_SIBLING, person)
