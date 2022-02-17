@@ -68,7 +68,7 @@ class Update(UpdateViewBase):
         'page_header_primary_text': self.translations['edit_person'],
         'page_title': self.translations['edit_person'],
     })
-    print(self.get_object().aunts_and_uncles)
+
     return context
 
   def get_success_url(self):

@@ -9,7 +9,7 @@ const pages = {
 
 module.exports = {
   pages: pages,
-  filenameHashing: false,
+  filenameHashing: true,
   productionSourceMap: false,
   publicPath:
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8080/",
