@@ -303,8 +303,8 @@ class Person(TreeNodeModel):
     return self.birth_year and self.birth_year != self.EMPTY_VALUE
 
   @property
-  def has_children(self):
-    """Return True if person has children."""
+  def has_child(self):
+    """Return True if person has a child."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
@@ -315,8 +315,8 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
-  def has_cousins(self):
-    """Return True if person has at least one cousin."""
+  def has_cousin(self):
+    """Return True if person has a cousin."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }})
@@ -331,8 +331,8 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
-  def has_cousin_nephews_or_nieces(self):
-    """Return True if person has at least one cousin nephew or niece."""
+  def has_cousin_nephew_or_niece(self):
+    """Return True if person has a cousin nephew or a cousin niece."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }})
@@ -354,8 +354,8 @@ class Person(TreeNodeModel):
     return self.death_year and self.death_year != self.EMPTY_VALUE
 
   @property
-  def has_grandnephews_or_grandnieces(self):
-    """Return True if person has at least one grandnephew or grandniece."""
+  def has_grandnephew_or_grandniece(self):
+    """Return True if person has a grandnephew or a grandniece."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
@@ -370,8 +370,8 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
-  def has_nephews_or_nieces(self):
-    """Return True if person has at least one nephew or niece."""
+  def has_nephew_or_niece(self):
+    """Return True if person has a nephew or a niece."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
@@ -384,8 +384,8 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
-  def has_parents(self):
-    """Return True if person has parents."""
+  def has_parent(self):
+    """Return True if person has a parent."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]- (parent:Person)

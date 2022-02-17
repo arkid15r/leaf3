@@ -9,37 +9,37 @@ from apps.schema.serializers.base import (ListItemSerializerBase,
 class ItemSerializer(UIDSerializer):
   """Person item serializer."""
 
-  has_children = serializers.SerializerMethodField()
-  has_cousins = serializers.SerializerMethodField()
-  has_cousin_nephews_or_nieces = serializers.SerializerMethodField()
-  has_nephews_or_nieces = serializers.SerializerMethodField()
-  has_parents = serializers.SerializerMethodField()
+  has_child = serializers.SerializerMethodField()
+  has_cousin = serializers.SerializerMethodField()
+  has_cousin_nephew_or_niece = serializers.SerializerMethodField()
+  has_nephew_or_niece = serializers.SerializerMethodField()
+  has_parent = serializers.SerializerMethodField()
   has_timeline = serializers.SerializerMethodField()
 
-  def get_has_children(self, obj):
-    """Get has_children."""
+  def get_has_child(self, obj):
+    """Get has_child."""
 
-    return obj.has_children
+    return obj.has_child
 
-  def get_has_cousins(self, obj):
-    """Get has_cousins."""
+  def get_has_cousin(self, obj):
+    """Get has_cousin."""
 
-    return obj.has_cousins
+    return obj.has_cousin
 
-  def get_has_cousin_nephews_or_nieces(self, obj):
-    """Get has_cousin_nephews_or_nieces."""
+  def get_has_cousin_nephew_or_niece(self, obj):
+    """Get has_cousin_nephew_or_niece."""
 
-    return obj.has_cousin_nephews_or_nieces
+    return obj.has_cousin_nephew_or_niece
 
-  def get_has_nephews_or_nieces(self, obj):
-    """Get has_nephews_or_nieces."""
+  def get_has_nephew_or_niece(self, obj):
+    """Get has_nephew_or_niece."""
 
-    return obj.has_nephews_or_nieces
+    return obj.has_nephew_or_niece
 
-  def get_has_parents(self, obj):
-    """Get has_parents."""
+  def get_has_parent(self, obj):
+    """Get has_parent."""
 
-    return obj.has_parents
+    return obj.has_parent
 
   def get_has_timeline(self, obj):
     """Get has_timeline."""

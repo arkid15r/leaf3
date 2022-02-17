@@ -73,11 +73,11 @@ class SimpleTree(TreeNodeMixin, APIView):
 
     p_idx = 0
     for parent in person.parents:  # Add nodes for parents.
-      if not parent.has_nephews_or_nieces:
+      if not parent.has_nephew_or_niece:
         continue
 
       if (perspective == 'nephews-nieces'
-          and not parent.has_grandnephews_or_grandnieces):
+          and not parent.has_grandnephew_or_grandniece):
         continue
 
       data['children'].append(self.serializer_class(parent).data)
@@ -87,7 +87,7 @@ class SimpleTree(TreeNodeMixin, APIView):
 
       ps_idx = 0
       for p_sibling in parent.siblings:  # Add nodes for parent siblings.
-        if not p_sibling.has_children:
+        if not p_sibling.has_child:
           continue
 
         parent_data['children'].append(self.serializer_class(p_sibling).data)
@@ -134,7 +134,7 @@ class SimpleTree(TreeNodeMixin, APIView):
 
     s_idx = 0
     for sibling in person.siblings:  # Add nodes for siblings.
-      if not sibling.has_children:
+      if not sibling.has_child:
         continue
 
       data['children'].append(self.serializer_class(sibling).data)

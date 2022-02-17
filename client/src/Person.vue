@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div v-if="person.has_parents">
+    <div v-if="person.has_parent">
       <simple-tree
         :person-uid="personUid"
         :tree-uid="treeUid"
         view="ancestors"
       />
     </div>
-    <div v-if="person.has_children">
+    <div v-if="person.has_child">
       <simple-tree
         :person-uid="personUid"
         :tree-uid="treeUid"
@@ -15,7 +15,7 @@
         view="descendants"
       />
     </div>
-    <div v-if="person.has_nephews_or_nieces">
+    <div v-if="person.has_nephew_or_niece">
       <simple-tree
         :person-uid="personUid"
         :tree-uid="treeUid"
@@ -23,7 +23,7 @@
         view="nephews-nieces"
       />
     </div>
-    <div v-if="person.has_cousins">
+    <div v-if="person.has_cousin">
       <simple-tree
         :person-uid="personUid"
         :tree-uid="treeUid"
@@ -31,7 +31,7 @@
         view="cousins"
       />
     </div>
-    <div v-if="person.has_cousin_nephews_or_nieces">
+    <div v-if="person.has_cousin_nephew_or_niece">
       <simple-tree
         :person-uid="personUid"
         :tree-uid="treeUid"
