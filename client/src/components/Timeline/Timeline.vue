@@ -10,7 +10,14 @@
             class="list-feed-item border-warning"
           >
             <div class="text-muted font-size-sm mb-1">
-              {{ entry.occurred || entry.occurred_year }}
+              <a
+                :href="
+                  `/tree/${treeUid}/person/${personUid}/entry/` +
+                  `${entry.uid}/edit/`
+                "
+                target="_blank"
+                >{{ entry.occurred || entry.occurred_year }}</a
+              >
             </div>
             <span v-html="entry.text"></span>
           </div>
