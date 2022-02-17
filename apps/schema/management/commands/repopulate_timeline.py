@@ -34,7 +34,9 @@ class Command(BaseCommand):
             self.style.ERROR(f'Tree with UID {tree_uid} does not exist.'))
         exit(1)
 
-    for tree in trees:
+    tree_count = len(trees)
+    for idx, tree in enumerate(trees):
+      self.stdout.write(f'{tree.name} [{idx + 1}/{tree_count}]')
       self.populate_timeline(tree.uid)
 
     self.stdout.write(self.style.SUCCESS('Done.'))

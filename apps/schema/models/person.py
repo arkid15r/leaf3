@@ -265,6 +265,38 @@ class Person(TreeNodeModel):
     return [self.inflate(node[0]) for node in nodes]
 
   @property
+  def great_grandchildren(self):
+    """Return person's great grandchildren."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]->
+            (c:Person) -[:PARENT]->
+            (gc:Person) -[:PARENT]-> (g_gc:Person)
+        RETURN g_gc
+        ORDER BY c.gender DESC, gc.gender DESC, g_gc.gender DESC
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
+  def great_great_grandchildren(self):
+    """Return person's great-great grandchildren."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]->
+            (c:Person) -[:PARENT]->
+            (gc:Person) -[:PARENT]->
+            (g_gc:Person) -[:PARENT]-> (gg_gc:Person)
+        RETURN gg_gc
+        ORDER BY c.gender DESC, gc.gender DESC, g_gc.gender DESC,
+            gg_gc.gender DESC
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return [self.inflate(node[0]) for node in nodes]
+
+  @property
   def great_grandparents(self):
     """Return person's great grandparents."""
 
@@ -354,15 +386,28 @@ class Person(TreeNodeModel):
     return self.death_year and self.death_year != self.EMPTY_VALUE
 
   @property
+  def has_grandchild(self):
+    """Return True if person has a grandchild."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]->
+            (:Person) -[:PARENT]-> (gc:Person)
+        RETURN COUNT(gc) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
   def has_grandnephew_or_grandniece(self):
     """Return True if person has a grandnephew or a grandniece."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) <-[:PARENT]-
-            (:Person) -[:PARENT]->
-            (:Person) -[:PARENT]->
-            (:Person) <-[:PARENT]- (g_non:Person)
+        MATCH (Person {{ uid: "{self.uid}" }})
+            <-[:PARENT]- (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (g_non:Person)
         RETURN COUNT (g_non) > 0
     """
 
