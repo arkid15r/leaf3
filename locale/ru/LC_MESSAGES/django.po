@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 23:52+0000\n"
+"POT-Creation-Date: 2022-02-17 06:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: ru\n"
@@ -77,7 +77,7 @@ msgstr "Объект"
 msgid "Location"
 msgstr "Место"
 
-#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:578
+#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:639
 #: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr "Человек"
@@ -621,7 +621,7 @@ msgstr "Год смерти"
 msgid "Date of burial"
 msgstr "Дата похорон"
 
-#: apps/schema/models/person.py:542
+#: apps/schema/models/person.py:603
 #, python-brace-format
 msgid "died in {year} in the age of {f} year"
 msgid_plural "died in {year} in the age of {f} years"
@@ -630,7 +630,7 @@ msgstr[1] "умерла в {year} г., {f} года"
 msgstr[2] "умерла в {year} г., {f} лет"
 msgstr[3] "умерла в {year} г., {f} лет"
 
-#: apps/schema/models/person.py:547
+#: apps/schema/models/person.py:608
 #, python-brace-format
 msgid "died in {year} in the age of {m} year"
 msgid_plural "died in {year} in the age of {m} years"
@@ -639,17 +639,17 @@ msgstr[1] "умер в {year} г., в {m} года"
 msgstr[2] "умер в {year} г., в {m} лет"
 msgstr[3] "умер в {year} г., в {m} лет"
 
-#: apps/schema/models/person.py:552
+#: apps/schema/models/person.py:613
 #, python-brace-format
 msgid "died in {f}"
 msgstr "умерла в {f} г."
 
-#: apps/schema/models/person.py:554
+#: apps/schema/models/person.py:615
 #, python-brace-format
 msgid "died in {m}"
 msgstr "умер в {m} г."
 
-#: apps/schema/models/person.py:559
+#: apps/schema/models/person.py:620
 #, python-brace-format
 msgid "{n} y.o."
 msgid_plural "{n} y.o."
@@ -658,12 +658,12 @@ msgstr[1] "{n} года"
 msgstr[2] "{n} лет"
 msgstr[3] "{n} лет"
 
-#: apps/schema/models/person.py:561
+#: apps/schema/models/person.py:622
 #, python-brace-format
 msgid "born in {birth_year}"
 msgstr "{birth_year} г.р."
 
-#: apps/schema/models/person.py:569
+#: apps/schema/models/person.py:630
 #, python-brace-format
 msgid "{c} child"
 msgid_plural "{c} children"
@@ -672,7 +672,7 @@ msgstr[1] "{c} детей"
 msgstr[2] "{c} детей"
 msgstr[3] "{c} детей"
 
-#: apps/schema/models/person.py:579 apps/schema/views/api/person.py:18
+#: apps/schema/models/person.py:640 apps/schema/views/api/person.py:18
 #: apps/tree/templates/tree/view.html:6
 msgid "Persons"
 msgstr "Люди"

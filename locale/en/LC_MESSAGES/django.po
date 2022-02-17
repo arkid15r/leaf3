@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 23:52+0000\n"
+"POT-Creation-Date: 2022-02-17 06:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: en\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:578
+#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:639
 #: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr ""
@@ -615,50 +615,50 @@ msgstr ""
 msgid "Date of burial"
 msgstr ""
 
-#: apps/schema/models/person.py:542
+#: apps/schema/models/person.py:603
 #, python-brace-format
 msgid "died in {year} in the age of {f} year"
 msgid_plural "died in {year} in the age of {f} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:547
+#: apps/schema/models/person.py:608
 #, python-brace-format
 msgid "died in {year} in the age of {m} year"
 msgid_plural "died in {year} in the age of {m} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:552
+#: apps/schema/models/person.py:613
 #, python-brace-format
 msgid "died in {f}"
 msgstr ""
 
-#: apps/schema/models/person.py:554
+#: apps/schema/models/person.py:615
 #, python-brace-format
 msgid "died in {m}"
 msgstr ""
 
-#: apps/schema/models/person.py:559
+#: apps/schema/models/person.py:620
 #, python-brace-format
 msgid "{n} y.o."
 msgid_plural "{n} y.o."
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:561
+#: apps/schema/models/person.py:622
 #, python-brace-format
 msgid "born in {birth_year}"
 msgstr ""
 
-#: apps/schema/models/person.py:569
+#: apps/schema/models/person.py:630
 #, python-brace-format
 msgid "{c} child"
 msgid_plural "{c} children"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:579 apps/schema/views/api/person.py:18
+#: apps/schema/models/person.py:640 apps/schema/views/api/person.py:18
 #: apps/tree/templates/tree/view.html:6
 msgid "Persons"
 msgstr ""
