@@ -47,6 +47,7 @@ class EntryTranslation:
   AUTO_EVENT_LOST_GREAT_GREAT_GRANDCHILD = 'lost_great_great_grandchild'
   AUTO_EVENT_LOST_GREAT_GREAT_GRANDPARENT = 'lost_great_great_grandparent'
   AUTO_EVENT_LOST_NEPHEW_OR_NIECE = 'lost_nephew_or_niece'
+  AUTO_EVENT_LOST_PARENT = 'lost_parent'
   AUTO_EVENT_LOST_SIBLING = 'lost_sibling'
 
   AUTO_ENTRY_EVENTS = {
@@ -77,6 +78,7 @@ class EntryTranslation:
       AUTO_EVENT_LOST_GREAT_GREAT_GRANDPARENT: _(
           'Lost a great-great grandparent'),
       AUTO_EVENT_LOST_NEPHEW_OR_NIECE: _('Lost a nephew or a niece'),
+      AUTO_EVENT_LOST_PARENT: _('Lost a parent'),
       AUTO_EVENT_LOST_SIBLING: _('Lost a sibling'),
   }
 
@@ -155,6 +157,10 @@ class EntryTranslation:
   AUTO_EVENT_LOST_NEPHEW_OR_NIECE_DICT = {
       Person.FEMALE: _('A death of a niece'),
       Person.MALE: _('A death of a nephew'),
+  }
+  AUTO_EVENT_LOST_PARENT_DICT = {
+      Person.FEMALE: _('A death of mother'),
+      Person.MALE: _('A death of father'),
   }
   AUTO_EVENT_LOST_SIBLING_DICT = {
       Person.FEMALE: _('A death of a sister'),
@@ -259,6 +265,9 @@ class EntryTranslation:
           AUTO_EVENT_LOST_NEPHEW_OR_NIECE_DICT),
       f'{AUTO_EVENT_LOST_NEPHEW_OR_NIECE}_year': (
           AUTO_EVENT_LOST_NEPHEW_OR_NIECE_DICT),
+
+      f'{AUTO_EVENT_LOST_PARENT}_date': AUTO_EVENT_LOST_PARENT_DICT,
+      f'{AUTO_EVENT_LOST_PARENT}_year': AUTO_EVENT_LOST_PARENT_DICT,
 
       f'{AUTO_EVENT_LOST_SIBLING}_date': AUTO_EVENT_LOST_SIBLING_DICT,
       f'{AUTO_EVENT_LOST_SIBLING}_year': AUTO_EVENT_LOST_SIBLING_DICT,

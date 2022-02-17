@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 17:03+0000\n"
+"POT-Creation-Date: 2022-02-16 23:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ark <ark@cho.red>\n"
 "Language: en\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:536
+#: apps/schema/forms/entry.py:41 apps/schema/models/person.py:578
 #: apps/schema/views/api/person.py:29
 msgid "Person"
 msgstr ""
@@ -224,302 +224,314 @@ msgstr ""
 msgid "Ended"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:53
+#: apps/schema/models/entry_translation.py:54
 msgid "Born"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:54
+#: apps/schema/models/entry_translation.py:55
 msgid "Buried"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:55
+#: apps/schema/models/entry_translation.py:56
 msgid "Died"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:58
+#: apps/schema/models/entry_translation.py:59
 msgid "Had an aunt or an uncle."
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:59
+#: apps/schema/models/entry_translation.py:60
 msgid "Had a child"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:60
+#: apps/schema/models/entry_translation.py:61
 msgid "Had a cousin"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:61
+#: apps/schema/models/entry_translation.py:62
 msgid "Had a grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:62
+#: apps/schema/models/entry_translation.py:63
 msgid "Had a great grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:63
+#: apps/schema/models/entry_translation.py:64
 msgid "Had a great-great grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:64
+#: apps/schema/models/entry_translation.py:65
 msgid "Had a nephew or a niece"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:65
+#: apps/schema/models/entry_translation.py:66
 msgid "Had a sibling"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:68
+#: apps/schema/models/entry_translation.py:69
 msgid "Lost an aunt or an uncle."
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:69
+#: apps/schema/models/entry_translation.py:70
 msgid "Lost a child"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:70
+#: apps/schema/models/entry_translation.py:71
 msgid "Lost a cousin"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:71
+#: apps/schema/models/entry_translation.py:72
 msgid "Lost a grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:72
+#: apps/schema/models/entry_translation.py:73
 msgid "Lost a grandparent"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:73
+#: apps/schema/models/entry_translation.py:74
 msgid "Lost a great grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:74
+#: apps/schema/models/entry_translation.py:75
 msgid "Lost a great grandparent"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:76
+#: apps/schema/models/entry_translation.py:77
 msgid "Lost a great-great grandchild"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:78
+#: apps/schema/models/entry_translation.py:79
 msgid "Lost a great-great grandparent"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:79
+#: apps/schema/models/entry_translation.py:80
 msgid "Lost a nephew or a niece"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:80
+#: apps/schema/models/entry_translation.py:81
+msgid "Lost a parent"
+msgstr ""
+
+#: apps/schema/models/entry_translation.py:82
 msgid "Lost a sibling"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:86
+#: apps/schema/models/entry_translation.py:88
 msgid "A birth of an aunt"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:87
+#: apps/schema/models/entry_translation.py:89
 msgid "A birth of an uncle"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:90
+#: apps/schema/models/entry_translation.py:92
 msgid "A birth of a daughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:91
+#: apps/schema/models/entry_translation.py:93
 msgid "A birth of a son"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:94
+#: apps/schema/models/entry_translation.py:96
 msgid "A birth of a cousin sister"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:95
+#: apps/schema/models/entry_translation.py:97
 msgid "A birth of a cousin brother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:98
+#: apps/schema/models/entry_translation.py:100
 msgid "A birth of a granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:99
+#: apps/schema/models/entry_translation.py:101
 msgid "A birth of a grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:102
+#: apps/schema/models/entry_translation.py:104
 msgid "A birth of a great granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:103
+#: apps/schema/models/entry_translation.py:105
 msgid "A birth of a great grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:106
+#: apps/schema/models/entry_translation.py:108
 msgid "A birth of a great-great granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:107
+#: apps/schema/models/entry_translation.py:109
 msgid "A birth of a great-great grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:110
+#: apps/schema/models/entry_translation.py:112
 msgid "A birth of a niece"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:111
+#: apps/schema/models/entry_translation.py:113
 msgid "A birth of a nephew"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:114
+#: apps/schema/models/entry_translation.py:116
 msgid "A birth of a sister"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:115
+#: apps/schema/models/entry_translation.py:117
 msgid "A birth of a brother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:120
+#: apps/schema/models/entry_translation.py:122
 msgid "A death of an aunt"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:121
+#: apps/schema/models/entry_translation.py:123
 msgid "A death of an uncle"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:124
+#: apps/schema/models/entry_translation.py:126
 msgid "A death of a daughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:125
+#: apps/schema/models/entry_translation.py:127
 msgid "A death of a son"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:128
+#: apps/schema/models/entry_translation.py:130
 msgid "A death of a cousin sister"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:129
+#: apps/schema/models/entry_translation.py:131
 msgid "A death of a cousin brother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:132
+#: apps/schema/models/entry_translation.py:134
 msgid "A death of a granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:133
+#: apps/schema/models/entry_translation.py:135
 msgid "A death of a grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:136
+#: apps/schema/models/entry_translation.py:138
 msgid "A death of a great granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:137
+#: apps/schema/models/entry_translation.py:139
 msgid "A death of a great grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:140
+#: apps/schema/models/entry_translation.py:142
 msgid "A death of a great-great granddaughter"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:141
+#: apps/schema/models/entry_translation.py:143
 msgid "A death of a great-great grandson"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:144
+#: apps/schema/models/entry_translation.py:146
 msgid "A death of a grandmother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:145
+#: apps/schema/models/entry_translation.py:147
 msgid "A death of a grandfather"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:148
+#: apps/schema/models/entry_translation.py:150
 msgid "A death of a great grandmother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:149
+#: apps/schema/models/entry_translation.py:151
 msgid "A death of a great grandfather"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:152
+#: apps/schema/models/entry_translation.py:154
 msgid "A death of a great-great grandmother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:153
+#: apps/schema/models/entry_translation.py:155
 msgid "A death of a great-great grandfather"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:156
+#: apps/schema/models/entry_translation.py:158
 msgid "A death of a niece"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:157
+#: apps/schema/models/entry_translation.py:159
 msgid "A death of a nephew"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:160
-msgid "A death of a sister"
+#: apps/schema/models/entry_translation.py:162
+msgid "A death of mother"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:161
-msgid "A death of a brother"
+#: apps/schema/models/entry_translation.py:163
+msgid "A death of father"
 msgstr ""
 
 #: apps/schema/models/entry_translation.py:166
+msgid "A death of a sister"
+msgstr ""
+
+#: apps/schema/models/entry_translation.py:167
+msgid "A death of a brother"
+msgstr ""
+
+#: apps/schema/models/entry_translation.py:172
 #, python-brace-format
 msgid "Was born on {f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:167
+#: apps/schema/models/entry_translation.py:173
 #, python-brace-format
 msgid "Was born on {m}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:170
+#: apps/schema/models/entry_translation.py:176
 #, python-brace-format
 msgid "Was born in {f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:171
+#: apps/schema/models/entry_translation.py:177
 #, python-brace-format
 msgid "Was born in {m}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:174
+#: apps/schema/models/entry_translation.py:180
 #, python-brace-format
 msgid "Buried{f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:175
+#: apps/schema/models/entry_translation.py:181
 #, python-brace-format
 msgid "Buried{m}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:178
+#: apps/schema/models/entry_translation.py:184
 #, python-brace-format
 msgid "Buried on {f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:179
+#: apps/schema/models/entry_translation.py:185
 #, python-brace-format
 msgid "Buried on {m}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:182
+#: apps/schema/models/entry_translation.py:188
 #, python-brace-format
 msgid "Died on {f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:183
+#: apps/schema/models/entry_translation.py:189
 #, python-brace-format
 msgid "Died on {m}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:186
+#: apps/schema/models/entry_translation.py:192
 #, python-brace-format
 msgid "Died in {f}"
 msgstr ""
 
-#: apps/schema/models/entry_translation.py:187
+#: apps/schema/models/entry_translation.py:193
 #, python-brace-format
 msgid "Died in {m}"
 msgstr ""
@@ -603,50 +615,50 @@ msgstr ""
 msgid "Date of burial"
 msgstr ""
 
-#: apps/schema/models/person.py:500
+#: apps/schema/models/person.py:542
 #, python-brace-format
 msgid "died in {year} in the age of {f} year"
 msgid_plural "died in {year} in the age of {f} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:505
+#: apps/schema/models/person.py:547
 #, python-brace-format
 msgid "died in {year} in the age of {m} year"
 msgid_plural "died in {year} in the age of {m} years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:510
+#: apps/schema/models/person.py:552
 #, python-brace-format
 msgid "died in {f}"
 msgstr ""
 
-#: apps/schema/models/person.py:512
+#: apps/schema/models/person.py:554
 #, python-brace-format
 msgid "died in {m}"
 msgstr ""
 
-#: apps/schema/models/person.py:517
+#: apps/schema/models/person.py:559
 #, python-brace-format
 msgid "{n} y.o."
 msgid_plural "{n} y.o."
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:519
+#: apps/schema/models/person.py:561
 #, python-brace-format
 msgid "born in {birth_year}"
 msgstr ""
 
-#: apps/schema/models/person.py:527
+#: apps/schema/models/person.py:569
 #, python-brace-format
 msgid "{c} child"
 msgid_plural "{c} children"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/schema/models/person.py:537 apps/schema/views/api/person.py:18
+#: apps/schema/models/person.py:579 apps/schema/views/api/person.py:18
 #: apps/tree/templates/tree/view.html:6
 msgid "Persons"
 msgstr ""

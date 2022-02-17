@@ -76,21 +76,26 @@ def post_save(sender, instance, created, **kwargs):
       Entry.add_relative_birth(aou, Entry.AUTO_EVENT_HAD_NEPHEW_OR_NIECE,
                                person)
 
-    if aou.was_alive_in(person.death_year) and person.has_death_year:
+    if aou.was_alive_in(person.death_year):
       Entry.add_relative_death(aou, Entry.AUTO_EVENT_LOST_NEPHEW_OR_NIECE,
                                person)
+
+  # Children.
+  for child in person.children:
+    if child.was_alive_in(person.death_year):
+      Entry.add_relative_death(child, Entry.AUTO_EVENT_LOST_PARENT, person)
 
   # Cousins.
   for cousin in person.cousins:
     if cousin.was_alive_in(person.birth_year):
       Entry.add_relative_birth(cousin, Entry.AUTO_EVENT_HAD_COUSIN, person)
 
-    if cousin.was_alive_in(person.death_year) and person.has_death_year:
+    if cousin.was_alive_in(person.death_year):
       Entry.add_relative_death(cousin, Entry.AUTO_EVENT_LOST_COUSIN, person)
 
   # Grandchildren.
   for grandchild in person.grandchildren:
-    if grandchild.was_alive_in(person.death_year) and person.has_death_year:
+    if grandchild.was_alive_in(person.death_year):
       Entry.add_relative_death(grandchild, Entry.AUTO_EVENT_LOST_GRANDPARENT,
                                person)
 
@@ -100,7 +105,7 @@ def post_save(sender, instance, created, **kwargs):
       Entry.add_relative_birth(grandparent, Entry.AUTO_EVENT_HAD_GRANDCHILD,
                                person)
 
-    if grandparent.was_alive_in(person.death_year) and person.has_death_year:
+    if grandparent.was_alive_in(person.death_year):
       Entry.add_relative_death(grandparent, Entry.AUTO_EVENT_LOST_GRANDCHILD,
                                person)
 
@@ -110,7 +115,7 @@ def post_save(sender, instance, created, **kwargs):
       Entry.add_relative_birth(g_grandparent,
                                Entry.AUTO_EVENT_HAD_GREAT_GRANDCHILD, person)
 
-    if g_grandparent.was_alive_in(person.death_year) and person.has_death_year:
+    if g_grandparent.was_alive_in(person.death_year):
       Entry.add_relative_death(g_grandparent,
                                Entry.AUTO_EVENT_LOST_GREAT_GRANDCHILD, person)
 
@@ -121,7 +126,7 @@ def post_save(sender, instance, created, **kwargs):
                                Entry.AUTO_EVENT_HAD_GREAT_GREAT_GRANDCHILD,
                                person)
 
-    if gg_grandparent.was_alive_in(person.death_year) and person.has_death_year:
+    if gg_grandparent.was_alive_in(person.death_year):
       Entry.add_relative_death(gg_grandparent,
                                Entry.AUTO_EVENT_LOST_GREAT_GREAT_GRANDCHILD,
                                person)
@@ -131,7 +136,7 @@ def post_save(sender, instance, created, **kwargs):
     if non.was_alive_in(person.birth_year):
       Entry.add_relative_birth(non, Entry.AUTO_EVENT_HAD_AUNT_OR_UNCLE, person)
 
-    if non.was_alive_in(person.death_year) and person.has_death_year:
+    if non.was_alive_in(person.death_year):
       Entry.add_relative_death(non, Entry.AUTO_EVENT_LOST_AUNT_OR_UNCLE, person)
 
   # Parents.
@@ -139,7 +144,7 @@ def post_save(sender, instance, created, **kwargs):
     if parent.was_alive_in(person.birth_year):
       Entry.add_relative_birth(parent, Entry.AUTO_EVENT_HAD_CHILD, person)
 
-    if parent.was_alive_in(person.death_year) and person.has_death_year:
+    if parent.was_alive_in(person.death_year):
       Entry.add_relative_death(parent, Entry.AUTO_EVENT_LOST_CHILD, person)
 
   # Siblings.
@@ -147,5 +152,5 @@ def post_save(sender, instance, created, **kwargs):
     if sibling.was_alive_in(person.birth_year):
       Entry.add_relative_birth(sibling, Entry.AUTO_EVENT_HAD_SIBLING, person)
 
-    if sibling.was_alive_in(person.death_year) and person.has_death_year:
+    if sibling.was_alive_in(person.death_year):
       Entry.add_relative_death(sibling, Entry.AUTO_EVENT_LOST_SIBLING, person)

@@ -114,7 +114,7 @@ class Person(TreeNodeModel):
   def was_alive_in(self, year):
     """Return True if person was alive in a given year."""
 
-    if not year:
+    if not year or year == self.EMPTY_VALUE:
       return False
 
     if not self.birth_year or self.death_year == self.EMPTY_VALUE:
@@ -149,7 +149,8 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) <-[:PARENT]- (:Person) -[:PARENT]-> (aou:Person)
+            (:Person) <-[:PARENT]-
+            (:Person) -[:PARENT]-> (aou:Person)
         RETURN DISTINCT aou
         ORDER BY aou.birth_year
     """
@@ -187,10 +188,12 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
-            (:Person) -[:PARENT]-> (c:Person)
-        RETURN DISTINCT c
-        ORDER BY c.birth_year, c.gender DESC, c.last_name, c.first_name
+            (:Person) <-[:PARENT]-
+            (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]-> (cousin:Person)
+        RETURN DISTINCT cousin
+        ORDER BY cousin.birth_year, cousin.gender DESC,
+            cousin.last_name, cousin.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -201,9 +204,9 @@ class Person(TreeNodeModel):
     """Return person's children."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (c:Person)
-        RETURN c
-        ORDER BY c.birth_year, c.gender DESC, c.first_name
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
+        RETURN child
+        ORDER BY child.birth_year, child.gender DESC, child.first_name
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -238,8 +241,8 @@ class Person(TreeNodeModel):
     """Return person's grandchildren."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (:Person)
-            -[:PARENT]-> (gc: Person)
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]->
+            (:Person) -[:PARENT]-> (gc:Person)
         RETURN gc
         ORDER BY gc.birth_year, gc.gender DESC, gc.first_name
     """
@@ -252,8 +255,8 @@ class Person(TreeNodeModel):
     """Return person's grandparents."""
 
     query = f"""
-        MATCH (gp:Person) -[:PARENT]-> (p:Person) -[:PARENT]->
-            (Person {{ uid: "{self.uid}" }})
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (p:Person) <-[:PARENT]- (gp:Person)
         RETURN gp
         ORDER BY p.gender DESC, gp.gender DESC
     """
@@ -266,8 +269,9 @@ class Person(TreeNodeModel):
     """Return person's great grandparents."""
 
     query = f"""
-        MATCH (g_gp: Person) -[:PARENT]-> (gp:Person) -[:PARENT]->
-            (p:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (p:Person) <-[:PARENT]-
+            (gp:Person) <-[:PARENT]- (g_gp:Person)
         RETURN g_gp
         ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC
     """
@@ -280,9 +284,10 @@ class Person(TreeNodeModel):
     """Return person's great-great grandparents."""
 
     query = f"""
-        MATCH (gg_gp: Person) -[:PARENT]-> (g_gp: Person)
-            -[:PARENT]-> (gp:Person) -[:PARENT]-> (p:Person)
-            -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (p:Person) <-[:PARENT]-
+            (gp:Person) <-[:PARENT]-
+            (g_gp:Person) <-[:PARENT]- (gg_gp:Person)
         RETURN gg_gp
         ORDER BY p.gender DESC, gp.gender DESC, g_gp.gender DESC,
             gg_gp.gender DESC
@@ -302,8 +307,8 @@ class Person(TreeNodeModel):
     """Return True if person has children."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (c:Person)
-        RETURN COUNT(c) > 0
+        MATCH (Person {{ uid: "{self.uid}" }}) -[:PARENT]-> (child:Person)
+        RETURN COUNT(child) > 0
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -314,10 +319,29 @@ class Person(TreeNodeModel):
     """Return True if person has at least one cousin."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) <-[:PARENT]- (:Person) -[:PARENT]->
-            (:Person) -[:PARENT]-> (c:Person)
-        RETURN COUNT (c) > 0
+        MATCH (Person {{ uid: "{self.uid}" }})
+            <-[:PARENT]- (:Person)
+            <-[:PARENT]- (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (cousin:Person)
+        RETURN COUNT (cousin) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
+  def has_cousin_nephews_or_nieces(self):
+    """Return True if person has at least one cousin nephew or niece."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }})
+            <-[:PARENT]- (:Person)
+            <-[:PARENT]- (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (c_non:Person)
+        RETURN COUNT (c_non) > 0
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -330,13 +354,30 @@ class Person(TreeNodeModel):
     return self.death_year and self.death_year != self.EMPTY_VALUE
 
   @property
+  def has_grandnephews_or_grandnieces(self):
+    """Return True if person has at least one grandnephew or grandniece."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) <-[:PARENT]-
+            (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]->
+            (:Person) <-[:PARENT]- (g_non:Person)
+        RETURN COUNT (g_non) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
   def has_nephews_or_nieces(self):
     """Return True if person has at least one nephew or niece."""
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (n:Person)
-        RETURN COUNT (n) > 0
+            (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]-> (non:Person)
+        RETURN COUNT (non) > 0
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -347,8 +388,8 @@ class Person(TreeNodeModel):
     """Return True if person has parents."""
 
     query = f"""
-        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]- (p:Person)
-        RETURN COUNT(p) > 0
+        MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]- (parent:Person)
+        RETURN COUNT(parent) > 0
     """
 
     nodes, unused_meta = self.cypher(query)
@@ -359,7 +400,7 @@ class Person(TreeNodeModel):
     """Return True if person has a timeline."""
 
     query = f"""
-        MATCH (entry: Entry {{ actor_uid: "{self.uid}" }})
+        MATCH (entry:Entry {{ actor_uid: "{self.uid}" }})
         RETURN COUNT(entry) > 0
     """
 
@@ -402,7 +443,8 @@ class Person(TreeNodeModel):
 
     query = f"""
         MATCH (Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) -[:PARENT]-> (:Person) -[:PARENT]-> (non:Person)
+            (:Person) -[:PARENT]->
+            (:Person) -[:PARENT]-> (non:Person)
         RETURN non
         ORDER BY non.birth_year
     """
@@ -433,7 +475,7 @@ class Person(TreeNodeModel):
     """Return person's parents."""
 
     query = f"""
-        MATCH (parent: Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
+        MATCH (parent:Person) -[:PARENT]-> (Person {{ uid: "{self.uid}" }})
         RETURN parent
         ORDER BY parent.gender DESC
     """
@@ -458,8 +500,8 @@ class Person(TreeNodeModel):
     """Return person's siblings."""
 
     query = f"""
-        MATCH (p: Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
-            (:Person) -[:PARENT]-> (sibling: Person)
+        MATCH (p:Person {{ uid: "{self.uid}" }}) <-[:PARENT]-
+            (:Person) -[:PARENT]-> (sibling:Person)
         WHERE sibling.father_uid = p.father_uid AND
             sibling.mother_uid = p.mother_uid
         RETURN DISTINCT sibling

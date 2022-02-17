@@ -59,7 +59,7 @@ class Entry(EntryTranslation, TreeNodeModel):
       Add an entry about <person>'s death to <relative>'s entry list.
     """
 
-    entry = Entry.auto_create(actor, event, person_uid=person.uid)
+    entry = Entry.auto_create(relative, event, person_uid=person.uid)
     entry.person_uid = person.uid
     entry.location_uid = person.death_place_uid
     entry.occurred = person.death_date

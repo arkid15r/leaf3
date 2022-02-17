@@ -65,7 +65,7 @@ class SimpleTree(TreeNodeMixin, APIView):
 
     return data
 
-  def build_cousin_tree(self, person):
+  def build_cousin_tree(self, person, perspective='cousins'):
     """Build person's cousins tree."""
 
     data = self.serializer_class(person).data
@@ -74,6 +74,10 @@ class SimpleTree(TreeNodeMixin, APIView):
     p_idx = 0
     for parent in person.parents:  # Add nodes for parents.
       if not parent.has_nephews_or_nieces:
+        continue
+
+      if (perspective == 'nephews-nieces'
+          and not parent.has_grandnephews_or_grandnieces):
         continue
 
       data['children'].append(self.serializer_class(parent).data)
@@ -92,8 +96,18 @@ class SimpleTree(TreeNodeMixin, APIView):
         ps_idx += 1
 
         # Add nodes for parent siblings' children.
+        psc_idx = 0
         for ps_child in p_sibling.children:
           cousin_data['children'].append(self.serializer_class(ps_child).data)
+
+          # Add nodes for cousin's children.
+          if perspective == 'nephews-nieces':
+            cousin_data['children'][psc_idx]['children'] = []
+            for c_child in ps_child.children:
+              cousin_data['children'][psc_idx]['children'].append(
+                  self.serializer_class(c_child).data)
+
+          psc_idx += 1
 
     return data
 
@@ -141,7 +155,10 @@ class SimpleTree(TreeNodeMixin, APIView):
     if view == 'ancestors':
       nodes = self.build_ancestor_tree(self.get_object())
     elif view == 'cousins':
-      nodes = self.build_cousin_tree(self.get_object())
+      nodes = self.build_cousin_tree(self.get_object(), perspective='cousins')
+    elif view == 'cousin-nephews-nieces':
+      nodes = self.build_cousin_tree(self.get_object(),
+                                     perspective='nephews-nieces')
     elif view == 'descendants':
       nodes = self.build_descendant_tree(self.get_object())
     elif view == 'nephews-nieces':
