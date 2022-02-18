@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from apps.schema.models.person import Person
 from apps.schema.serializers import person
-from apps.schema.views.api.base import DataTableListBase
+from apps.schema.views.api.base import DataTableListBase, SerializedDataView
 from apps.schema.views.base import TreeNodeMixin
 
 
@@ -22,7 +22,7 @@ class DataTableList(DataTableListBase):
   serializer_class = person.ListItemSerializer
 
 
-class Item(TreeNodeMixin, APIView):
+class Item(TreeNodeMixin, SerializedDataView):
   """Person item API endpoint."""
 
   model = Person
@@ -32,10 +32,10 @@ class Item(TreeNodeMixin, APIView):
   def get(self, request, **kwargs):
     """Return person."""
 
-    return Response(self.serializer_class(self.get_object()).data)
+    return Response(self.serialize(self.get_object()))
 
 
-class SimpleTree(TreeNodeMixin, APIView):
+class SimpleTree(TreeNodeMixin, SerializedDataView):
   """Person simple tree API endpoint."""
 
   model = Person
@@ -45,11 +45,11 @@ class SimpleTree(TreeNodeMixin, APIView):
   def build_ancestor_tree(self, person):
     """Build person's ancestors tree.
 
-    The 'children' attribute of a node is required in order to get the tree
+    The "children" attribute of a node is required in order to get the tree
     visualized properly. Apparently it contains parents of each person.
     """
 
-    data = self.serializer_class(person).data
+    data = self.serialize(person)
     data['children'] = []
 
     nodes = person.parents
@@ -61,14 +61,14 @@ class SimpleTree(TreeNodeMixin, APIView):
 
       # Add siblings.
       for sibling in node.siblings:
-        data['children'].append(self.serializer_class(sibling).data)
+        data['children'].append(self.serialize(sibling))
 
     return data
 
   def build_cousin_tree(self, person, perspective='cousins'):
     """Build person's cousins tree."""
 
-    data = self.serializer_class(person).data
+    data = self.serialize(person)
     data['children'] = []
 
     p_idx = 0
@@ -80,7 +80,7 @@ class SimpleTree(TreeNodeMixin, APIView):
           and not parent.has_grandnephew_or_grandniece):
         continue
 
-      data['children'].append(self.serializer_class(parent).data)
+      data['children'].append(self.serialize(parent))
       parent_data = data['children'][p_idx]
       parent_data['children'] = []
       p_idx += 1
@@ -92,7 +92,7 @@ class SimpleTree(TreeNodeMixin, APIView):
         if perspective == 'nephews-nieces' and not p_sibling.has_grandchild:
           continue
 
-        parent_data['children'].append(self.serializer_class(p_sibling).data)
+        parent_data['children'].append(self.serialize(p_sibling))
         cousin_data = parent_data['children'][ps_idx]
         cousin_data['children'] = []
         ps_idx += 1
@@ -103,14 +103,14 @@ class SimpleTree(TreeNodeMixin, APIView):
           if perspective == 'nephews-nieces' and not ps_child.has_child:
             continue
 
-          cousin_data['children'].append(self.serializer_class(ps_child).data)
+          cousin_data['children'].append(self.serialize(ps_child))
 
           # Add nodes for cousin's children.
           if perspective == 'nephews-nieces':
             cousin_data['children'][psc_idx]['children'] = []
             for c_child in ps_child.children:
               cousin_data['children'][psc_idx]['children'].append(
-                  self.serializer_class(c_child).data)
+                  self.serialize(c_child))
 
           psc_idx += 1
 
@@ -119,7 +119,7 @@ class SimpleTree(TreeNodeMixin, APIView):
   def build_descendant_tree(self, person):
     """Build person's descendants tree."""
 
-    data = self.serializer_class(person).data
+    data = self.serialize(person)
     data['children'] = []
 
     nodes = person.children
@@ -134,7 +134,7 @@ class SimpleTree(TreeNodeMixin, APIView):
   def build_newphew_niece_tree(self, person):
     """Build person's nephews/nieces tree."""
 
-    data = self.serializer_class(person).data
+    data = self.serialize(person)
     data['children'] = []
 
     s_idx = 0
@@ -142,20 +142,20 @@ class SimpleTree(TreeNodeMixin, APIView):
       if not sibling.has_child:
         continue
 
-      data['children'].append(self.serializer_class(sibling).data)
+      data['children'].append(self.serialize(sibling))
       sibling_data = data['children'][s_idx]
       sibling_data['children'] = []
       s_idx += 1
 
       for s_child in sibling.children:  # Add nodes for siblings' children.
-        sibling_data['children'].append(self.serializer_class(s_child).data)
+        sibling_data['children'].append(self.serialize(s_child))
 
     return data
 
   def build_second_cousin_tree(self, person):
     """Build person's second cousins tree."""
 
-    data = self.serializer_class(person).data
+    data = self.serialize(person)
     data['children'] = []
 
     # Add nodes for parents.
@@ -164,7 +164,7 @@ class SimpleTree(TreeNodeMixin, APIView):
       if not parent.has_cousin_nephew_or_niece:
         continue
 
-      data['children'].append(self.serializer_class(parent).data)
+      data['children'].append(self.serialize(parent))
       parent_data = data['children'][p_idx]
       parent_data['children'] = []
       p_idx += 1
@@ -175,7 +175,7 @@ class SimpleTree(TreeNodeMixin, APIView):
         if not grandparent.has_nephew_or_niece:
           continue
 
-        parent_data['children'].append(self.serializer_class(grandparent).data)
+        parent_data['children'].append(self.serialize(grandparent))
         grandparent_data = parent_data['children'][gp_idx]
         grandparent_data['children'] = []
         gp_idx += 1
@@ -186,8 +186,7 @@ class SimpleTree(TreeNodeMixin, APIView):
           if not gp_sibling.has_grandchild:
             continue
 
-          grandparent_data['children'].append(
-              self.serializer_class(gp_sibling).data)
+          grandparent_data['children'].append(self.serialize(gp_sibling))
           second_cousin_parent_data = grandparent_data['children'][gps_idx]
           second_cousin_parent_data['children'] = []
           gps_idx += 1
@@ -199,14 +198,14 @@ class SimpleTree(TreeNodeMixin, APIView):
               continue
 
             second_cousin_parent_data['children'].append(
-                self.serializer_class(gps_child).data)
+                self.serialize(gps_child))
             second_cousin_data = second_cousin_parent_data['children'][gpc_idx]
             second_cousin_data['children'] = []
             gpc_idx += 1
 
             for second_cousin in gps_child.children:
               second_cousin_data['children'].append(
-                  self.serializer_class(second_cousin).data)
+                  self.serialize(second_cousin))
 
     return data
 

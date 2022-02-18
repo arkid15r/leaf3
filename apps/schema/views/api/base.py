@@ -4,7 +4,16 @@ from neomodel import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.schema.views.base import TreeMixin, TreePersonNodeMixin
+from apps.schema.views.base import TreeMixin
+
+
+class SerializedDataView(APIView):
+  """API view with serialization helpers."""
+
+  def serialize(self, obj):
+    """Serialize object and return serialized data."""
+
+    return self.serializer_class(obj).data
 
 
 class TreeNodesMixin(TreeMixin):
