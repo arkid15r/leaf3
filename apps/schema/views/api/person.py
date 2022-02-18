@@ -152,9 +152,68 @@ class SimpleTree(TreeNodeMixin, APIView):
 
     return data
 
+  def build_second_cousin_tree(self, person):
+    """Build person's second cousins tree."""
+
+    data = self.serializer_class(person).data
+    data['children'] = []
+
+    # Add nodes for parents.
+    p_idx = 0
+    for parent in person.parents:
+      if not parent.has_cousin_nephew_or_niece:
+        continue
+
+      data['children'].append(self.serializer_class(parent).data)
+      parent_data = data['children'][p_idx]
+      parent_data['children'] = []
+      p_idx += 1
+
+      # Add nodes for grandparents.
+      gp_idx = 0
+      for grandparent in parent.parents:
+        if not grandparent.has_nephew_or_niece:
+          continue
+
+        parent_data['children'].append(self.serializer_class(grandparent).data)
+        grandparent_data = parent_data['children'][gp_idx]
+        grandparent_data['children'] = []
+        gp_idx += 1
+
+        # Add nodes for grandparent siblings' children.
+        gps_idx = 0
+        for gp_sibling in grandparent.siblings:
+          if not gp_sibling.has_grandchild:
+            continue
+
+          grandparent_data['children'].append(
+              self.serializer_class(gp_sibling).data)
+          second_cousin_parent_data = grandparent_data['children'][gps_idx]
+          second_cousin_parent_data['children'] = []
+          gps_idx += 1
+
+          # Add nodes for grandparent siblings' grandchildren.
+          gpc_idx = 0
+          for gps_child in gp_sibling.children:
+            if not gps_child.has_child:
+              continue
+
+            second_cousin_parent_data['children'].append(
+                self.serializer_class(gps_child).data)
+            second_cousin_data = second_cousin_parent_data['children'][gpc_idx]
+            second_cousin_data['children'] = []
+            gpc_idx += 1
+
+            for second_cousin in gps_child.children:
+              second_cousin_data['children'].append(
+                  self.serializer_class(second_cousin).data)
+
+    return data
+
   def get(self, request, **kwargs):
     """Return tree."""
 
+    nodes = []
     view = request.query_params.get('view')
 
     if view == 'ancestors':
@@ -168,7 +227,7 @@ class SimpleTree(TreeNodeMixin, APIView):
       nodes = self.build_descendant_tree(self.get_object())
     elif view == 'nephews-nieces':
       nodes = self.build_newphew_niece_tree(self.get_object())
-    else:
-      nodes = []
+    elif view == 'second-cousins':
+      nodes = self.build_second_cousin_tree(self.get_object())
 
     return Response(nodes)

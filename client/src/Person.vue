@@ -39,6 +39,14 @@
         view="cousin-nephews-nieces"
       />
     </div>
+    <div v-if="person.has_second_cousin">
+      <simple-tree
+        :person-uid="personUid"
+        :tree-uid="treeUid"
+        direction="rtl"
+        view="second-cousins"
+      />
+    </div>
     <div v-if="person.has_timeline">
       <timeline :person-uid="personUid" :tree-uid="treeUid" />
     </div>

@@ -407,6 +407,24 @@ class Person(TreeNodeModel):
     return nodes[0][0]
 
   @property
+  def has_second_cousin(self):
+    """Return True if person has a second cousin."""
+
+    query = f"""
+        MATCH (Person {{ uid: "{self.uid}" }})
+            <-[:PARENT]- (:Person)
+            <-[:PARENT]- (:Person)
+            <-[:PARENT]- (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (:Person)
+            -[:PARENT]-> (sc:Person)
+        RETURN DISTINCT COUNT(sc) > 0
+    """
+
+    nodes, unused_meta = self.cypher(query)
+    return nodes[0][0]
+
+  @property
   def has_death_year(self):
     """Return True if person's death year is known."""
 

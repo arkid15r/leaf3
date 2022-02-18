@@ -1,11 +1,14 @@
 <template>
   <div v-show="loaded">
     <h5 v-if="view == 'ancestors'">{{ $t("ancestors") }}</h5>
+    <h5 v-if="view == 'cousin-nephews-nieces'">
+      {{ $t("cousin-nephews-nieces") }}
+    </h5>
     <h5 v-if="view == 'cousins'">{{ $t("cousins") }}</h5>
     <h5 v-if="view == 'descendants'">{{ $t("descendants") }}</h5>
     <h5 v-if="view == 'nephews-nieces'">{{ $t("nephews-nieces") }}</h5>
-    <h5 v-if="view == 'cousin-nephews-nieces'">
-      {{ $t("cousin-nephews-nieces") }}
+    <h5 v-if="view == 'second-cousins'">
+      {{ $t("second-cousins") }}
     </h5>
     <div :id="elementId"></div>
   </div>
@@ -62,6 +65,7 @@ export default {
     "cousin-nephews-nieces": "Cousin nephews and nieces",
     "descendants": "Descendant tree",
     "nephews-nieces": "Nephews and nieces",
+    "second-cousins": "Second cousins",
   },
   "ru": {
     "ancestors": "Дерево предков",
@@ -69,6 +73,7 @@ export default {
     "cousin-nephews-nieces": "Двоюродные племянники и племянницы",
     "descendants": "Дерево потомков",
     "nephews-nieces": "Племянники и племянницы",
+    "second-cousins": "Троюродные братья и сёстры",
   }
 }
 </i18n>
