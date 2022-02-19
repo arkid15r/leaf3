@@ -67,6 +67,7 @@ class Update(UpdateViewBase):
     context.update({
         'page_header_primary_text': self.translations['edit_person'],
         'page_title': self.translations['edit_person'],
+        'person': self.get_object(),
     })
 
     return context

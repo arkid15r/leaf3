@@ -142,5 +142,6 @@ class PersonForm(TreeFormBase):
         'birth_date': DatePickerInput(format='%d/%m/%Y'),
         'burial_date': DatePickerInput(format='%d/%m/%Y'),
         'death_date': DatePickerInput(format='%d/%m/%Y'),
+        'death_year': forms.TextInput(attrs={'autocomplete': 'off'}),
         'details': forms.Textarea(),
     }

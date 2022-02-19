@@ -2,7 +2,11 @@ const BundleTracker = require("webpack-bundle-tracker");
 const path = require("path");
 const pages = {
   person: {
-    entry: "./src/person.js",
+    entry: "src/views/person/main.js",
+    chunks: ["chunk-vendors"],
+  },
+  "person-form": {
+    entry: "src/forms/person/main.js",
     chunks: ["chunk-vendors"],
   },
 };

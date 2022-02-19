@@ -55,8 +55,8 @@
 
 <script>
 import axios from "axios";
-import SimpleTree from "./components/SimpleTree/SimpleTree.vue";
-import Timeline from "./components/Timeline/Timeline.vue";
+import SimpleTree from "@/components/SimpleTree/SimpleTree.vue";
+import Timeline from "@/components/Timeline/Timeline.vue";
 
 export default {
   name: "person",
